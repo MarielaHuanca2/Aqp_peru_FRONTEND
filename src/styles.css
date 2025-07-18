@@ -1,0 +1,12 @@
+body {
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+.custom-header{
+    background-color: rgb(23, 155, 243);
+}
