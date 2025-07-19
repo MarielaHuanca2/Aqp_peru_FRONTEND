@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Productos from "./pages/Productos";
-
+import Marcas from "./pages/Marcas"; // Import the Marcas component
 import Experiencia from "./pages/Experiencia";
 import Servicios from "./pages/Servicios";
 import Ofertas from "./pages/Ofertas";
@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/productos" element={<Productos />} />
-
+        <Route path="/marcas" element={<Marcas />} /> {/* Add the new route */}
         <Route path="/experiencia" element={<Experiencia />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/ofertas" element={<Ofertas />} />

@@ -14,16 +14,16 @@ function Header() {
   };
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: "#87CEFA" }}>
+    <Navbar expand="lg" style={{ backgroundColor: "#4682B4" }}>
       <Container>
-        <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem", fontWeight: "bold" }}>
+        <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem", fontWeight: "bold", fontSize: "2rem" }}>
           ComputerShops
         </Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link as={Link} to="/productos">Productos</Nav.Link>
-          <Nav.Link as={Link} to="/marcas">Marcas</Nav.Link>
-          <Nav.Link as={Link} to="/experiencia">Experiencia</Nav.Link>
-          <Nav.Link as={Link} to="/servicios">Servicios</Nav.Link>
+          <Nav.Link as={Link} to="/productos" style={{ fontWeight: "bold" }}>Productos</Nav.Link>
+          <Nav.Link as={Link} to="/marcas" style={{ fontWeight: "bold" }}>Marcas</Nav.Link>
+          <Nav.Link as={Link} to="/experiencia" style={{ fontWeight: "bold" }}>Experiencia</Nav.Link>
+          <Nav.Link as={Link} to="/servicios" style={{ fontWeight: "bold" }}>Servicios</Nav.Link>
         </Nav>
         <div className="d-flex gap-2">
           <Button variant="danger" onClick={() => navigate("/ofertas")}>
@@ -45,5 +45,3 @@ function Header() {
 }
 
 export default Header;
-
-
