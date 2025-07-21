@@ -20,7 +20,7 @@ h1, h2, h3 {
   position: absolute;
   left: 0;
   top: 100%;
-  width: 100vw;
+  width: 100%; /* Cambiado de 100vw a 100% */
   background: #f8f9fa;
   padding: 2rem 4rem;
   display: none;
@@ -29,7 +29,9 @@ h1, h2, h3 {
   min-height: 300px;
 }
 
-.nav-item.mega-hover:hover .mega-menu {
+.nav-item.mega-hover:hover .mega-menu,
+.nav-item.mega-hover:focus-within .mega-menu,
+.nav-item.mega-hover .mega-menu:hover {
   display: flex;
 }
 

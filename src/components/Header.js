@@ -15,16 +15,16 @@ function Header() {
 
   return (
     <Navbar expand="lg" style={{ backgroundColor: "#4682B4", minHeight: "90px" }}>
-      <Container fluid>
+      <Container fluid style={{ position: "relative" }}>
         <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem", fontWeight: "bold", fontSize: "2rem" }}>
           ComputerShops
         </Navbar.Brand>
         <Nav className="me-auto" style={{ width: "100%" }}>
           {/* Productos */}
-          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/productos" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
-              Productos
-            </Link>
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative", display: "inline-block" }}>
+            <div className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", color: "#fff" }}>
+              <Link to="/productos" style={{ color: "#fff", textDecoration: "none" }}>Productos</Link>
+            </div>
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
@@ -47,13 +47,13 @@ function Header() {
           </div>
           {/* Marcas */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/marcas" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+            <Link to="/marcas" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
               Marcas
             </Link>
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
-                  <img src="/images/apple.jpg" alt="Apple" className="mega-menu-img" />
+                  <img src="/images/apple.png" alt="Apple" className="mega-menu-img" />
                   <Link to="/marcas/apple"><h5>Apple</h5></Link>
                   <p>Productos Apple originales y accesorios.</p>
                 </div>
@@ -72,7 +72,7 @@ function Header() {
           </div>
           {/* Experiencia */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/experiencia" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+            <Link to="/experiencia" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
               Experiencia
             </Link>
             <div className="mega-menu">
@@ -97,7 +97,7 @@ function Header() {
           </div>
           {/* Servicios */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/servicios" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+            <Link to="/servicios" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
               Servicios
             </Link>
             <div className="mega-menu">
