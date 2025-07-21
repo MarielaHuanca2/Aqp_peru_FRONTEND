@@ -10,3 +10,44 @@ h1, h2, h3 {
 .custom-header{
     background-color: rgb(23, 155, 243);
 }
+
+/* Mega menu styles */
+.mega-dropdown {
+  position: static !important;
+}
+
+.mega-menu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100vw;
+  background: #f8f9fa;
+  padding: 2rem 4rem;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  z-index: 999;
+  min-height: 300px;
+}
+
+.nav-item.mega-hover:hover .mega-menu {
+  display: flex;
+}
+
+.mega-menu-column {
+  flex: 1;
+  margin-right: 2rem;
+}
+
+.mega-menu-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.mega-menu-content {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+}

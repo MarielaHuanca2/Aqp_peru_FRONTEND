@@ -14,16 +14,112 @@ function Header() {
   };
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: "#4682B4" }}>
-      <Container>
+    <Navbar expand="lg" style={{ backgroundColor: "#4682B4", minHeight: "90px" }}>
+      <Container fluid>
         <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem", fontWeight: "bold", fontSize: "2rem" }}>
           ComputerShops
         </Navbar.Brand>
-        <Nav className="me-auto">
-          <Nav.Link as={Link} to="/productos" style={{ fontWeight: "bold" }}>Productos</Nav.Link>
-          <Nav.Link as={Link} to="/marcas" style={{ fontWeight: "bold" }}>Marcas</Nav.Link>
-          <Nav.Link as={Link} to="/experiencia" style={{ fontWeight: "bold" }}>Experiencia</Nav.Link>
-          <Nav.Link as={Link} to="/servicios" style={{ fontWeight: "bold" }}>Servicios</Nav.Link>
+        <Nav className="me-auto" style={{ width: "100%" }}>
+          {/* Productos */}
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link to="/productos" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+              Productos
+            </Link>
+            <div className="mega-menu">
+              <div className="mega-menu-content">
+                <div className="mega-menu-column">
+                  <img src="/images/categorias.jpg" alt="Categorías" className="mega-menu-img" />
+                  <Link to="/productos/categorias"><h5>Categorías</h5></Link>
+                  <p>Explora todas las categorías de productos.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/nuevos.jpg" alt="Nuevos" className="mega-menu-img" />
+                  <Link to="/productos/nuevos"><h5>Nuevos</h5></Link>
+                  <p>Descubre los productos más recientes.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/populares.jpg" alt="Populares" className="mega-menu-img" />
+                  <Link to="/productos/populares"><h5>Populares</h5></Link>
+                  <p>Los productos favoritos de nuestros clientes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Marcas */}
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link to="/marcas" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+              Marcas
+            </Link>
+            <div className="mega-menu">
+              <div className="mega-menu-content">
+                <div className="mega-menu-column">
+                  <img src="/images/apple.jpg" alt="Apple" className="mega-menu-img" />
+                  <Link to="/marcas/apple"><h5>Apple</h5></Link>
+                  <p>Productos Apple originales y accesorios.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/dell.jpg" alt="Dell" className="mega-menu-img" />
+                  <Link to="/marcas/dell"><h5>Dell</h5></Link>
+                  <p>Equipos Dell para oficina y hogar.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/hp.jpg" alt="HP" className="mega-menu-img" />
+                  <Link to="/marcas/hp"><h5>HP</h5></Link>
+                  <p>Soluciones HP para todos los usos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Experiencia */}
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link to="/experiencia" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+              Experiencia
+            </Link>
+            <div className="mega-menu">
+              <div className="mega-menu-content">
+                <div className="mega-menu-column">
+                  <img src="/images/testimonios.jpg" alt="Testimonios" className="mega-menu-img" />
+                  <Link to="/experiencia/testimonios"><h5>Testimonios</h5></Link>
+                  <p>Opiniones de nuestros clientes.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/casos.jpg" alt="Casos de éxito" className="mega-menu-img" />
+                  <Link to="/experiencia/casos"><h5>Casos de éxito</h5></Link>
+                  <p>Historias de éxito con nuestros productos.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/soporte.jpg" alt="Soporte" className="mega-menu-img" />
+                  <Link to="/experiencia/soporte"><h5>Soporte</h5></Link>
+                  <p>Asistencia y ayuda personalizada.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Servicios */}
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link to="/servicios" className="nav-link" style={{ fontWeight: "bold", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "inherit" }}>
+              Servicios
+            </Link>
+            <div className="mega-menu">
+              <div className="mega-menu-content">
+                <div className="mega-menu-column">
+                  <img src="/images/instalacion.jpg" alt="Instalación" className="mega-menu-img" />
+                  <Link to="/servicios/instalacion"><h5>Instalación</h5></Link>
+                  <p>Instalación profesional de equipos.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/garantia.jpg" alt="Garantía" className="mega-menu-img" />
+                  <Link to="/servicios/garantia"><h5>Garantía</h5></Link>
+                  <p>Garantía extendida y soporte técnico.</p>
+                </div>
+                <div className="mega-menu-column">
+                  <img src="/images/mantenimiento.jpg" alt="Mantenimiento" className="mega-menu-img" />
+                  <Link to="/servicios/mantenimiento"><h5>Mantenimiento</h5></Link>
+                  <p>Mantenimiento preventivo y correctivo.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </Nav>
         <div className="d-flex gap-2">
           <Button variant="danger" onClick={() => navigate("/ofertas")}>
