@@ -16,9 +16,18 @@ function Header() {
   return (
     <Navbar expand="lg" style={{ backgroundColor: "#4682B4", minHeight: "90px" }}>
       <Container fluid style={{ position: "relative" }}>
-        <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem", fontWeight: "bold", fontSize: "2rem" }}>
-          ComputerShops
+        {/* Logo + Nombre */}
+        <Navbar.Brand as={Link} to="/" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <img
+            src="/LOGO_CSHOPS.png"
+            alt="Logo"
+            style={{ height: "50px", objectFit: "contain" }}
+          />
+          <span style={{ fontWeight: "bold", fontSize: "2rem", color: "white" }}>
+            ComputerShops
+          </span>
         </Navbar.Brand>
+
         <Nav className="me-auto" style={{ width: "100%" }}>
           {/* Productos */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative", display: "inline-block" }}>
@@ -45,6 +54,7 @@ function Header() {
               </div>
             </div>
           </div>
+
           {/* Marcas */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
             <Link to="/marcas" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
@@ -70,6 +80,7 @@ function Header() {
               </div>
             </div>
           </div>
+
           {/* Experiencia */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
             <Link to="/experiencia" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
@@ -95,6 +106,7 @@ function Header() {
               </div>
             </div>
           </div>
+
           {/* Servicios */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
             <Link to="/servicios" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
@@ -137,6 +149,8 @@ function Header() {
             </Link>
           </div>
         </Nav>
+
+        {/* Botones de sesión */}
         <div className="d-flex gap-2">
           <Button variant="danger" onClick={() => navigate("/ofertas")}>
             Ofertas

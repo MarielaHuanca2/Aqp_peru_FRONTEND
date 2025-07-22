@@ -1,6 +1,14 @@
 import { Container, Row, Col } from "react-bootstrap";
 
 function Marcas() {
+  // Arreglo de imágenes de marcas
+  const brandImages = [
+    "/dell_logo.png",
+    "/lenovo_logo.png",
+    "/hp_logo.png",
+    "/cisco_logo.png",
+  ];
+
   return (
     <Container className="py-4">
       <h2>Marcas</h2>
@@ -9,21 +17,28 @@ function Marcas() {
       </p>
 
       <Row className="mt-4">
-        {Array.from({ length: 16 }).map((_, index) => (
-          <Col key={index} xs={12} sm={6} md={3} className="mb-4">
-            <div
-              style={{
-                backgroundColor: "#e0e0e0",
-                textAlign: "center",
-                padding: "50px 0",
-                borderRadius: "8px",
-                fontWeight: "bold",
-              }}
-            >
-              image
-            </div>
-          </Col>
-        ))}
+        {Array.from({ length: 16 }).map((_, index) => {
+          const imageSrc = brandImages[index % brandImages.length];
+          return (
+            <Col key={index} xs={12} sm={6} md={3} className="mb-4">
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  textAlign: "center",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                }}
+              >
+                <img
+                  src={imageSrc}
+                  alt={`Marca ${index + 1}`}
+                  style={{ maxWidth: "100%", height: "80px", objectFit: "contain" }}
+                />
+              </div>
+            </Col>
+          );
+        })}
       </Row>
 
       <p className="mt-5">
