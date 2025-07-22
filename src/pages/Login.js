@@ -24,7 +24,7 @@ function Login() {
       localStorage.setItem("isLoggedIn", "true");
       navigate("/admin");
     } else {
-      setError("Credenciales incorrectas. Intenta con admin / 1234 😅");
+      setError("Credenciales incorrectas. Sorry");
     }
   };
 

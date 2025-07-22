@@ -120,6 +120,22 @@ function Header() {
               </div>
             </div>
           </div>
+          {/* Sobre Nosotros */}
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link
+              to="/sobre-nosotros"
+              className="nav-link"
+              style={{
+                fontWeight: "normal",
+                fontSize: "1.3rem",
+                cursor: "pointer",
+                textDecoration: "none",
+                color: "#fff"
+              }}
+            >
+              Sobre Nosotros
+            </Link>
+          </div>
         </Nav>
         <div className="d-flex gap-2">
           <Button variant="danger" onClick={() => navigate("/ofertas")}>
