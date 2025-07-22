@@ -24,17 +24,17 @@ function Home() {
         </div>
         <div className="row text-center mb-5">
           <div className="col-md-4 mb-4">
-            <img src="/images/servicio.jpg" alt="Servicios" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
+            <img src="/images/servicio.png" alt="Servicios" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
             <h4 style={{ color: "#4682B4" }}>Servicios Empresariales</h4>
             <p>Instalación, mantenimiento y soporte técnico para tu empresa.</p>
           </div>
           <div className="col-md-4 mb-4">
-            <img src="/images/marcas.jpg" alt="Marcas" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
+            <img src="/images/brand.png" alt="Marcas" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
             <h4 style={{ color: "#4682B4" }}>Las Mejores Marcas</h4>
             <p>Trabajamos con Apple, Dell, HP y más líderes del mercado.</p>
           </div>
           <div className="col-md-4 mb-4">
-            <img src="/images/ofertas.jpg" alt="Ofertas" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
+            <img src="/images/sales.jpg" alt="Ofertas" style={{ width: "100%", borderRadius: "12px", marginBottom: "15px" }} />
             <h4 style={{ color: "#4682B4" }}>Ofertas Exclusivas</h4>
             <p>Aprovecha descuentos y promociones especiales cada semana.</p>
           </div>

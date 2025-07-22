@@ -56,7 +56,7 @@ const SobreNosotros = () => {
             Nuestra empresa cumple con los estándares de calidad establecidos por la norma ISO 9001. Esto garantiza procesos eficientes y servicios confiables.
           </p>
           <Image
-            src="/imagenes/iso_9001.jpg"
+            src="./images/9001.jpg"
             alt="Certificación ISO 9001"
             fluid
             rounded
@@ -68,7 +68,7 @@ const SobreNosotros = () => {
             También estamos certificados con la norma ISO 27001 en seguridad de la información, protegiendo los datos de nuestros clientes con las mejores prácticas del sector.
           </p>
           <Image
-            src="/imagenes/iso_27001.jpg"
+            src="./images/45001.2018.jpg"
             alt="Certificación ISO 27001"
             fluid
             rounded
