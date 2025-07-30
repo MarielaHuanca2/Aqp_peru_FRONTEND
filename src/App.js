@@ -12,6 +12,9 @@ import Admin from "./pages/Admin";
 import PrivateRoute from "./components/PrivateRoute";
 import SobreNosotros from "./pages/Sobre_nosotros"; 
 import WhatsappButton from "./components/WhatsappButton";
+import ProductoDetalle from "./pages/ProductoDetalle"; // <--- nuevo
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -20,14 +23,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/productos" element={<Productos />} />
-        <Route path="/marcas" element={<Marcas />} /> {/* Add the new route */}
+        <Route path="/productos/:id" element={<ProductoDetalle />} /> {/* nuevo */}
+        <Route path="/marcas" element={<Marcas />} />
         <Route path="/experiencia" element={<Experiencia />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/ofertas" element={<Ofertas />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-        
-        {/* Private route for admin */}
         <Route
           path="/admin"
           element={
@@ -44,4 +46,3 @@ function App() {
 }
 
 export default App;
-

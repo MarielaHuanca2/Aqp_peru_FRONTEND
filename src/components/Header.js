@@ -37,17 +37,14 @@ function Header() {
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
-                  <img src="/images/categorias.jpg" alt="Categorías" className="mega-menu-img" />
                   <Link to="/productos/categorias"><h5>Categorías</h5></Link>
                   <p>Explora todas las categorías de productos.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/images/nuevos.jpg" alt="Nuevos" className="mega-menu-img" />
                   <Link to="/productos/nuevos"><h5>Nuevos</h5></Link>
                   <p>Descubre los productos más recientes.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/images/populares.jpg" alt="Populares" className="mega-menu-img" />
                   <Link to="/productos/populares"><h5>Populares</h5></Link>
                   <p>Los productos favoritos de nuestros clientes.</p>
                 </div>
@@ -68,12 +65,12 @@ function Header() {
                   <p>Productos Apple originales y accesorios.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/images/dell.jpg" alt="Dell" className="mega-menu-img" />
+                  <img src="/dell_logo.png" alt="Dell" className="mega-menu-img" />
                   <Link to="/marcas/dell"><h5>Dell</h5></Link>
                   <p>Equipos Dell para oficina y hogar.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/images/hp.jpg" alt="HP" className="mega-menu-img" />
+                  <img src="/hp_logo.png" alt="HP" className="mega-menu-img" />
                   <Link to="/marcas/hp"><h5>HP</h5></Link>
                   <p>Soluciones HP para todos los usos.</p>
                 </div>
