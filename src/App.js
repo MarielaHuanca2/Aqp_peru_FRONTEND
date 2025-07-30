@@ -12,9 +12,10 @@ import Admin from "./pages/Admin";
 import PrivateRoute from "./components/PrivateRoute";
 import SobreNosotros from "./pages/Sobre_nosotros"; 
 import WhatsappButton from "./components/WhatsappButton";
-import ProductoDetalle from "./pages/ProductoDetalle"; // <--- nuevo
-
+import ProductoDetalle from "./pages/ProductoDetalle"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.css';
+import './index.css';
 
 function App() {
   return (

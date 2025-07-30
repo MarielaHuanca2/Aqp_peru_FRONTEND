@@ -1,0 +1,31 @@
+.elegant-footer {
+  font-family: 'Poppins', sans-serif;
+  background: #1c1c1c;
+}
+
+.footer-link {
+  display: inline-block;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #17a2b8;
+  text-decoration: underline;
+}
+
+.footer-icon {
+  font-size: 1.25rem;
+  color: #ffffff;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, transform 0.2s;
+  text-align: center;
+}
+
+.footer-icon:hover {
+  background-color: #17a2b8;
+  transform: scale(1.1);
+  color: #fff;
+}

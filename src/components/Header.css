@@ -1,0 +1,64 @@
+.navbar-header {
+  background-color: #4682B4;
+  min-height: 90px;
+}
+
+.navbar-brand-custom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 2rem;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link-custom {
+  font-weight: normal;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+
+.mega-dropdown {
+  position: relative;
+}
+
+.mega-menu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: #f8f9fa;
+  padding: 2rem 4rem;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  min-height: 300px;
+}
+
+.nav-item.mega-hover:hover .mega-menu,
+.nav-item.mega-hover:focus-within .mega-menu,
+.nav-item.mega-hover .mega-menu:hover {
+  display: flex;
+}
+
+.mega-menu-content {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+}
+
+.mega-menu-column {
+  flex: 1;
+  margin-right: 2rem;
+}
+
+.mega-menu-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}

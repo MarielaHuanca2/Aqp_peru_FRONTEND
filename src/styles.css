@@ -1,14 +1,35 @@
+/* Fuente global e imagen profesional */
 body {
   background-color: #f9f9f9;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
-h1, h2, h3 {
+/* Encabezados con mejor jerarquía */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
   font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
-.custom-header{
-    background-color: rgb(23, 155, 243);
+h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilo para el header */
+.custom-header {
+  background-color: rgb(23, 155, 243);
 }
 
 /* Mega menu styles */
@@ -20,11 +41,11 @@ h1, h2, h3 {
   position: absolute;
   left: 0;
   top: 100%;
-  width: 100%; /* Cambiado de 100vw a 100% */
+  width: 100%;
   background: #f8f9fa;
   padding: 2rem 4rem;
   display: none;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 999;
   min-height: 300px;
 }
@@ -33,6 +54,12 @@ h1, h2, h3 {
 .nav-item.mega-hover:focus-within .mega-menu,
 .nav-item.mega-hover .mega-menu:hover {
   display: flex;
+}
+
+.mega-menu-content {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
 }
 
 .mega-menu-column {
@@ -48,12 +75,7 @@ h1, h2, h3 {
   margin-bottom: 1rem;
 }
 
-.mega-menu-content {
-  display: flex;
-  width: 100%;
-  gap: 2rem;
-}
-
+/* WhatsApp button flotante */
 .whatsapp-float {
   position: fixed;
   bottom: 20px;
@@ -70,5 +92,4 @@ h1, h2, h3 {
 .whatsapp-float:hover {
   transform: scale(1.1);
   background-color: #1ebe5d;
-  color: white;
 }
