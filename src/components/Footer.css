@@ -1,31 +1,98 @@
-.elegant-footer {
-  font-family: 'Poppins', sans-serif;
-  background: #1c1c1c;
+.footer-container {
+  background-color: #1a2a4f; /* azul profesional oscuro */
+  color: #dbe4ee;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  padding: 3rem 1rem 2rem;
+  margin-top: 4rem;
+  border-top: 4px solid #2c3e70;
 }
 
-.footer-link {
-  display: inline-block;
-  margin-bottom: 8px;
-  transition: color 0.3s ease;
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  gap: 2rem;
 }
 
-.footer-link:hover {
-  color: #17a2b8;
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-section h5 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.footer-section p,
+.footer-section li,
+.footer-section a {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #c5d1e5;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  color: #ffffff;
   text-decoration: underline;
 }
 
-.footer-icon {
-  font-size: 1.25rem;
-  color: #ffffff;
-  background-color: #333;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease, transform 0.2s;
-  text-align: center;
+.footer-section ul {
+  list-style: none;
+  padding: 0;
 }
 
-.footer-icon:hover {
-  background-color: #17a2b8;
-  transform: scale(1.1);
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.social-icons a {
+  color: #c5d1e5;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #ffffff;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid #2c3e70;
+  font-size: 0.85rem;
+  color: #a5b2c9;
+}
+.footer-bottom {
+  border-top: 1px solid #444;
+  padding: 1rem 0;
+  text-align: center;
+  background-color: #111;
+  color: #ccc;
+}
+
+.footer-legal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legal-links a {
+  color: #bbb;
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.legal-links a:hover {
+  text-decoration: underline;
   color: #fff;
 }

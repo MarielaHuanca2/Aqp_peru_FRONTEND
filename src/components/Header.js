@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa"; // Ícono del carrito
 import "./Header.css";
 
 function Header() {
@@ -15,26 +16,22 @@ function Header() {
   };
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: "#4682B4", minHeight: "90px" }}>
+    <Navbar expand="lg" className="navbar-header">
       <Container fluid style={{ position: "relative" }}>
         {/* Logo + Nombre */}
-        <Navbar.Brand as={Link} to="/" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
           <img
             src="/LOGO_CSHOPS.png"
             alt="Logo"
             style={{ height: "50px", objectFit: "contain" }}
           />
-          <span style={{ fontWeight: "bold", fontSize: "2rem", color: "white" }}>
-            ComputerShops
-          </span>
+          <span className="navbar-title">ComputerShops</span>
         </Navbar.Brand>
 
-        <Nav className="me-auto" style={{ width: "100%" }}>
+        <Nav className="me-auto d-flex align-items-center" style={{ width: "100%" }}>
           {/* Productos */}
-          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative", display: "inline-block" }}>
-            <div className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", color: "#fff" }}>
-              <Link to="/productos" style={{ color: "#fff", textDecoration: "none" }}>Productos</Link>
-            </div>
+          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+            <Link to="/productos" className="nav-link-custom">Productos</Link>
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
@@ -55,61 +52,36 @@ function Header() {
 
           {/* Marcas */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/marcas" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
-              Marcas
-            </Link>
+            <Link to="/marcas" className="nav-link-custom">Marcas</Link>
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
-                  <img src="/images/apple.png" alt="Apple" className="mega-menu-img" />
-                  <Link to="/marcas/apple"><h5>Apple</h5></Link>
-                  <p>Productos Apple originales y accesorios.</p>
+                  <img src="/images/Lenovo_header2.jpg" alt="Apple" className="mega-menu-img" />
+                  <p>Productos originales y accesorios.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/dell_logo.png" alt="Dell" className="mega-menu-img" />
-                  <Link to="/marcas/dell"><h5>Dell</h5></Link>
+                  <img src="/images/Dell_header.png" alt="Dell" className="mega-menu-img" />
                   <p>Equipos Dell para oficina y hogar.</p>
                 </div>
                 <div className="mega-menu-column">
-                  <img src="/hp_logo.png" alt="HP" className="mega-menu-img" />
-                  <Link to="/marcas/hp"><h5>HP</h5></Link>
-                  <p>Soluciones HP para todos los usos.</p>
+                  <img src="/images/cisco_header.png" alt="HP" className="mega-menu-img" />
+                  <p>Soluciones para todos los usos.</p>
+                </div>
+                 <div className="mega-menu-column">
+                  <img src="/images/Fortinet_header.png" alt="Apple" className="mega-menu-img" />
+                  <p>Productos originales y accesorios.</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Experiencia */}
-          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/experiencia" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
-              Experiencia
-            </Link>
-            <div className="mega-menu">
-              <div className="mega-menu-content">
-                <div className="mega-menu-column">
-                  <img src="/images/testimonios.jpg" alt="Testimonios" className="mega-menu-img" />
-                  <Link to="/experiencia/testimonios"><h5>Testimonios</h5></Link>
-                  <p>Opiniones de nuestros clientes.</p>
-                </div>
-                <div className="mega-menu-column">
-                  <img src="/images/casos.jpg" alt="Casos de éxito" className="mega-menu-img" />
-                  <Link to="/experiencia/casos"><h5>Casos de éxito</h5></Link>
-                  <p>Historias de éxito con nuestros productos.</p>
-                </div>
-                <div className="mega-menu-column">
-                  <img src="/images/soporte.jpg" alt="Soporte" className="mega-menu-img" />
-                  <Link to="/experiencia/soporte"><h5>Soporte</h5></Link>
-                  <p>Asistencia y ayuda personalizada.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+                <div className="nav-item">
+                     <Link to="/experiencia" className="nav-link-custom">Experiencia</Link>
+                     </div>
           {/* Servicios */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/servicios" className="nav-link" style={{ fontWeight: "normal", fontSize: "1.3rem", cursor: "pointer", textDecoration: "none", color: "#fff" }}>
-              Servicios
-            </Link>
+            <Link to="/servicios" className="nav-link-custom">Servicios</Link>
             <div className="mega-menu">
               <div className="mega-menu-content">
                 <div className="mega-menu-column">
@@ -130,27 +102,21 @@ function Header() {
               </div>
             </div>
           </div>
+
           {/* Sobre Nosotros */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link
-              to="/sobre-nosotros"
-              className="nav-link"
-              style={{
-                fontWeight: "normal",
-                fontSize: "1.3rem",
-                cursor: "pointer",
-                textDecoration: "none",
-                color: "#fff"
-              }}
-            >
-              Sobre Nosotros
-            </Link>
+            <Link to="/sobre-nosotros" className="nav-link-custom">Sobre Nosotros</Link>
           </div>
         </Nav>
 
+        {/* Ícono del carrito */}
+        <Link to="/carrito" className="shopping-cart-icon" style={{ fontSize: "1.6rem", color: "#000", marginRight: "15px" }}>
+          <FaShoppingCart />
+        </Link>
+
         {/* Botones de sesión */}
         <div className="d-flex gap-2">
-          <Button variant="danger" onClick={() => navigate("/ofertas")}>
+          <Button className="btn-offer" onClick={() => navigate("/ofertas")}>
             Ofertas
           </Button>
           {isLoggedIn ? (
@@ -169,3 +135,4 @@ function Header() {
 }
 
 export default Header;
+

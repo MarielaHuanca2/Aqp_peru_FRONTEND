@@ -12,6 +12,9 @@ import Admin from "./pages/Admin";
 import PrivateRoute from "./components/PrivateRoute";
 import SobreNosotros from "./pages/Sobre_nosotros"; 
 import WhatsappButton from "./components/WhatsappButton";
+import Carrito from "./pages/Carrito";
+import Terminos from "./pages/Terminos";
+import Reclamaciones from "./pages/Reclamaciones";
 import ProductoDetalle from "./pages/ProductoDetalle"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
@@ -24,13 +27,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/productos" element={<Productos />} />
-        <Route path="/productos/:id" element={<ProductoDetalle />} /> {/* nuevo */}
+        <Route path="/productos/:id" element={<ProductoDetalle />} /> 
         <Route path="/marcas" element={<Marcas />} />
         <Route path="/experiencia" element={<Experiencia />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/ofertas" element={<Ofertas />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+        <Route path="/carrito" element={<Carrito />} /> 
+        <Route path="/terminos" element={<Terminos />} /> 
+        <Route path="/reclamaciones" element={<Reclamaciones />} /> 
         <Route
           path="/admin"
           element={

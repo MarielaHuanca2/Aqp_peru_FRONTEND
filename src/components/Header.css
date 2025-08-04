@@ -1,26 +1,79 @@
+/* Fondo azul Dell y altura fija */
 .navbar-header {
-  background-color: #4682B4;
+  background-color: #0070b8;
   min-height: 90px;
 }
+.navbar-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-left: 0.5rem;
+}
 
+
+/* Marca */
 .navbar-brand-custom {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: bold;
-  font-size: 2rem;
-  color: white;
+  font-weight: 400;
+  font-size: 1.9rem;
+  color: #ffffff;
   text-decoration: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.navbar-brand-custom span {
+  color: #e1e8ed;
+}
+
+/* Links del menú en blanco y más grandes */
 .nav-link-custom {
-  font-weight: normal;
-  font-size: 1.3rem;
-  cursor: pointer;
-  color: #fff;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #ffffff;
   text-decoration: none;
+  margin-right: 1.2rem;
+  transition: color 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.nav-link-custom:hover {
+  color: #4fb0e3;
+  text-decoration: underline;
+}
+
+/* Botón ofertas en negro */
+.btn-offer {
+  background-color: #000000;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-offer:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+/* Botón Iniciar Sesión o Admin en negro */
+.btn-outline-dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-outline-dark:hover {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+/* Mega menú */
 .mega-dropdown {
   position: relative;
 }
@@ -30,12 +83,13 @@
   left: 0;
   top: 100%;
   width: 100%;
-  background: #f8f9fa;
+  background: #ffffff;
   padding: 2rem 4rem;
   display: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 999;
   min-height: 300px;
+  border-radius: 8px;
 }
 
 .nav-item.mega-hover:hover .mega-menu,
@@ -53,6 +107,18 @@
 .mega-menu-column {
   flex: 1;
   margin-right: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333333;
+}
+
+.mega-menu-column h5 {
+  color: #007db8;
+  margin-bottom: 0.5rem;
+}
+
+.mega-menu-column p {
+  font-size: 0.95rem;
+  color: #555555;
 }
 
 .mega-menu-img {
@@ -62,3 +128,9 @@
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+.shopping-cart-icon:hover {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+
