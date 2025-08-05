@@ -12,6 +12,13 @@ function Admin() {
   return (
     <Container className="mt-5">
       <h2>Bienvenido al panel de administrador</h2>
+      <Button
+        variant="primary"
+        className="mt-3 me-3"
+        onClick={() => navigate("/admin/reclamaciones")}
+      >
+        Ver Reclamaciones
+      </Button>
       <Button variant="danger" className="mt-3" onClick={handleLogout}>
         Cerrar sesión
       </Button>

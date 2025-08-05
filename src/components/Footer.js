@@ -39,7 +39,7 @@ Horarios de atención.
         </div>
       </div>
 
-      <div className="footer-bottom">
+      <div className="footer-bottom full-width-dark" width="100%">
         <div className="footer-legal">
           <small>&copy; 2025 ComputerShops. Todos los derechos reservados.</small>
           <div className="legal-links">
