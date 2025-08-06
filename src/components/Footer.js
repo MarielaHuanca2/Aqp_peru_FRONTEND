@@ -10,9 +10,8 @@ function Footer() {
           <h5>Contacto</h5>
           <p><strong>Teléfono:</strong> +51 123 456 7890</p>
           <p><strong>Email:</strong> ventas@computershops.pe</p>
-          <p><strong>Dirección:</strong> Av. Venezuela Mza. B Lote 14 Urb. Ampliación La Negrita – Arequipa – Arequipa – Arequipa
-Horarios de atención.
-</p>
+          <p><strong>Dirección:</strong> Av. Venezuela Mza. B Lote 14 Urb. Ampliación La Negrita – Arequipa – Arequipa – Arequipa</p>
+          <p><strong>Horarios de atención:</strong></p>
         </div>
 
         <div className="footer-section">
@@ -23,6 +22,16 @@ Horarios de atención.
                 <a href={`/${item.toLowerCase()}`}>{item}</a>
               </li>
             ))}
+          </ul>
+        </div>
+
+        <div className="footer-section">
+          <h5>Preguntas Frecuentes</h5>
+          <ul>
+            <li><Link to="/faq#envios">¿Realizan envíos a provincias?</Link></li>
+            <li><Link to="/faq#pagos">¿Qué métodos de pago aceptan?</Link></li>
+            <li><Link to="/faq#garantia">¿Los productos tienen garantía?</Link></li>
+            <li><Link to="/faq#devoluciones">¿Cómo hago una devolución?</Link></li>
           </ul>
         </div>
 
@@ -54,5 +63,4 @@ Horarios de atención.
 }
 
 export default Footer;
-
 

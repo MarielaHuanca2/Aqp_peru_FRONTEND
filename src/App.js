@@ -18,6 +18,7 @@ import Terminos from "./pages/Terminos";
 import Reclamaciones from "./pages/Reclamaciones";
 import ProductoDetalle from "./pages/ProductoDetalle"; 
 import ReclamacionesAdmin from "./pages/ReclamacionesAdmin";
+import FaqPage from './pages/FaqPage';
 import ReclamoDetalle from "./pages/ReclamoDetalle";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
@@ -41,6 +42,7 @@ function App() {
           <Route path="/carrito" element={<Carrito />} /> 
           <Route path="/terminos" element={<Terminos />} /> 
           <Route path="/reclamaciones" element={<Reclamaciones />} /> 
+          <Route path="/faq" element={<FaqPage />} />
           <Route
             path="/admin"
             element={

@@ -112,43 +112,71 @@ function Header() {
             </div>
           </div>
 
-          {/* Experiencia */}
-          <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
-            <Link to="/experiencia" className="nav-link-custom">Experiencia</Link>
-            <div className="mega-menu">
-              <div className="mega-menu-content" style={{ flexWrap: "wrap", gap: "1.5rem", justifyContent: "center" }}>
-                {/* Tarjetas de experiencia */}
-                {[
-                  {
-                    titulo: "Data Center SEAL",
-                    resumen: "Renovación de infraestructura crítica para SEAL (Arequipa).",
-                    icon: "💡"
-                  },
-                  {
-                    titulo: "Servidores EGASA",
-                    resumen: "Modernización de servidores industriales para EGASA.",
-                    icon: "🖥️"
-                  },
-                  {
-                    titulo: "Mantenimiento SUNARP",
-                    resumen: "Mantenimiento integral de servidores y data center SUNARP.",
-                    icon: "🔧"
-                  },
-                  {
-                    titulo: "Video Vigilancia ZOFRATACNA",
-                    resumen: "Sistema CCTV IP y monitoreo centralizado en ZOFRATACNA.",
-                    icon: "🎥"
-                  }
-                ].map((exp, idx) => (
-                  <div key={idx} style={{ width: "120px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#f4f6fa", borderRadius: "10px", padding: "12px 8px", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-                    <div style={{ fontSize: "2.1rem", marginBottom: "8px" }}>{exp.icon}</div>
-                    <div style={{ fontWeight: 600, fontSize: "1rem", marginBottom: "4px" }}>{exp.titulo}</div>
-                    <div style={{ fontSize: "0.85rem", color: "#555" }}>{exp.resumen}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+{/* Experiencia */}
+<div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
+  <Link to="/experiencia" className="nav-link-custom">Experiencia</Link>
+  <div className="mega-menu">
+    <div
+      className="mega-menu-content"
+      style={{ flexWrap: "wrap", gap: "1.5rem", justifyContent: "center", display: "flex" }}
+    >
+      {/* Tarjetas de experiencia con logos */}
+      {[
+        {
+          titulo: "Data Center SEAL",
+          resumen: "Renovación de infraestructura crítica para SEAL (Arequipa).",
+          logo: "/seal.png"
+        },
+        {
+          titulo: "Servidores EGASA",
+          resumen: "Modernización de servidores industriales para EGASA.",
+          logo: "/egasa_logo.png"
+        },
+        {
+          titulo: "Mantenimiento SUNARP",
+          resumen: "Mantenimiento integral de servidores y data center SUNARP.",
+          logo: "/sunarp_logo.png"
+        },
+        {
+          titulo: "Video Vigilancia ZOFRATACNA",
+          resumen: "Sistema CCTV IP y monitoreo centralizado en ZOFRATACNA.",
+          logo: "/Zofratacna_logo.jpg"
+        }
+      ].map((exp, idx) => (
+        <div
+          key={idx}
+          style={{
+            width: "140px",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#f4f6fa",
+            borderRadius: "10px",
+            padding: "12px 8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
+          }}
+        >
+          <img
+            src={exp.logo}
+            alt={exp.titulo}
+            style={{
+              width: "60px",
+              height: "60px",
+              objectFit: "contain",
+              marginBottom: "8px"
+            }}
+          />
+          <div style={{ fontWeight: 600, fontSize: "1rem", marginBottom: "4px" }}>
+            {exp.titulo}
           </div>
+          <div style={{ fontSize: "0.85rem", color: "#555" }}>{exp.resumen}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
           {/* Servicios */}
           <div className="nav-item mega-hover mega-dropdown" style={{ position: "relative" }}>
             <Link to="/servicios" className="nav-link-custom">Servicios</Link>
