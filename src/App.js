@@ -22,6 +22,7 @@ import FaqPage from './pages/FaqPage';
 import ReclamoDetalle from "./pages/ReclamoDetalle";
 import PedidosAdmin from "./pages/PedidosAdmin";
 import PedidoDetalle from "./pages/PedidoDetalle";
+import ProductosAdmin from "./pages/ProductosAdmin";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import './index.css';
@@ -57,6 +58,7 @@ function App() {
           <Route path="/admin/reclamaciones/:id" element={<PrivateRoute><ReclamoDetalle /></PrivateRoute>} />
           <Route path="/admin/pedidos" element={<PrivateRoute><PedidosAdmin /></PrivateRoute>} />
           <Route path="/admin/pedidos/:id" element={<PrivateRoute><PedidoDetalle /></PrivateRoute>} />
+          <Route path="/admin/productos" element={<PrivateRoute><ProductosAdmin /></PrivateRoute>} />
         </Routes>
         <WhatsappButton />
         <Footer />
