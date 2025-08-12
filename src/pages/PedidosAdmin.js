@@ -1,0 +1,172 @@
+import React, { useState, useEffect } from "react";
+import { Container, Table, Button, Form, Row, Col, Alert, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+const PedidosAdmin = () => {
+  const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filtros, setFiltros] = useState({
+    fechaInicio: "",
+    fechaFin: "",
+    correo: ""
+  });
+
+  const obtenerPedidos = async () => {
+    try {
+      setLoading(true);
+      let url = "http://localhost:8080/api/pedidos";
+      const params = new URLSearchParams();
+      
+      if (filtros.fechaInicio) params.append("fechaInicio", filtros.fechaInicio);
+      if (filtros.fechaFin) params.append("fechaFin", filtros.fechaFin);
+      if (filtros.correo) params.append("correo", filtros.correo);
+      
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
+      
+      const response = await axios.get(url);
+      setPedidos(response.data);
+      setError(null);
+    } catch (err) {
+      setError("Error al cargar los pedidos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtenerPedidos();
+  }, []);
+
+  const handleFiltroChange = (e) => {
+    setFiltros({ ...filtros, [e.target.name]: e.target.value });
+  };
+
+  const aplicarFiltros = () => {
+    obtenerPedidos();
+  };
+
+  const limpiarFiltros = () => {
+    setFiltros({ fechaInicio: "", fechaFin: "", correo: "" });
+  };
+
+  if (loading) {
+    return (
+      <Container className="mt-5 text-center">
+        <Spinner animation="border" role="status" />
+        <div>Cargando pedidos...</div>
+      </Container>
+    );
+  }
+
+  return (
+    <Container className="mt-5">
+      <h2>Administrar Pedidos</h2>
+      
+      {/* Filtros */}
+      <Form className="mb-4 p-3 border rounded bg-light">
+        <Row className="g-3">
+          <Col md={3}>
+            <Form.Group>
+              <Form.Label>Fecha Inicio</Form.Label>
+              <Form.Control
+                type="date"
+                name="fechaInicio"
+                value={filtros.fechaInicio}
+                onChange={handleFiltroChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            <Form.Group>
+              <Form.Label>Fecha Fin</Form.Label>
+              <Form.Control
+                type="date"
+                name="fechaFin"
+                value={filtros.fechaFin}
+                onChange={handleFiltroChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group>
+              <Form.Label>Correo Cliente</Form.Label>
+              <Form.Control
+                type="email"
+                name="correo"
+                placeholder="Filtrar por correo del cliente"
+                value={filtros.correo}
+                onChange={handleFiltroChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={2} className="d-flex align-items-end gap-2">
+            <Button variant="primary" onClick={aplicarFiltros}>
+              Filtrar
+            </Button>
+            <Button variant="outline-secondary" onClick={limpiarFiltros}>
+              Limpiar
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      {pedidos.length === 0 ? (
+        <Alert variant="info">No se encontraron pedidos.</Alert>
+      ) : (
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pedidos.map((pedido) => (
+              <tr key={pedido.id}>
+                <td>{pedido.id}</td>
+                <td>{pedido.nombresSolicitante} {pedido.apellidosSolicitante}</td>
+                <td>{pedido.correoSolicitante}</td>
+                <td>{pedido.telefonoSolicitante}</td>
+                <td>{new Date(pedido.fechaPedido).toLocaleDateString()}</td>
+                <td>
+                  <span className={`badge ${pedido.estado === 'PENDIENTE' ? 'bg-warning' : 
+                    pedido.estado === 'PROCESANDO' ? 'bg-info' : 
+                    pedido.estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
+                    {pedido.estado}
+                  </span>
+                </td>
+                <td>
+                  <Link 
+                    to={`/admin/pedidos/${pedido.id}`} 
+                    className="btn btn-sm btn-outline-primary"
+                  >
+                    Ver Detalles
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+
+      <div className="mt-3">
+        <Link to="/admin" className="btn btn-secondary">
+          Volver al Panel Admin
+        </Link>
+      </div>
+    </Container>
+  );
+};
+
+export default PedidosAdmin;

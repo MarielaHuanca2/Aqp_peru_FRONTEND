@@ -37,3 +37,7 @@ export function notificarEmpresa({
   console.log("Notificando a la empresa:", payload);
   return axios.post("http://localhost:8080/api/email/notificar-empresa", payload);
 }
+
+export function crearPedido(pedidoData) {
+  return axios.post("http://localhost:8080/api/pedidos", pedidoData);
+}

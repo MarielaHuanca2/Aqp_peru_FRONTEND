@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
-import { enviarCorreoPedido, notificarEmpresa } from "../services/emailService";
+import { enviarCorreoPedido, notificarEmpresa, crearPedido } from "../services/emailService";
 
 const Carrito = () => {
   const { carrito, quitarDelCarrito, vaciarCarrito } = useCarrito();
   const [form, setForm] = useState({ 
     para: "", 
     cliente: "", 
+    apellidos: "",
     telefono: "", 
     direccion: ""
   });
@@ -41,10 +42,40 @@ const Carrito = () => {
     }));
 
     try {
+      // Crear pedido en el backend con el formato correcto
+      const detallesPedido = carrito.map((item) => {
+        // Extraer el número del ID (ej: "PROD000001" -> "1")
+        const idNumerico = item.idProducto.replace(/\D/g, '') || "1";
+        return {
+          producto: { 
+            idProducto: idNumerico 
+          },
+          cantidad: item.cantidad
+        };
+      });
+
+      const pedidoData = {
+        nombres: form.cliente,
+        apellidos: form.apellidos,
+        correo: form.para,
+        telefono: form.telefono,
+        fechaSolicitud: new Date().toISOString(),
+        detalles: detallesPedido
+      };
+
+      // Console log fácil de leer para el POST del pedido
+      console.log("🚀 ===== ENVIANDO PEDIDO AL BACKEND =====");
+      console.log("📍 URL: POST /api/pedidos");
+      console.log("📦 DATOS DEL PEDIDO:");
+      console.log(JSON.stringify(pedidoData, null, 2));
+      console.log("============================================");
+
+      await crearPedido(pedidoData);
+
       // Enviar correo al cliente
       await enviarCorreoPedido({
         para: form.para,
-        cliente: form.cliente,
+        cliente: `${form.cliente} ${form.apellidos}`,
         pedidoId,
         total,
         urlDetalle,
@@ -54,20 +85,22 @@ const Carrito = () => {
       // Notificar a la empresa (correo fijo)
       await notificarEmpresa({
         paraEmpresa: "pelopelo103@gmail.com", // Correo fijo de la empresa
-        cliente: form.cliente,
+        cliente: `${form.cliente} ${form.apellidos}`,
         correoCliente: form.para,
         telefonoCliente: form.telefono,
         direccionCliente: form.direccion,
         pedidoId,
-        total,
+        total: total.toString(), // Convertir a string como requiere la API
         items: itemsEmpresa
       });
 
-      setMensaje({ tipo: "success", texto: "¡Pedido confirmado! Se enviaron los correos al cliente y a la empresa." });
+      setMensaje({ tipo: "success", texto: "¡Pedido confirmado! Se creó el pedido y se enviaron los correos al cliente y a la empresa." });
       vaciarCarrito();
-      setForm({ para: "", cliente: "", telefono: "", direccion: "" });
+      setForm({ para: "", cliente: "", apellidos: "", telefono: "", direccion: "" });
     } catch (err) {
-      setMensaje({ tipo: "danger", texto: "Error al procesar el pedido. Verifica los datos." });
+      console.error("❌ ERROR AL PROCESAR PEDIDO:", err);
+      console.error("📄 Respuesta del servidor:", err.response?.data);
+      setMensaje({ tipo: "danger", texto: `Error al procesar el pedido: ${err.response?.data?.message || err.message}` });
     } finally {
       setEnviando(false);
     }
@@ -127,7 +160,7 @@ const Carrito = () => {
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formCliente">
-                  <Form.Label>Nombre del cliente</Form.Label>
+                  <Form.Label>Nombres del cliente</Form.Label>
                   <Form.Control
                     type="text"
                     name="cliente"
@@ -140,6 +173,18 @@ const Carrito = () => {
             </Row>
             <Row className="mb-3">
               <Col md={6}>
+                <Form.Group controlId="formApellidos">
+                  <Form.Label>Apellidos del cliente</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="apellidos"
+                    value={form.apellidos}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
                 <Form.Group controlId="formTelefono">
                   <Form.Label>Teléfono del cliente</Form.Label>
                   <Form.Control
@@ -151,6 +196,8 @@ const Carrito = () => {
                   />
                 </Form.Group>
               </Col>
+            </Row>
+            <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="formDireccion">
                   <Form.Label>Dirección de entrega</Form.Label>

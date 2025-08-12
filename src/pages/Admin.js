@@ -19,6 +19,13 @@ function Admin() {
       >
         Ver Reclamaciones
       </Button>
+      <Button
+        variant="success"
+        className="mt-3 me-3"
+        onClick={() => navigate("/admin/pedidos")}
+      >
+        Ver Pedidos
+      </Button>
       <Button variant="danger" className="mt-3" onClick={handleLogout}>
         Cerrar sesión
       </Button>
