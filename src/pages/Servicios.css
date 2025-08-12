@@ -1,0 +1,85 @@
+/* Estilos para el banner principal */
+.servicios-page {
+  background-color: #f8f9fa; /* Fondo gris claro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.banner-principal {
+  background-color: #0070b8; /* Azul de tu marca */
+  color: #ffffff;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.banner-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.banner-subtitle {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Estilos para la sección de servicios */
+.servicios-main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0070b8;
+  margin-bottom: 2rem;
+}
+
+.service-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%; /* Asegura que todas las tarjetas tengan la misma altura en una fila */
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Efecto de "levantar" al pasar el mouse */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.service-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #0070b8;
+}
+
+.service-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+  .banner-principal {
+    padding: 3rem 0;
+  }
+
+  .banner-title {
+    font-size: 2rem;
+  }
+
+  .banner-subtitle {
+    font-size: 1rem;
+  }
+
+  .servicios-main-title {
+    font-size: 2rem;
+  }
+
+  .service-card {
+    margin-bottom: 1rem;
+  }
+
+  .service-title {
+    font-size: 1.1rem;
+  }
+}

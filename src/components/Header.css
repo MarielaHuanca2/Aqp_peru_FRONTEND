@@ -1,81 +1,91 @@
-/* Fondo azul Dell y altura fija */
 .navbar-header {
-  background-color: #0070b8;
-  min-height: 90px;
-}
-.navbar-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: 0.5rem;
+  background-color: #0070b8; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
 
-
-/* Marca */
 .navbar-brand-custom {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 400;
-  font-size: 1.9rem;
+  font-weight: 700;
+  font-size: 1.9rem; 
   color: #ffffff;
   text-decoration: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .navbar-brand-custom span {
-  color: #e1e8ed;
+  color: #ffffff;
 }
 
-/* Links del menú en blanco y más grandes */
+.navbar-title {
+  font-size: 1.8rem; 
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-left: 0.5rem;
+}
+
 .nav-link-custom {
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.2rem; 
   color: #ffffff;
   text-decoration: none;
-  margin-right: 1.2rem;
-  transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 4px;
 }
 
 .nav-link-custom:hover {
-  color: #4fb0e3;
-  text-decoration: underline;
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
 }
 
-/* Botón ofertas en negro */
 .btn-offer {
-  background-color: #000000;
+  background-color: #ff5722;
   border: none;
   color: #ffffff;
   font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .btn-offer:hover {
+  background-color: #e64a19;
+}
+
+.btn-outline-dark {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-outline-dark:hover {
   background-color: #333333;
   color: #ffffff;
 }
 
-/* Botón Iniciar Sesión o Admin en negro */
-.btn-outline-dark {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border: none !important;
-  font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.shopping-cart-icon {
+  font-size: 1.6rem; 
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
-.btn-outline-dark:hover {
-  background-color: #333333 !important;
-  color: #ffffff !important;
+.shopping-cart-icon:hover {
+  color: #d4e8f7;
 }
 
-/* Mega menú */
 .mega-dropdown {
-  position: relative;
+  position: static;
 }
 
 .mega-menu {
@@ -84,12 +94,11 @@
   top: 100%;
   width: 100%;
   background: #ffffff;
-  padding: 2rem 4rem;
+  padding: 2rem;
   display: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  z-index: 999;
-  min-height: 300px;
-  border-radius: 8px;
+  z-index: 1000;
+  border-radius: 0 0 8px 8px;
 }
 
 .nav-item.mega-hover:hover .mega-menu,
@@ -102,35 +111,89 @@
   display: flex;
   width: 100%;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .mega-menu-column {
   flex: 1;
-  margin-right: 2rem;
+  min-width: 150px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333333;
 }
 
 .mega-menu-column h5 {
-  color: #007db8;
+  color: #0070b8;
+  font-weight: 600;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
 .mega-menu-column p {
   font-size: 0.95rem;
   color: #555555;
+  line-height: 1.4;
 }
 
 .mega-menu-img {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: auto;
+  max-width: 120px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 1rem;
 }
-.shopping-cart-icon:hover {
-  color: #007bff;
-  transition: color 0.3s ease;
+
+@media (max-width: 991.98px) {
+  .navbar-brand-custom {
+    font-size: 1.5rem; 
+  }
+
+  .nav-link-custom {
+    color: #333333 !important;
+    font-size: 1.1rem; 
+    padding: 0.75rem 1rem !important;
+  }
+  .nav-link-custom:hover {
+    background-color: #f0f0f0 !important;
+    color: #0070b8 !important;
+  }
+
+  .navbar-collapse {
+    background-color: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .navbar-collapse .nav-item {
+    width: 100%;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .navbar-collapse .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .mega-menu {
+    position: static;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .mega-menu-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mega-menu-column {
+    padding: 0.5rem 1rem;
+  }
+
+  .d-flex.align-items-center.gap-2 {
+    margin-top: 1rem;
+    justify-content: space-around;
+  }
 }
 
 

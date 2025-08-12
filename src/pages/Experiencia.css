@@ -1,0 +1,121 @@
+.experiencia-page {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #0070b8;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.cliente-logos-section {
+  background-color: #ffffff;
+  padding: 2rem 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cliente-logo-container {
+  height: 120px;
+  justify-content: center;
+}
+
+.cliente-logo {
+  max-height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+}
+
+.cliente-logo:hover {
+  filter: grayscale(0%);
+  transform: scale(1.1);
+}
+
+.cliente-nombre {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-align: center;
+}
+
+.casos-de-exito-section {
+  padding-top: 2rem;
+}
+
+.caso-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.caso-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+.caso-logo-card {
+  max-width: 100px;
+  max-height: 80px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  margin: 0 auto;
+  display: block;
+}
+
+.caso-cliente-nombre {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.caso-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0070b8;
+}
+
+.caso-resumen {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #555;
+  border-left: 3px solid #0070b8;
+  padding-left: 10px;
+  margin-bottom: 1rem;
+}
+
+.caso-ejecutado {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2.2rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .caso-title {
+    font-size: 1.3rem;
+  }
+}

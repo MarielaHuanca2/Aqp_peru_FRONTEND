@@ -1,31 +1,56 @@
+import { useEffect } from 'react';
 import './Home.css';
+
 function Home() {
+  useEffect(() => {
+    const elements = document.querySelectorAll('.fade-in');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="home-main">
+      {/* Primera imagen a pantalla completa */}
+      <div className="full-width-image fade-in">
+        <img src="/CSC-webinicio-01.jpg" alt="Banner 1" className="banner-image" />
+      </div>
+
       <div className="container">
-        {/* Hero */}
-        <div className="row align-items-center mb-5">
+        {/* Texto y botón */}
+        <div className="row align-items-center my-5">
           <div className="col-md-6">
             <h1 className="home-title">Bienvenido a ComputerShops</h1>
             <p className="home-subtitle">
               Tu tienda líder en tecnología, equipos y soluciones empresariales.
               Descubre productos, marcas y servicios de calidad.
             </p>
-            <a href="/productos" className="btn btn-primary btn-lg mt-3">
+          </div>
+          <div className="col-md-6 text-center">
+            <a href="/productos" className="btn btn-primary btn-lg">
               Ver productos
             </a>
           </div>
-          <div className="col-md-6 text-center">
-            <img
-              src="/images/hero.jpg"
-              alt="Tienda ComputerShops"
-              className="home-hero-image"
-            />
-          </div>
         </div>
+      </div>
 
+      {/* Segunda imagen a pantalla completa */}
+      <div className="full-width-image fade-in">
+        <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner-image" />
+      </div>
+
+      <div className="container">
         {/* Tres columnas */}
-        <div className="row text-center mb-5">
+        <div className="row text-center mb-5 mt-5">
           <div className="col-md-4 mb-4">
             <img src="/images/servicio.png" alt="Servicios" className="home-card-img" />
             <h4 className="home-section-title">Servicios Empresariales</h4>
@@ -59,3 +84,4 @@ function Home() {
 }
 
 export default Home;
+

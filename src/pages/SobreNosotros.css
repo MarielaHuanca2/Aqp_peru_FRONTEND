@@ -1,0 +1,168 @@
+/* Estilos generales de la página */
+.about-page {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.about-header {
+  background-color: #ffffff; 
+  color: #ffffff;
+  padding: 4rem 0 2rem;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.about-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #0070b8;
+  padding-bottom: 0.5rem;
+  display: inline-block; 
+}
+
+.about-image {
+  border-radius: 12px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-image:hover {
+  transform: scale(1.02); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+.mission-vision-section {
+  background-color: #6d7480a7; 
+}
+
+.mission-vision-card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-vision-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mission-vision-image {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: contain;
+  margin: 1.5rem auto;
+  display: block;
+}
+
+.mission-title,
+.vision-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #0070b8 !important;
+}
+
+.card-text-justify {
+  text-align: justify;
+  line-height: 1.7;
+}
+
+.valores-section {
+  background-color: #0070b8;
+  color: #ffffff;
+}
+
+.section-title-light {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.valores-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.valores-list li {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.valores-list li i {
+  font-size: 1.2rem;
+}
+
+.policy-intro {
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: justify;
+  color: #555;
+  border-left: 4px solid #0070b8;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.policy-list {
+  padding-left: 2rem;
+}
+
+.policy-list li {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  text-align: justify;
+  font-size: 1rem;
+}
+
+.policy-item-title {
+  color: #0070b8;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .about-header {
+    padding: 2rem 0;
+  }
+  .main-title {
+    font-size: 2.5rem;
+  }
+  .section-title,
+  .section-title-light {
+    font-size: 1.8rem;
+  }
+  .about-text,
+  .card-text-justify,
+  .policy-intro,
+  .policy-list li {
+    font-size: 1rem;
+  }
+  .mission-vision-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .mission-vision-card {
+    margin-bottom: 1.5rem !important;
+  }
+}

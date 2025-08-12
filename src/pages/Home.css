@@ -1,52 +1,133 @@
+/* Estilos generales */
 .home-main {
-  background: #f4f6fa;
-  min-height: 80vh;
-  padding: 60px 0;
-  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9; /* Fondo gris claro para una sensación de limpieza */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333; /* Color de texto principal */
 }
 
+/* Sección de imagen a pantalla completa */
+.full-width-image-container {
+  width: 100%;
+  overflow: hidden;
+  height: 400px; /* Altura fija para banners de escritorio */
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen cubra el contenedor sin distorsionarse */
+  object-position: center;
+}
+
+/* Tipografía y textos */
 .home-title {
+  font-size: 3.5rem; /* Título principal más grande y llamativo */
   font-weight: 700;
-  font-size: 3rem;
-  color: #4682B4;
+  color: #0070b8; /* Usamos el azul de tu marca */
+  margin-bottom: 1rem;
 }
 
 .home-subtitle {
-  font-size: 1.25rem;
-  color: #333;
-  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.6; /* Mejora la legibilidad del texto */
 }
 
-.home-hero-image {
-  max-width: 100%;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(70, 130, 180, 0.2);
-  transition: transform 0.3s ease;
+/* Botón "Ver productos" */
+.btn-primary.btn-lg {
+  background-color: #0070b8;
+  border-color: #0070b8;
+  font-size: 1.2rem;
+  padding: 0.8rem 2.5rem; /* Aumenta el relleno para que el botón sea más visible */
+  border-radius: 50px; /* Bordes redondeados para un look moderno */
+  transition: all 0.3s ease;
 }
 
-.home-hero-image:hover {
-  transform: scale(1.02);
+.btn-primary.btn-lg:hover {
+  background-color: #005a96;
+  border-color: #005a96;
+  transform: translateY(-2px); /* Efecto de "levantar" el botón */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos de las tarjetas (tres columnas) */
+.home-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.home-card:hover {
+  transform: translateY(-10px); /* Efecto de "levantar" la tarjeta al pasar el mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .home-card-img {
-  width: 100%;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 80px; /* Imágenes de íconos más estilizadas */
+  height: 80px;
+  margin-bottom: 1.5rem;
+  object-fit: contain;
 }
 
 .home-section-title {
-  color: #4682B4;
+  font-size: 1.5rem;
   font-weight: 600;
+  color: #0070b8;
 }
 
+/* Sección final de beneficios */
 .home-benefits-title {
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #222;
-  margin-bottom: 10px;
+  color: #333;
+  margin-bottom: 1rem;
 }
 
 .home-benefits-text {
-  font-size: 1.2rem;
-  color: #555;
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Animación fade-in */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 991px) {
+  .home-title {
+    font-size: 2.5rem;
+  }
+
+  .home-subtitle {
+    font-size: 1rem;
+  }
+
+  .home-benefits-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .full-width-image-container {
+    height: 250px; /* Altura más corta para móviles */
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+
+  .home-benefits-title {
+    font-size: 1.8rem;
+  }
 }
