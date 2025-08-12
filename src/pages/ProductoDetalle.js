@@ -1,14 +1,17 @@
 // src/pages/ProductoDetalle.js
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Container, Row, Col, Image, Spinner, Alert, Button } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { Container, Row, Col, Image, Spinner, Alert, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cantidad, setCantidad] = useState(1);
+  const [showToast, setShowToast] = useState(false);
   const { agregarAlCarrito } = useCarrito();
 
   useEffect(() => {
@@ -28,6 +31,14 @@ const ProductoDetalle = () => {
         setLoading(false);
       });
   }, [id]);
+
+  const handleAgregarCarrito = () => {
+    agregarAlCarrito(producto, cantidad);
+    setShowToast(true);
+    setTimeout(() => {
+      navigate('/productos');
+    }, 1500);
+  };
 
   if (loading) {
     return (
@@ -72,8 +83,21 @@ const ProductoDetalle = () => {
           <p className="mb-1"><strong>Especificaciones:</strong> {producto.especificaciones}</p>
           {producto.observaciones && <p className="mb-1"><strong>Observaciones:</strong> {producto.observaciones}</p>}
           <div className="d-flex flex-column gap-2 mt-3">
-            <Button variant="success" onClick={() => agregarAlCarrito(producto)}>
-              Añadir al carrito
+            <div className="d-flex align-items-center gap-2 mb-2">
+              <label htmlFor="cantidad" className="fw-bold">Cantidad:</label>
+              <input
+                id="cantidad"
+                type="number"
+                min="1"
+                max={producto.stock || 99}
+                value={cantidad}
+                onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
+                className="form-control"
+                style={{ width: "80px" }}
+              />
+            </div>
+            <Button variant="success" onClick={handleAgregarCarrito}>
+              Añadir al carrito ({cantidad} {cantidad === 1 ? 'unidad' : 'unidades'})
             </Button>
             {producto.linkHojaDeDatos && (
               <a
@@ -88,6 +112,14 @@ const ProductoDetalle = () => {
           </div>
         </Col>
       </Row>
+      <ToastContainer position="top-center" className="p-3" style={{ position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 9999 }}>
+        <Toast show={showToast} onClose={() => setShowToast(false)} delay={1500} autohide>
+          <Toast.Header>
+            <strong className="me-auto">¡Éxito!</strong>
+          </Toast.Header>
+          <Toast.Body>Producto agregado al carrito. Redirigiendo...</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 };

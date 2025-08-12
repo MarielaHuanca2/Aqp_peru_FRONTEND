@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
-import { enviarCorreoPedido } from "../services/emailService";
+import { enviarCorreoPedido, notificarEmpresa } from "../services/emailService";
 
 const Carrito = () => {
   const { carrito, quitarDelCarrito, vaciarCarrito } = useCarrito();
-  const [form, setForm] = useState({ para: "", cliente: "" });
+  const [form, setForm] = useState({ 
+    para: "", 
+    cliente: "", 
+    telefono: "", 
+    direccion: ""
+  });
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
   const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
@@ -25,7 +30,18 @@ const Carrito = () => {
       cantidad: item.cantidad,
       precio: item.precio
     }));
+    
+    const itemsEmpresa = carrito.map((item) => ({
+      nombre: item.producto,
+      descripcion: item.descripcion || item.producto,
+      sku: item.nroSKU || item.idProducto,
+      cantidad: item.cantidad,
+      precio: item.precio.toString(),
+      subtotal: (item.cantidad * item.precio).toString()
+    }));
+
     try {
+      // Enviar correo al cliente
       await enviarCorreoPedido({
         para: form.para,
         cliente: form.cliente,
@@ -34,11 +50,24 @@ const Carrito = () => {
         urlDetalle,
         items
       });
-      setMensaje({ tipo: "success", texto: "¡Correo enviado correctamente!" });
+
+      // Notificar a la empresa (correo fijo)
+      await notificarEmpresa({
+        paraEmpresa: "pelopelo103@gmail.com", // Correo fijo de la empresa
+        cliente: form.cliente,
+        correoCliente: form.para,
+        telefonoCliente: form.telefono,
+        direccionCliente: form.direccion,
+        pedidoId,
+        total,
+        items: itemsEmpresa
+      });
+
+      setMensaje({ tipo: "success", texto: "¡Pedido confirmado! Se enviaron los correos al cliente y a la empresa." });
       vaciarCarrito();
-      setForm({ para: "", cliente: "" });
+      setForm({ para: "", cliente: "", telefono: "", direccion: "" });
     } catch (err) {
-      setMensaje({ tipo: "danger", texto: "Error al enviar el correo. Verifica los datos." });
+      setMensaje({ tipo: "danger", texto: "Error al procesar el pedido. Verifica los datos." });
     } finally {
       setEnviando(false);
     }
@@ -109,8 +138,34 @@ const Carrito = () => {
                 </Form.Group>
               </Col>
             </Row>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="formTelefono">
+                  <Form.Label>Teléfono del cliente</Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="telefono"
+                    value={form.telefono}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="formDireccion">
+                  <Form.Label>Dirección de entrega</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="direccion"
+                    value={form.direccion}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
             <Button type="submit" variant="primary" disabled={enviando}>
-              {enviando ? <Spinner animation="border" size="sm" /> : "Confirmar pedido y enviar correo"}
+              {enviando ? <Spinner animation="border" size="sm" /> : "Confirmar pedido y enviar correos"}
             </Button>
           </Form>
         </>
