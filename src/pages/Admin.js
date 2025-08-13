@@ -9,8 +9,10 @@ function Admin() {
     authService.logout();
   };
 
-  return (
-    <Container className="mt-5">
+    return (
+      <>
+    {/* ...botones del menú... */}
+        <Container className="mt-5">
       <h2>Bienvenido al panel de administrador</h2>
       <Button
         variant="primary"
@@ -44,6 +46,13 @@ function Admin() {
         Cerrar sesión
       </Button>
     </Container>
+    {/* Segunda imagen a pantalla completa (del Home) */}
+    <br />
+    
+    <div className="full-width-image-container">
+      <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner-image" />
+    </div>
+    </>
   );
 }
 

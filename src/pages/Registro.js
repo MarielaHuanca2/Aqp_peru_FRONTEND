@@ -12,7 +12,7 @@ function Registro() {
     confirmarClave: "",
     telefono: "",
     direccion: "",
-    rol: "ROLE_USER"
+  // rol eliminado, todos los usuarios serán normales
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -187,20 +187,7 @@ function Registro() {
           </Col>
         </Row>
 
-        <Form.Group controlId="formRol" className="mb-3">
-          <Form.Label>Tipo de usuario</Form.Label>
-          <Form.Select 
-            name="rol" 
-            value={formData.rol} 
-            onChange={handleChange}
-          >
-            <option value="ROLE_USER">Usuario</option>
-            <option value="ROLE_ADMIN">Administrador</option>
-          </Form.Select>
-          <Form.Text className="text-muted">
-            Selecciona el tipo de cuenta que necesitas
-          </Form.Text>
-        </Form.Group>
+  {/* Campo de tipo de usuario eliminado, todos los usuarios serán normales */}
 
         <Button 
           variant="primary" 
