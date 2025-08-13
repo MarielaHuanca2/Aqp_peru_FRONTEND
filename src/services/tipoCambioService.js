@@ -1,23 +1,15 @@
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/api";
-const TIPO_CAMBIO_KEY = "tipoCambio";
 
-// Obtener el tipo de cambio desde localStorage o valor por defecto
+// Obtener el tipo de cambio desde la API
 export const obtenerTipoCambio = () => {
-  return new Promise((resolve) => {
-    const tipoCambioGuardado = localStorage.getItem(TIPO_CAMBIO_KEY);
-    const valor = tipoCambioGuardado ? parseFloat(tipoCambioGuardado) : 3.75;
-    resolve({ data: { valor } });
-  });
+  return axios.get(`${API_BASE_URL}/tipocambio/1`);
 };
 
-// Actualizar el tipo de cambio en localStorage
-export const actualizarTipoCambio = (tipoCambio) => {
-  return new Promise((resolve) => {
-    localStorage.setItem(TIPO_CAMBIO_KEY, tipoCambio.toString());
-    resolve({ data: { valor: tipoCambio } });
-  });
+// Actualizar el tipo de cambio en la API (PUT)
+export const actualizarTipoCambio = (tipoCambio, id = 1) => {
+  return axios.put(`${API_BASE_URL}/tipocambio/${id}`, { valor: tipoCambio });
 };
 
 // Función para convertir precio de USD a PEN

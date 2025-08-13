@@ -5,7 +5,7 @@ import { useTipoCambio } from "../context/TipoCambioContext";
 import { actualizarTipoCambio } from "../services/tipoCambioService";
 
 const TipoCambioAdmin = () => {
-  const { tipoCambio, cargarTipoCambio, actualizarTipoCambioLocal } = useTipoCambio();
+  const { tipoCambio, cargarTipoCambio, actualizarTipoCambioGlobal } = useTipoCambio();
   const [nuevoTipoCambio, setNuevoTipoCambio] = useState("");
   const [mensaje, setMensaje] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,20 +25,16 @@ const TipoCambioAdmin = () => {
 
     setLoading(true);
     try {
-      await actualizarTipoCambio(valor);
-      actualizarTipoCambioLocal(valor);
+  await actualizarTipoCambioGlobal(valor, 1);
       setMensaje({ 
         tipo: "success", 
         texto: `Tipo de cambio actualizado exitosamente a ${valor.toFixed(4)} PEN por USD` 
       });
     } catch (error) {
-      console.error("Error al actualizar tipo de cambio:", error);
       setMensaje({ 
-        tipo: "warning", 
-        texto: `Tipo de cambio guardado localmente. Se aplicará inmediatamente.` 
+        tipo: "danger", 
+        texto: `Error al actualizar el tipo de cambio en la API. Se aplicará localmente.` 
       });
-      // Como respaldo, actualizar localmente
-      actualizarTipoCambioLocal(valor);
     } finally {
       setLoading(false);
     }

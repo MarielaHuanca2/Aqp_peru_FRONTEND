@@ -25,6 +25,7 @@ import PedidosAdmin from "./pages/PedidosAdmin";
 import PedidoDetalle from "./pages/PedidoDetalle";
 import ProductosAdmin from "./pages/ProductosAdmin";
 import TipoCambioAdmin from "./pages/TipoCambioAdmin";
+import Registro from "./pages/Registro";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import './index.css';
@@ -34,40 +35,86 @@ function App() {
     <TipoCambioProvider>
       <CarritoProvider>
         <Router>
-          <Header />
-          <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/productos" element={<Productos />} />
-          <Route path="/productos/:id" element={<ProductoDetalle />} /> 
-          <Route path="/marcas" element={<Marcas />} />
-          <Route path="/experiencia" element={<Experiencia />} />
-          <Route path="/servicios" element={<Servicios />} />
-          <Route path="/ofertas" element={<Ofertas />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-          <Route path="/carrito" element={<Carrito />} /> 
-          <Route path="/terminos" element={<Terminos />} /> 
-          <Route path="/reclamaciones" element={<Reclamaciones />} /> 
-          <Route path="/faq" element={<FaqPage />} />
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute>
-                <Admin />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/admin/reclamaciones" element={<PrivateRoute><ReclamacionesAdmin /></PrivateRoute>} />
-          <Route path="/admin/reclamaciones/:id" element={<PrivateRoute><ReclamoDetalle /></PrivateRoute>} />
-          <Route path="/admin/pedidos" element={<PrivateRoute><PedidosAdmin /></PrivateRoute>} />
-          <Route path="/admin/pedidos/:id" element={<PrivateRoute><PedidoDetalle /></PrivateRoute>} />
-          <Route path="/admin/productos" element={<PrivateRoute><ProductosAdmin /></PrivateRoute>} />
-          <Route path="/admin/tipo-cambio" element={<PrivateRoute><TipoCambioAdmin /></PrivateRoute>} />
-        </Routes>
-        <WhatsappButton />
-        <Footer />
-      </Router>
-    </CarritoProvider>
+          <div className="App">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/productos" element={<Productos />} />
+              <Route path="/productos/:id" element={<ProductoDetalle />} />
+              <Route path="/marcas" element={<Marcas />} />
+              <Route path="/experiencia" element={<Experiencia />} />
+              <Route path="/servicios" element={<Servicios />} />
+              <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+              <Route path="/ofertas" element={<Ofertas />} />
+              <Route path="/carrito" element={<Carrito />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registro" element={<Registro />} />
+              <Route path="/terminos" element={<Terminos />} />
+              <Route path="/reclamaciones" element={<Reclamaciones />} />
+              <Route path="/faq" element={<FaqPage />} />
+              <Route 
+                path="/admin" 
+                element={
+                  <PrivateRoute>
+                    <Admin />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/reclamaciones" 
+                element={
+                  <PrivateRoute>
+                    <ReclamacionesAdmin />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/reclamaciones/:id" 
+                element={
+                  <PrivateRoute>
+                    <ReclamoDetalle />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/pedidos" 
+                element={
+                  <PrivateRoute>
+                    <PedidosAdmin />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/pedidos/:id" 
+                element={
+                  <PrivateRoute>
+                    <PedidoDetalle />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/productos" 
+                element={
+                  <PrivateRoute>
+                    <ProductosAdmin />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/admin/tipo-cambio" 
+                element={
+                  <PrivateRoute>
+                    <TipoCambioAdmin />
+                  </PrivateRoute>
+                } 
+              />
+              <Route path="*" element={<div>Página no encontrada</div>} />
+            </Routes>
+            <Footer />
+            <WhatsappButton />
+          </div>
+        </Router>
+      </CarritoProvider>
     </TipoCambioProvider>
   );
 }
