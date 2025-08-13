@@ -1,0 +1,95 @@
+.terms-page {
+  background-color: #f8f9fa; /* Fondo gris claro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Encabezado de la pagina */
+.terms-header {
+  background-color: #ffffff; /* Fondo azul para el encabezado */
+  color: #ffffff;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+/* Los estilos que presenta el estilo principal */
+.intro-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  border-left: 4px solid #0070b8; /* Borde de color para resaltar */
+  padding-left: 1.5rem;
+  color: #555;
+}
+
+.terms-section {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0070b8;
+  border-bottom: 2px solid #e9ecef; /* Línea separadora */
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.terms-list {
+  padding-left: 1.5rem;
+}
+
+.terms-list li {
+  margin-bottom: 0.7rem;
+  line-height: 1.6;
+}
+
+.terms-list strong {
+  color: #0070b8;
+}
+
+.contact-text {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Un diseño mas responsive */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2rem;
+  }
+  .header-subtitle {
+    font-size: 1rem;
+  }
+  .intro-text {
+    font-size: 1rem;
+    padding-left: 1rem;
+  }
+  .terms-section {
+    padding: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.3rem;
+  }
+  .contact-text {
+    font-size: 1rem;
+  }
+}

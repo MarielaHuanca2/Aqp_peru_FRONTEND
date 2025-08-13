@@ -11,7 +11,6 @@ function Footer() {
           <p><strong>Teléfono:</strong> +51 123 456 7890</p>
           <p><strong>Email:</strong> ventas@computershops.pe</p>
           <p><strong>Dirección:</strong> Av. Venezuela Mza. B Lote 14 Urb. Ampliación La Negrita – Arequipa – Arequipa – Arequipa</p>
-          <p><strong>Horarios de atención:</strong></p>
         </div>
 
         <div className="footer-section">

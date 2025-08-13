@@ -21,11 +21,10 @@ function Header() {
         {/* Logo + Nombre */}
         <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
           <img
-            src="/LOGO_CSHOPS.png"
+            src="/logo_nuevo.png"
             alt="Logo"
-            style={{ height: "50px", objectFit: "contain" }}
+            style={{ height: "80px", objectFit: "contain" }}
           />
-          <span className="navbar-title">ComputerShops</span>
         </Navbar.Brand>
 
         {/* Toggler para el menú de hamburguesa en pantallas pequeñas */}

@@ -59,7 +59,7 @@ function Home() {
           <div className="col-md-4 mb-4">
             <img src="/images/brand.png" alt="Marcas" className="home-card-img" />
             <h4 className="home-section-title">Las Mejores Marcas</h4>
-            <p>Trabajamos con Apple, Dell, HP y más líderes del mercado.</p>
+            <p>Trabajamos con Lenovo, Dell, HP y más líderes del mercado.</p>
           </div>
           <div className="col-md-4 mb-4">
             <img src="/images/sales.jpg" alt="Ofertas" className="home-card-img" />
