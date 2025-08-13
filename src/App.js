@@ -55,7 +55,7 @@ function App() {
               <Route 
                 path="/admin" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <Admin />
                   </PrivateRoute>
                 } 
@@ -63,7 +63,7 @@ function App() {
               <Route 
                 path="/admin/reclamaciones" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <ReclamacionesAdmin />
                   </PrivateRoute>
                 } 
@@ -71,7 +71,7 @@ function App() {
               <Route 
                 path="/admin/reclamaciones/:id" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <ReclamoDetalle />
                   </PrivateRoute>
                 } 
@@ -79,7 +79,7 @@ function App() {
               <Route 
                 path="/admin/pedidos" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <PedidosAdmin />
                   </PrivateRoute>
                 } 
@@ -87,7 +87,7 @@ function App() {
               <Route 
                 path="/admin/pedidos/:id" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <PedidoDetalle />
                   </PrivateRoute>
                 } 
@@ -95,7 +95,7 @@ function App() {
               <Route 
                 path="/admin/productos" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <ProductosAdmin />
                   </PrivateRoute>
                 } 
@@ -103,7 +103,7 @@ function App() {
               <Route 
                 path="/admin/tipo-cambio" 
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdmin={true}>
                     <TipoCambioAdmin />
                   </PrivateRoute>
                 } 

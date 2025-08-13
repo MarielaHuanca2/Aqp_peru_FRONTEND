@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Form, Button, Alert, Spinner, Row, Col } from "react-bootstrap";
-import axios from "axios";
+import apiClient from "../services/authService";
 
 function Registro() {
   const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ function Registro() {
       
       console.log("Registrando usuario:", dataToSend);
       
-      const response = await axios.post("http://localhost:8080/api/usuarios", dataToSend);
+      const response = await apiClient.post("/usuarios", dataToSend);
       
       console.log("Registro exitoso:", response.data);
       setSuccess("¡Usuario registrado exitosamente! Redirigiendo al login...");

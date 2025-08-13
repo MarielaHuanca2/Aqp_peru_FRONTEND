@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Image, Spinner, Alert, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
+import apiClient from "../services/authService";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
@@ -19,17 +20,13 @@ const ProductoDetalle = () => {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`http://localhost:8080/api/productos/${id}`)
+    apiClient.get(`/productos/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error("No se encontró el producto");
-        return res.json();
-      })
-      .then((data) => {
-        setProducto(data);
+        setProducto(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        setError(err.response?.data?.message || "No se encontró el producto");
         setLoading(false);
       });
   }, [id]);

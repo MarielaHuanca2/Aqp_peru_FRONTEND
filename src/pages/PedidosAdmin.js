@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../services/authService";
 
 const PedidosAdmin = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -16,7 +16,7 @@ const PedidosAdmin = () => {
   const obtenerPedidos = async () => {
     try {
       setLoading(true);
-      let url = "http://localhost:8080/api/pedidos";
+      let url = "/pedidos";
       const params = new URLSearchParams();
       
       if (filtros.fechaInicio) params.append("fechaInicio", filtros.fechaInicio);
@@ -27,7 +27,7 @@ const PedidosAdmin = () => {
         url += `?${params.toString()}`;
       }
       
-      const response = await axios.get(url);
+      const response = await apiClient.get(url);
       setPedidos(response.data);
       setError(null);
     } catch (err) {

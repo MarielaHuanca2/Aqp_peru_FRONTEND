@@ -1,11 +1,13 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import { authService } from "../services/authService";
 import "./Header.css";
 
 function Header() {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const isAuthenticated = authService.isAuthenticated();
+  const isAdmin = authService.isAdmin();
 
   const handleAdminClick = () => {
     navigate("/admin");
@@ -13,6 +15,10 @@ function Header() {
 
   const handleLoginClick = () => {
     navigate("/login");
+  };
+
+  const handleLogoutClick = () => {
+    authService.logout();
   };
 
   return (
@@ -500,10 +506,17 @@ function Header() {
             >
               Ofertas
             </Button>
-            {isLoggedIn ? (
-              <Button variant="outline-dark" onClick={handleAdminClick}>
-                Admin
-              </Button>
+            {isAuthenticated ? (
+              <>
+                {isAdmin ? (
+                  <Button variant="outline-dark" onClick={handleAdminClick}>
+                    Admin
+                  </Button>
+                ) : null}
+                <Button variant="outline-danger" onClick={handleLogoutClick}>
+                  Cerrar Sesión
+                </Button>
+              </>
             ) : (
               <Button variant="outline-dark" onClick={handleLoginClick}>
                 Iniciar Sesión

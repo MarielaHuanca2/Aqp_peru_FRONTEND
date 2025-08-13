@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
-import axios from "axios";
+import { authService } from "../services/authService";
 
 function Login() {
   const [correo, setCorreo] = useState("");
@@ -12,8 +12,7 @@ function Login() {
 
   // 🔐 Redirige si ya está logeado
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    if (isLoggedIn) {
+    if (authService.isAuthenticated()) {
       navigate("/admin");
     }
   }, [navigate]);
@@ -24,16 +23,8 @@ function Login() {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        correo,
-        clave
-      });
-
-      // Guardar datos del usuario en localStorage
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userData", JSON.stringify(response.data));
-      
-      console.log("Login exitoso:", response.data);
+      const userData = await authService.login(correo, clave);
+      console.log("Login exitoso:", userData);
       navigate("/admin");
     } catch (err) {
       console.error("Error de login:", err);

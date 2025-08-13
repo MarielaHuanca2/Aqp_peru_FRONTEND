@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
+import { authService } from "../services/authService";
 
 function Admin() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    navigate("/");
+    authService.logout();
   };
 
   return (

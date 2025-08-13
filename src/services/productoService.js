@@ -1,5 +1,5 @@
-import axios from "axios";
+import apiClient from "./authService";
 
-const API_URL = "http://localhost:8080/api/productos";
+const PRODUCTOS_URL = "/productos";
 
-export const obtenerProductos = () => axios.get(API_URL);
+export const obtenerProductos = () => apiClient.get(PRODUCTOS_URL);

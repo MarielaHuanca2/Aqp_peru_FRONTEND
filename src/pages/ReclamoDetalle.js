@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
+import apiClient from "../services/authService";
 
 const ReclamoDetalle = () => {
   const { id } = useParams();
@@ -9,10 +10,9 @@ const ReclamoDetalle = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/reclamos/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setReclamo(data);
+    apiClient.get(`/reclamos/${id}`)
+      .then((res) => {
+        setReclamo(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));

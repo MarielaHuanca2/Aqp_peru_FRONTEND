@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Table, Alert, Spinner, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../services/authService";
 
 const PedidoDetalle = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const PedidoDetalle = () => {
     const obtenerPedido = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
+        const response = await apiClient.get(`/pedidos/${id}`);
         setPedido(response.data);
         setError(null);
       } catch (err) {

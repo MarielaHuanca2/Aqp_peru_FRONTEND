@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../services/authService";
 
 const ReclamacionesAdmin = () => {
   const [reclamaciones, setReclamaciones] = useState([]);
@@ -8,10 +9,9 @@ const ReclamacionesAdmin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/reclamos")
-      .then((res) => res.json())
-      .then((data) => {
-        setReclamaciones(data);
+    apiClient.get("/reclamos")
+      .then((res) => {
+        setReclamaciones(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));

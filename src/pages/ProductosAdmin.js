@@ -3,7 +3,7 @@ import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from 
 import { Link } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
 import { useTipoCambio } from "../context/TipoCambioContext";
-import axios from "axios";
+import apiClient from "../services/authService";
 
 const ProductosAdmin = () => {
   const [productos, setProductos] = useState([]);
@@ -129,13 +129,11 @@ const ProductosAdmin = () => {
   const guardarProducto = async (e) => {
     e.preventDefault();
     try {
-      const url = editandoProducto 
-        ? `http://localhost:8080/api/productos/${editandoProducto.idProducto}`
-        : "http://localhost:8080/api/productos";
-      
-      const method = editandoProducto ? "put" : "post";
-      
-      await axios[method](url, formProducto);
+      if (editandoProducto) {
+        await apiClient.put(`/productos/${editandoProducto.idProducto}`, formProducto);
+      } else {
+        await apiClient.post("/productos", formProducto);
+      }
       
       setMensaje({ 
         tipo: "success", 
@@ -155,7 +153,7 @@ const ProductosAdmin = () => {
   const eliminarProducto = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/productos/${id}`);
+        await apiClient.delete(`/productos/${id}`);
         setMensaje({ tipo: "success", texto: "Producto eliminado exitosamente" });
         cargarProductos();
       } catch (err) {

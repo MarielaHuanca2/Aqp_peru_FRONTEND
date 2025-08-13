@@ -1,9 +1,9 @@
-import axios from "axios";
+import apiClient from "./authService";
 
 export function enviarCorreoPedido({ para, cliente, pedidoId, total, urlDetalle, items }) {
   const payload = { para, cliente, pedidoId, total, urlDetalle, items };
   console.log("Enviando JSON a la API:", payload);
-  return axios.post("http://localhost:8080/api/email/enviar-html", payload);
+  return apiClient.post("/email/enviar-html", payload);
 }
 
 export function notificarEmpresa({ 
@@ -35,9 +35,9 @@ export function notificarEmpresa({
   };
   
   console.log("Notificando a la empresa:", payload);
-  return axios.post("http://localhost:8080/api/email/notificar-empresa", payload);
+  return apiClient.post("/email/notificar-empresa", payload);
 }
 
 export function crearPedido(pedidoData) {
-  return axios.post("http://localhost:8080/api/pedidos", pedidoData);
+  return apiClient.post("/pedidos", pedidoData);
 }
