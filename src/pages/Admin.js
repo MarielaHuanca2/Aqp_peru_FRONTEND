@@ -33,6 +33,13 @@ function Admin() {
       >
         Gestionar Productos
       </Button>
+      <Button
+        variant="warning"
+        className="mt-3 me-3"
+        onClick={() => navigate("/admin/tipo-cambio")}
+      >
+        Configurar Tipo de Cambio
+      </Button>
       <Button variant="danger" className="mt-3" onClick={handleLogout}>
         Cerrar sesión
       </Button>

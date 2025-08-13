@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
+import { useTipoCambio } from "../context/TipoCambioContext";
 import axios from "axios";
 
 const ProductosAdmin = () => {
@@ -11,6 +12,7 @@ const ProductosAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [editandoProducto, setEditandoProducto] = useState(null);
   const [mensaje, setMensaje] = useState(null);
+  const { formatearPrecioSoles } = useTipoCambio();
   
   const [filtros, setFiltros] = useState({
     texto: "",
@@ -239,7 +241,7 @@ const ProductosAdmin = () => {
               <td>{producto.producto}</td>
               <td>{producto.marca}</td>
               <td>{producto.modelo}</td>
-              <td>{producto.moneda?.simboloMoneda || 'S/'} {producto.precio?.toFixed(2)}</td>
+              <td>{formatearPrecioSoles(producto.precio || 0)}</td>
               <td>{producto.stock}</td>
               <td>
                 <span className={`badge ${producto.estadoProducto?.estadoProd === 'Activo' ? 'bg-success' : 'bg-danger'}`}>

@@ -1,6 +1,7 @@
 // src/pages/ListaProductos.js
 import React, { useEffect, useState } from "react";
 import { useCarrito } from "../context/CarritoContext";
+import { useTipoCambio } from "../context/TipoCambioContext";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
@@ -9,6 +10,7 @@ const ListaProductos = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const { agregarAlCarrito } = useCarrito();
+  const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
 
   const [filtros, setFiltros] = useState({
     texto: "",
@@ -47,8 +49,8 @@ const ListaProductos = () => {
       (filtros.categoria === "" || prod.categoria?.categoria === filtros.categoria) &&
       (filtros.subCategoria === "" || prod.subCategoria?.subCategoria === filtros.subCategoria) &&
       (filtros.condicion === "" || prod.condicionProducto?.condicionProd === filtros.condicion) &&
-      (filtros.precioMin === "" || prod.precio >= parseFloat(filtros.precioMin)) &&
-      (filtros.precioMax === "" || prod.precio <= parseFloat(filtros.precioMax))
+      (filtros.precioMin === "" || convertirAMonedaSoles(prod.precio) >= parseFloat(filtros.precioMin)) &&
+      (filtros.precioMax === "" || convertirAMonedaSoles(prod.precio) <= parseFloat(filtros.precioMax))
     );
   });
 
@@ -169,7 +171,7 @@ const ListaProductos = () => {
           </Col>
           <Col md={3}>
             <Form.Group>
-              <Form.Label className="small text-muted mb-1">Precio mínimo</Form.Label>
+              <Form.Label className="small text-muted mb-1">Precio mínimo (S/)</Form.Label>
               <Form.Control
                 size="sm"
                 type="number"
@@ -181,7 +183,7 @@ const ListaProductos = () => {
           </Col>
           <Col md={3}>
             <Form.Group>
-              <Form.Label className="small text-muted mb-1">Precio máximo</Form.Label>
+              <Form.Label className="small text-muted mb-1">Precio máximo (S/)</Form.Label>
               <Form.Control
                 size="sm"
                 type="number"
@@ -229,7 +231,7 @@ const ListaProductos = () => {
                     <strong>Categoría:</strong> {prod.categoria?.categoria} <br />
                     <strong>Condición:</strong> {prod.condicionProducto?.condicionProd} <br />
                     <strong>Precio:</strong>{" "}
-                    {prod.moneda?.simboloMoneda || "S/"} {prod.precio?.toFixed(2)} <br />
+                    {formatearPrecioSoles(prod.precio || 0)} <br />
                     <strong>Stock:</strong> {prod.stock}
                   </Card.Text>
                   <div className="mt-auto d-flex flex-column gap-2">

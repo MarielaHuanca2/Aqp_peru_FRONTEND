@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CarritoProvider } from "./context/CarritoContext";
+import { TipoCambioProvider } from "./context/TipoCambioContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -23,16 +24,18 @@ import ReclamoDetalle from "./pages/ReclamoDetalle";
 import PedidosAdmin from "./pages/PedidosAdmin";
 import PedidoDetalle from "./pages/PedidoDetalle";
 import ProductosAdmin from "./pages/ProductosAdmin";
+import TipoCambioAdmin from "./pages/TipoCambioAdmin";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import './index.css';
 
 function App() {
   return (
-    <CarritoProvider>
-      <Router>
-        <Header />
-        <Routes>
+    <TipoCambioProvider>
+      <CarritoProvider>
+        <Router>
+          <Header />
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/productos/:id" element={<ProductoDetalle />} /> 
@@ -59,11 +62,13 @@ function App() {
           <Route path="/admin/pedidos" element={<PrivateRoute><PedidosAdmin /></PrivateRoute>} />
           <Route path="/admin/pedidos/:id" element={<PrivateRoute><PedidoDetalle /></PrivateRoute>} />
           <Route path="/admin/productos" element={<PrivateRoute><ProductosAdmin /></PrivateRoute>} />
+          <Route path="/admin/tipo-cambio" element={<PrivateRoute><TipoCambioAdmin /></PrivateRoute>} />
         </Routes>
         <WhatsappButton />
         <Footer />
       </Router>
     </CarritoProvider>
+    </TipoCambioProvider>
   );
 }
 

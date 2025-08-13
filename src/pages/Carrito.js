@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
+import { useTipoCambio } from "../context/TipoCambioContext";
 import { enviarCorreoPedido, notificarEmpresa, crearPedido } from "../services/emailService";
 
 const Carrito = () => {
   const { carrito, quitarDelCarrito, vaciarCarrito } = useCarrito();
+  const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
   const [form, setForm] = useState({ 
     para: "", 
     cliente: "", 
@@ -14,7 +16,7 @@ const Carrito = () => {
   });
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
-  const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+  const total = carrito.reduce((acc, item) => acc + (convertirAMonedaSoles(item.precio) * item.cantidad), 0);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,7 +40,7 @@ const Carrito = () => {
       sku: item.nroSKU || item.idProducto,
       cantidad: item.cantidad,
       precio: item.precio.toString(),
-      subtotal: (item.cantidad * item.precio).toString()
+      subtotal: (item.cantidad * convertirAMonedaSoles(item.precio)).toString()
     }));
 
     try {
@@ -128,9 +130,9 @@ const Carrito = () => {
               {carrito.map((item) => (
                 <tr key={item.idProducto}>
                   <td>{item.producto}</td>
-                  <td>{item.moneda?.simboloMoneda || 'S/'} {item.precio?.toFixed(2)}</td>
+                  <td>{formatearPrecioSoles(item.precio || 0)}</td>
                   <td>{item.cantidad}</td>
-                  <td>{item.moneda?.simboloMoneda || 'S/'} {(item.precio * item.cantidad).toFixed(2)}</td>
+                  <td>{formatearPrecioSoles((item.precio || 0) * item.cantidad)}</td>
                   <td>
                     <Button variant="danger" size="sm" onClick={() => quitarDelCarrito(item.idProducto)}>
                       Quitar
@@ -142,7 +144,7 @@ const Carrito = () => {
           </Table>
           <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
             <Button variant="outline-danger" onClick={vaciarCarrito}>Vaciar carrito</Button>
-            <h4>Total: {carrito[0]?.moneda?.simboloMoneda || 'S/'} {total.toFixed(2)}</h4>
+            <h4>Total: S/ {total.toFixed(2)}</h4>
           </div>
           <Form onSubmit={handleEnviar} className="border p-3 rounded bg-light">
             <Row className="mb-3">

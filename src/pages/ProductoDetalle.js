@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Image, Spinner, Alert, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useCarrito } from "../context/CarritoContext";
+import { useTipoCambio } from "../context/TipoCambioContext";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const ProductoDetalle = () => {
   const [cantidad, setCantidad] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const { agregarAlCarrito } = useCarrito();
+  const { formatearPrecioSoles } = useTipoCambio();
 
   useEffect(() => {
     setLoading(true);
@@ -75,7 +77,7 @@ const ProductoDetalle = () => {
           <p className="mb-1"><strong>Condición:</strong> {producto.condicionProducto?.condicionProd}</p>
           <p className="mb-1"><strong>Estado:</strong> {producto.estadoProducto?.estadoProd}</p>
           <p className="mb-1"><strong>Stock:</strong> {producto.stock}</p>
-          <p className="mb-1"><strong>Precio:</strong> {producto.moneda?.simboloMoneda || 'S/'} {producto.precio?.toFixed(2)}</p>
+          <p className="mb-1"><strong>Precio:</strong> {formatearPrecioSoles(producto.precio || 0)}</p>
           <p className="mb-1"><strong>Garantía:</strong> {producto.garantia} {producto.umGarantia}</p>
           <p className="mb-1"><strong>Fecha Alta:</strong> {producto.fechaAlta}</p>
           <hr />
