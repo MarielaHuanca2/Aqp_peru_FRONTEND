@@ -46,15 +46,31 @@ const PedidoDetalle = () => {
     );
   }
 
+  // Normalizar campos del pedido para soportar distintos esquemas de respuesta
+  const pedidoId = pedido.idPedido ?? pedido.id ?? pedido.id_pedido ?? "-";
+  const nombres = pedido.nombresSolicitante ?? pedido.nombres ?? "";
+  const apellidos = pedido.apellidosSolicitante ?? pedido.apellidos ?? "";
+  const correo = pedido.correoSolicitante ?? pedido.correo ?? pedido.email ?? "";
+  const telefono = pedido.telefonoSolicitante ?? pedido.telefono ?? "";
+  const fechaRaw = pedido.fechaSolicitud ?? pedido.fechaPedido ?? pedido.fecha ?? null;
+  const fechaDisplay = fechaRaw ? new Date(fechaRaw).toLocaleString() : "";
+  const estado = pedido.estado ?? pedido.estadoPedido ?? "PENDIENTE";
+
+  const monedaSimbolo = pedido.detalles?.[0]?.producto?.moneda?.simboloMoneda ?? 'S/';
+
   const calcularTotal = () => {
-    return pedido.detalles?.reduce((total, detalle) => 
-      total + (detalle.cantidad * detalle.producto.precio), 0
-    ) || 0;
+    return (
+      pedido.detalles?.reduce((total, detalle) => {
+        const cantidad = Number(detalle.cantidad ?? 0);
+        const precio = Number(detalle.producto?.precio ?? 0);
+        return total + cantidad * precio;
+      }, 0) || 0
+    );
   };
 
   return (
     <Container className="mt-5">
-      <h2>Detalle del Pedido #{pedido.id}</h2>
+      <h2>Detalle del Pedido #{pedidoId}</h2>
       
       <Card className="mb-4">
         <Card.Header>
@@ -62,18 +78,18 @@ const PedidoDetalle = () => {
         </Card.Header>
         <Card.Body>
           <div className="row">
-            <div className="col-md-6">
-              <p><strong>Nombre:</strong> {pedido.nombresSolicitante} {pedido.apellidosSolicitante}</p>
-              <p><strong>Correo:</strong> {pedido.correoSolicitante}</p>
-              <p><strong>Teléfono:</strong> {pedido.telefonoSolicitante}</p>
+              <div className="col-md-6">
+              <p><strong>Nombre:</strong> {nombres} {apellidos}</p>
+              <p><strong>Correo:</strong> {correo}</p>
+              <p><strong>Teléfono:</strong> {telefono}</p>
             </div>
             <div className="col-md-6">
-              <p><strong>Fecha del Pedido:</strong> {new Date(pedido.fechaPedido).toLocaleString()}</p>
+              <p><strong>Fecha del Pedido:</strong> {fechaDisplay}</p>
               <p><strong>Estado:</strong> 
-                <span className={`badge ms-2 ${pedido.estado === 'PENDIENTE' ? 'bg-warning' : 
-                  pedido.estado === 'PROCESANDO' ? 'bg-info' : 
-                  pedido.estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
-                  {pedido.estado}
+                <span className={`badge ms-2 ${estado === 'PENDIENTE' ? 'bg-warning' : 
+                  estado === 'PROCESANDO' ? 'bg-info' : 
+                  estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
+                  {estado}
                 </span>
               </p>
             </div>
@@ -98,13 +114,13 @@ const PedidoDetalle = () => {
                 </tr>
               </thead>
               <tbody>
-                {pedido.detalles.map((detalle, index) => (
+        {pedido.detalles.map((detalle, index) => (
                   <tr key={index}>
-                    <td>{detalle.producto.producto}</td>
-                    <td>{detalle.producto.marca}</td>
-                    <td>{detalle.producto.moneda?.simboloMoneda || 'S/'} {detalle.producto.precio?.toFixed(2)}</td>
-                    <td>{detalle.cantidad}</td>
-                    <td>{detalle.producto.moneda?.simboloMoneda || 'S/'} {(detalle.cantidad * detalle.producto.precio).toFixed(2)}</td>
+          <td>{detalle.producto.producto}</td>
+          <td>{detalle.producto.marca}</td>
+          <td>{monedaSimbolo} {(Number(detalle.producto?.precio ?? 0)).toFixed(2)}</td>
+          <td>{Number(detalle.cantidad ?? 0)}</td>
+          <td>{monedaSimbolo} {(Number(detalle.cantidad ?? 0) * Number(detalle.producto?.precio ?? 0)).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -114,7 +130,7 @@ const PedidoDetalle = () => {
           )}
         </Card.Body>
         <Card.Footer className="text-end">
-          <h5>Total: {pedido.detalles?.[0]?.producto.moneda?.simboloMoneda || 'S/'} {calcularTotal().toFixed(2)}</h5>
+          <h5>Total: {monedaSimbolo} {calcularTotal().toFixed(2)}</h5>
         </Card.Footer>
       </Card>
 

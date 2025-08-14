@@ -3,7 +3,8 @@ import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-
 import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
-import { enviarCorreoPedido, notificarEmpresa, crearPedido } from "../services/emailService";
+import { enviarCorreoPedido, notificarEmpresa } from "../services/emailService";
+import { crearPedido as crearPedidoService } from "../services/pedidoService";
 import { authService } from "../services/authService";
 
 const Carrito = () => {
@@ -89,8 +90,8 @@ const Carrito = () => {
 
       // Intentar crear pedido, pero no bloquear el envío de correos si el endpoint requiere auth
       let pedidoCreado = false;
-  try {
-        await crearPedido(pedidoData);
+      try {
+        await crearPedidoService(pedidoData);
         pedidoCreado = true;
       } catch (errCreate) {
         console.warn("crearPedido falló:", errCreate.response?.status, errCreate.response?.data || errCreate.message);
