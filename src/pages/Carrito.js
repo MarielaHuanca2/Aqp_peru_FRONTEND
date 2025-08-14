@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
 import { enviarCorreoPedido, notificarEmpresa, crearPedido } from "../services/emailService";
+import { authService } from "../services/authService";
 
 const Carrito = () => {
   const { carrito, quitarDelCarrito, vaciarCarrito } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ 
     para: "", 
     cliente: "", 
@@ -24,6 +27,12 @@ const Carrito = () => {
 
   const handleEnviar = async (e) => {
     e.preventDefault();
+    // Verificar sesión: solo usuarios autenticados pueden enviar correos desde la UI
+    if (!authService.isAuthenticated()) {
+      setMensaje({ tipo: "danger", texto: "Es necesario estar registrado para hacer pedidos." });
+      setEnviando(false);
+      return;
+    }
     setEnviando(true);
     setMensaje(null);
     const pedidoId = `PED${Date.now()}`;
@@ -72,31 +81,59 @@ const Carrito = () => {
       console.log(JSON.stringify(pedidoData, null, 2));
       console.log("============================================");
 
-      await crearPedido(pedidoData);
+      // Intentar crear pedido, pero no bloquear el envío de correos si el endpoint requiere auth
+      let pedidoCreado = false;
+      try {
+        await crearPedido(pedidoData);
+        pedidoCreado = true;
+      } catch (errCreate) {
+        console.warn("crearPedido falló:", errCreate.response?.status, errCreate.response?.data || errCreate.message);
+      }
 
-      // Enviar correo al cliente
-      await enviarCorreoPedido({
-        para: form.para,
-        cliente: `${form.cliente} ${form.apellidos}`,
-        pedidoId,
-        total,
-        urlDetalle,
-        items
-      });
+      // Enviar correo al cliente (se hace con publicClient en emailService)
+      let correoClienteOk = false;
+      try {
+        await enviarCorreoPedido({
+          para: form.para,
+          cliente: `${form.cliente} ${form.apellidos}`,
+          pedidoId,
+          total,
+          urlDetalle,
+          items
+        });
+        correoClienteOk = true;
+      } catch (errMail) {
+        console.error("Error al enviar correo al cliente:", errMail.response?.status, errMail.response?.data || errMail.message);
+      }
 
       // Notificar a la empresa (correo fijo)
-      await notificarEmpresa({
-        paraEmpresa: "pelopelo103@gmail.com", // Correo fijo de la empresa
-        cliente: `${form.cliente} ${form.apellidos}`,
-        correoCliente: form.para,
-        telefonoCliente: form.telefono,
-        direccionCliente: form.direccion,
-        pedidoId,
-        total: total.toString(), // Convertir a string como requiere la API
-        items: itemsEmpresa
-      });
+      let correoEmpresaOk = false;
+      try {
+        await notificarEmpresa({
+          paraEmpresa: "pelopelo103@gmail.com", // Correo fijo de la empresa
+          cliente: `${form.cliente} ${form.apellidos}`,
+          correoCliente: form.para,
+          telefonoCliente: form.telefono,
+          direccionCliente: form.direccion,
+          pedidoId,
+          total: total.toString(), // Convertir a string como requiere la API
+          items: itemsEmpresa
+        });
+        correoEmpresaOk = true;
+      } catch (errNotify) {
+        console.error("Error al notificar a la empresa:", errNotify.response?.status, errNotify.response?.data || errNotify.message);
+      }
 
-      setMensaje({ tipo: "success", texto: "¡Pedido confirmado! Se creó el pedido y se enviaron los correos al cliente y a la empresa." });
+      // Mensajes según resultado
+      if (pedidoCreado && correoClienteOk && correoEmpresaOk) {
+        setMensaje({ tipo: "success", texto: "¡Pedido confirmado! Se creó el pedido y se enviaron los correos al cliente y a la empresa." });
+      } else if (!pedidoCreado && (correoClienteOk || correoEmpresaOk)) {
+        setMensaje({ tipo: "warning", texto: "No se pudo crear el pedido (401). Los correos se intentaron enviar." });
+      } else if (!correoClienteOk && !correoEmpresaOk) {
+        setMensaje({ tipo: "danger", texto: "Error: no se pudieron enviar los correos ni crear el pedido. Revisa la consola para más detalles." });
+      } else {
+        setMensaje({ tipo: "info", texto: "El proceso terminó con advertencias. Revisa la consola para más detalles." });
+      }
       vaciarCarrito();
       setForm({ para: "", cliente: "", apellidos: "", telefono: "", direccion: "" });
     } catch (err) {

@@ -12,6 +12,8 @@ const ProductosAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [editandoProducto, setEditandoProducto] = useState(null);
   const [mensaje, setMensaje] = useState(null);
+  const [csvFile, setCsvFile] = useState(null);
+  const [importandoCsv, setImportandoCsv] = useState(false);
   const { formatearPrecioSoles } = useTipoCambio();
   
   const [filtros, setFiltros] = useState({
@@ -177,31 +179,29 @@ const ProductosAdmin = () => {
       
       {mensaje && <Alert variant={mensaje.tipo} dismissible onClose={() => setMensaje(null)}>{mensaje.texto}</Alert>}
       
-      {/* Filtros y botón agregar */}
-      <Row className="mb-4 p-3 bg-light rounded">
-        <Col md={4}>
+      {/* Filtros y acciones (más compactos y alineados) */}
+      <Row className="mb-4 p-3 bg-light rounded align-items-center">
+        <Col md={7} className="d-flex gap-2">
           <Form.Control
             type="text"
             placeholder="Buscar productos..."
             value={filtros.texto}
             onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
           />
-        </Col>
-        <Col md={3}>
           <Form.Select
             value={filtros.marca}
             onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
+            style={{ maxWidth: '220px' }}
           >
             <option value="">Todas las marcas</option>
             {marcasDisponibles.map((marca) => (
               <option key={marca} value={marca}>{marca}</option>
             ))}
           </Form.Select>
-        </Col>
-        <Col md={3}>
           <Form.Select
             value={filtros.categoria}
             onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
+            style={{ maxWidth: '220px' }}
           >
             <option value="">Todas las categorías</option>
             {categoriasDisponibles.map((categoria) => (
@@ -209,9 +209,51 @@ const ProductosAdmin = () => {
             ))}
           </Form.Select>
         </Col>
-        <Col md={2}>
+        <Col md={5} className="d-flex justify-content-end align-items-center gap-2">
           <Button variant="success" onClick={() => abrirModalEditar()}>
             + Agregar
+          </Button>
+
+          <div className="d-flex align-items-center gap-2">
+            <Form.Control
+              type="file"
+              accept=".csv,text/csv"
+              onChange={(e) => setCsvFile(e.target.files[0] || null)}
+              style={{ maxWidth: '220px' }}
+            />
+            <Button
+              variant="primary"
+              onClick={async () => {
+                if (!csvFile) {
+                  setMensaje({ tipo: 'danger', texto: 'Selecciona un archivo CSV primero.' });
+                  return;
+                }
+                setImportandoCsv(true);
+                setMensaje(null);
+                try {
+                  const formData = new FormData();
+                  formData.append('archivo', csvFile);
+                  const resp = await apiClient.post('/productos/importar-csv', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                  });
+                  setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV importado correctamente.' });
+                  setCsvFile(null);
+                  cargarProductos();
+                } catch (err) {
+                  console.error('Error importando CSV:', err);
+                  setMensaje({ tipo: 'danger', texto: `Error al importar CSV: ${err.response?.data?.message || err.message}` });
+                } finally {
+                  setImportandoCsv(false);
+                }
+              }}
+              disabled={importandoCsv}
+            >
+              {importandoCsv ? (<><Spinner size="sm" animation="border" className="me-2"/>Importando...</>) : 'Importar CSV'}
+            </Button>
+          </div>
+
+          <Button variant="secondary" onClick={cargarProductos}>
+            Refrescar
           </Button>
         </Col>
       </Row>

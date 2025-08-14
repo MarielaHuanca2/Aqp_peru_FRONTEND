@@ -1,9 +1,14 @@
 import apiClient from "./authService";
+import axios from "axios";
+
+// Public client without auth interceptors for endpoints that must be callable anonymously
+const API_BASE_URL = "http://localhost:8080/api";
+const publicClient = axios.create({ baseURL: API_BASE_URL });
 
 export function enviarCorreoPedido({ para, cliente, pedidoId, total, urlDetalle, items }) {
   const payload = { para, cliente, pedidoId, total, urlDetalle, items };
   console.log("Enviando JSON a la API:", payload);
-  return apiClient.post("/email/enviar-html", payload);
+  return publicClient.post("/email/enviar-html", payload);
 }
 
 export function notificarEmpresa({ 
@@ -35,9 +40,10 @@ export function notificarEmpresa({
   };
   
   console.log("Notificando a la empresa:", payload);
-  return apiClient.post("/email/notificar-empresa", payload);
+  return publicClient.post("/email/notificar-empresa", payload);
 }
 
 export function crearPedido(pedidoData) {
-  return apiClient.post("/pedidos", pedidoData);
+  // Crear pedido en endpoint público usando publicClient
+  return publicClient.post("/pedidos", pedidoData);
 }

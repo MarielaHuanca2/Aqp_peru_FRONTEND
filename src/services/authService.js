@@ -48,9 +48,11 @@ apiClient.interceptors.response.use(
 export const authService = {
   // Verificar si el usuario está autenticado
   isAuthenticated: () => {
-    const token = localStorage.getItem("authToken");
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    return !!(token && isLoggedIn);
+  const token = localStorage.getItem("authToken");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const hasUserData = Boolean(localStorage.getItem("userData") || localStorage.getItem("user"));
+  // Consider authenticated if token present, or isLoggedIn flag true, or user data exists
+  return Boolean(token || isLoggedIn || hasUserData);
   },
 
   // Obtener el token actual
