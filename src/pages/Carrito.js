@@ -19,7 +19,13 @@ const Carrito = () => {
   });
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
-  const total = carrito.reduce((acc, item) => acc + (convertirAMonedaSoles(item.precio) * item.cantidad), 0);
+  // Normalize: keep totals in base currency (USD) and convert only when formatting/sending
+  const totalUsd = carrito.reduce((acc, item) => acc + ((item.precioUSD ?? item.precio ?? 0) * item.cantidad), 0);
+  // Cálculo de IGV 18% en USD
+  const subtotalSinIgv = totalUsd; // in USD
+  const igv = +(subtotalSinIgv * 0.18);
+  const totalConIgv = +(subtotalSinIgv + igv); // in USD
+  const totalConIgvSoles = convertirAMonedaSoles(totalConIgv); // converted once when needed
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -40,7 +46,7 @@ const Carrito = () => {
     const items = carrito.map((item) => ({
       nombre: item.producto,
       cantidad: item.cantidad,
-      precio: item.precio
+      precio: (item.precioUSD ?? item.precio ?? 0)
     }));
     
     const itemsEmpresa = carrito.map((item) => ({
@@ -48,8 +54,8 @@ const Carrito = () => {
       descripcion: item.descripcion || item.producto,
       sku: item.nroSKU || item.idProducto,
       cantidad: item.cantidad,
-      precio: item.precio.toString(),
-      subtotal: (item.cantidad * convertirAMonedaSoles(item.precio)).toString()
+      precio: (item.precioUSD ?? item.precio ?? 0).toString(),
+      subtotal: (item.cantidad * convertirAMonedaSoles(item.precioUSD ?? item.precio ?? 0)).toString()
     }));
 
     try {
@@ -83,7 +89,7 @@ const Carrito = () => {
 
       // Intentar crear pedido, pero no bloquear el envío de correos si el endpoint requiere auth
       let pedidoCreado = false;
-      try {
+  try {
         await crearPedido(pedidoData);
         pedidoCreado = true;
       } catch (errCreate) {
@@ -97,7 +103,8 @@ const Carrito = () => {
           para: form.para,
           cliente: `${form.cliente} ${form.apellidos}`,
           pedidoId,
-          total,
+          // enviar total en soles al cliente
+          total: totalConIgvSoles,
           urlDetalle,
           items
         });
@@ -116,7 +123,8 @@ const Carrito = () => {
           telefonoCliente: form.telefono,
           direccionCliente: form.direccion,
           pedidoId,
-          total: total.toString(), // Convertir a string como requiere la API
+          // enviar total en soles a la empresa
+          total: totalConIgvSoles.toString(), // Convertir a string en soles como requiere la API
           items: itemsEmpresa
         });
         correoEmpresaOk = true;
@@ -181,7 +189,12 @@ const Carrito = () => {
           </Table>
           <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
             <Button variant="outline-danger" onClick={vaciarCarrito}>Vaciar carrito</Button>
-            <h4>Total: S/ {total.toFixed(2)}</h4>
+            <div className="text-end">
+              <div>Sin IGV: <strong>S/ {formatearPrecioSoles(subtotalSinIgv)}</strong></div>
+              <div>Sin IGV: <strong>{formatearPrecioSoles(subtotalSinIgv)}</strong></div>
+              <div>IGV (18%): <strong>{formatearPrecioSoles(igv)}</strong></div>
+              <h4 className="mt-1">Total (con IGV): {formatearPrecioSoles(totalConIgv)}</h4>
+            </div>
           </div>
           <Form onSubmit={handleEnviar} className="border p-3 rounded bg-light">
             <Row className="mb-3">

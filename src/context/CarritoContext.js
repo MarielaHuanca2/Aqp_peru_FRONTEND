@@ -19,7 +19,10 @@ export function CarritoProvider({ children }) {
             : item
         );
       } else {
-        return [...prev, { ...producto, cantidad }];
+  // Normalize price: store a canonical precioUSD field (coerce to Number)
+  const precioUSD = producto.precioUSD ?? producto.precio ?? 0;
+  const precioUsdNumber = typeof precioUSD === 'string' ? parseFloat(precioUSD) || 0 : precioUSD;
+  return [...prev, { ...producto, precioUSD: precioUsdNumber, cantidad }];
       }
     });
   };
