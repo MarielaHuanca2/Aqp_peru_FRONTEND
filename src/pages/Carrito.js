@@ -62,12 +62,34 @@ const Carrito = () => {
     try {
       // Crear pedido en el backend con el formato correcto
       const detallesPedido = carrito.map((item) => {
-        // Preserve idProducto as-is (string). Offer items may have nested `producto` object.
-        const idVal = item.idProducto ?? item.id ?? item.nroSKU ?? item.producto?.idProducto ?? item.producto?.id ?? String(Date.now());
+        // Preserve idProducto and include a snapshot of the product (same fields as ProductosAdmin)
+        const origen = item.producto && typeof item.producto === 'object' ? item.producto : item;
+        const idVal = item.idProducto ?? item.id ?? item.nroSKU ?? origen.idProducto ?? origen.id ?? String(Date.now());
+
+        const productoSnapshot = {
+          idProducto: String(idVal),
+          nroModelo: origen.nroModelo ?? origen.nroModelo ?? "",
+          nroParte: origen.nroParte ?? "",
+          nroSKU: origen.nroSKU ?? origen.nroSKU ?? "",
+          producto: origen.producto ?? origen.nombre ?? origen.title ?? "",
+          marca: origen.marca ?? "",
+          modelo: origen.modelo ?? "",
+          descripcion: origen.descripcion ?? "",
+          especificaciones: origen.especificaciones ?? "",
+          precio: Number(item.precioUSD ?? item.precio ?? origen.precio ?? 0),
+          stock: Number(item.stock ?? origen.stock ?? 0),
+          observaciones: origen.observaciones ?? "",
+          foto1: origen.foto1 ?? origen.imagen ?? "",
+          foto2: origen.foto2 ?? "",
+          foto3: origen.foto3 ?? "",
+          foto4: origen.foto4 ?? "",
+          linkHojaDeDatos: origen.linkHojaDeDatos ?? "",
+          garantia: origen.garantia ?? "",
+          umGarantia: origen.umGarantia ?? "años"
+        };
+
         return {
-          producto: { 
-            idProducto: String(idVal)
-          },
+          producto: productoSnapshot,
           cantidad: item.cantidad
         };
       });
