@@ -2,22 +2,44 @@ import React, { useState, useEffect } from "react";
 import { Container, Card, Table, Alert, Spinner, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import apiClient from "../services/authService";
+import axios from "axios";
+import { useTipoCambio } from "../context/TipoCambioContext";
 
 const PedidoDetalle = () => {
   const { id } = useParams();
   const [pedido, setPedido] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null);
+  // Hook must be called unconditionally at top-level
+  const { tipoCambio: tipoCambioGlobal, convertirAMonedaSoles } = useTipoCambio();
 
   useEffect(() => {
     const obtenerPedido = async () => {
       try {
         setLoading(true);
-        const response = await apiClient.get(`/pedidos/${id}`);
+        // Use a local axios instance without the auth interceptor so a 401 doesn't force a redirect
+        const localClient = axios.create({ baseURL: apiClient.defaults.baseURL });
+        // Attach JWT manually from localStorage so the request includes the token but bypasses the global interceptor
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          localClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        }
+        const response = await localClient.get(`/pedidos/${id}`);
         setPedido(response.data);
+        // record whether we attempted to send a token
+        setDebugInfo((d) => ({ ...(d || {}), tokenSent: !!token }));
         setError(null);
       } catch (err) {
+        // Capture debug information for the UI
+        const debug = {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data,
+          headers: err.response?.headers
+        };
         setError("Error al cargar el pedido");
+        setDebugInfo(debug);
       } finally {
         setLoading(false);
       }
@@ -39,6 +61,14 @@ const PedidoDetalle = () => {
     return (
       <Container className="mt-5">
         <Alert variant="danger">{error || "Pedido no encontrado"}</Alert>
+        {debugInfo && (
+          <div className="mt-3 p-3 bg-light border rounded">
+            <h6>Debug info</h6>
+            <pre style={{ whiteSpace: 'pre-wrap', maxHeight: 300, overflow: 'auto' }}>
+              {JSON.stringify(debugInfo, null, 2)}
+            </pre>
+          </div>
+        )}
         <Link to="/admin/pedidos" className="btn btn-secondary">
           Volver a Pedidos
         </Link>
@@ -64,6 +94,22 @@ const PedidoDetalle = () => {
         const cantidad = Number(detalle.cantidad ?? 0);
         const precio = Number(detalle.producto?.precio ?? 0);
         return total + cantidad * precio;
+      }, 0) || 0
+    );
+  };
+
+  // Tipo de cambio helper: preferir el valor enviado por detalle, si existe
+  const convertirConDetalle = (precioUsd, detalle) => {
+    const tc = Number(detalle?.tipoCambioValor ?? detalle?.tipoCambio?.valor ?? tipoCambioGlobal ?? 0);
+    return precioUsd * tc;
+  };
+
+  const calcularTotalSoles = () => {
+    return (
+      pedido.detalles?.reduce((total, detalle) => {
+        const cantidad = Number(detalle.cantidad ?? 0);
+        const precio = Number(detalle.producto?.precio ?? 0);
+        return total + cantidad * convertirConDetalle(precio, detalle);
       }, 0) || 0
     );
   };
@@ -115,13 +161,25 @@ const PedidoDetalle = () => {
               </thead>
               <tbody>
         {pedido.detalles.map((detalle, index) => (
-                  <tr key={index}>
-          <td>{detalle.producto.producto}</td>
-          <td>{detalle.producto.marca}</td>
-          <td>{monedaSimbolo} {(Number(detalle.producto?.precio ?? 0)).toFixed(2)}</td>
-          <td>{Number(detalle.cantidad ?? 0)}</td>
-          <td>{monedaSimbolo} {(Number(detalle.cantidad ?? 0) * Number(detalle.producto?.precio ?? 0)).toFixed(2)}</td>
-                  </tr>
+                      <tr key={index}>
+                        <td>{detalle.producto.producto}</td>
+                        <td>{detalle.producto.marca}</td>
+                        {
+                          (() => {
+                            const precioUsd = Number(detalle.producto?.precio ?? 0);
+                            const tc = Number(detalle.tipoCambioValor ?? detalle.tipoCambio?.valor ?? tipoCambioGlobal ?? 0);
+                            const precioSoles = precioUsd * tc;
+                            return (
+                              <td>
+                                {detalle.producto.moneda?.simboloMoneda ?? '$'} {precioUsd.toFixed(2)}
+                                <div className="text-muted small">S/ {precioSoles.toFixed(2)} (TC {tc.toFixed(4)})</div>
+                              </td>
+                            );
+                          })()
+                        }
+                        <td>{Number(detalle.cantidad ?? 0)}</td>
+                        <td>S/ {(Number(detalle.cantidad ?? 0) * Number(detalle.producto?.precio ?? 0) * (Number(detalle.tipoCambioValor ?? detalle.tipoCambio?.valor ?? tipoCambioGlobal ?? 0))).toFixed(2)}</td>
+                      </tr>
                 ))}
               </tbody>
             </Table>
@@ -130,7 +188,7 @@ const PedidoDetalle = () => {
           )}
         </Card.Body>
         <Card.Footer className="text-end">
-          <h5>Total: {monedaSimbolo} {calcularTotal().toFixed(2)}</h5>
+          <h5>Total (S/): {calcularTotalSoles().toFixed(2)}</h5>
         </Card.Footer>
       </Card>
 

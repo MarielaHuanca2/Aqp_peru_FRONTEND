@@ -7,6 +7,7 @@ const PedidosAdmin = () => {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null);
   const [filtros, setFiltros] = useState({
     fechaInicio: "",
     fechaFin: "",
@@ -30,8 +31,15 @@ const PedidosAdmin = () => {
       const response = await apiClient.get(url);
       setPedidos(response.data);
       setError(null);
+      setDebugInfo(null);
     } catch (err) {
       setError("Error al cargar los pedidos");
+      setDebugInfo({
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        headers: err.response?.headers
+      });
     } finally {
       setLoading(false);
     }
@@ -115,6 +123,12 @@ const PedidosAdmin = () => {
       </Form>
 
       {error && <Alert variant="danger">{error}</Alert>}
+      {debugInfo && (
+        <div className="mb-3 p-2 bg-light border rounded">
+          <strong>Debug:</strong>
+          <pre style={{ maxHeight: 200, overflow: 'auto' }}>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </div>
+      )}
 
       {pedidos.length === 0 ? (
         <Alert variant="info">No se encontraron pedidos.</Alert>
@@ -132,30 +146,41 @@ const PedidosAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {pedidos.map((pedido) => (
-              <tr key={pedido.id}>
-                <td>{pedido.id}</td>
-                <td>{pedido.nombresSolicitante} {pedido.apellidosSolicitante}</td>
-                <td>{pedido.correoSolicitante}</td>
-                <td>{pedido.telefonoSolicitante}</td>
-                <td>{new Date(pedido.fechaPedido).toLocaleDateString()}</td>
-                <td>
-                  <span className={`badge ${pedido.estado === 'PENDIENTE' ? 'bg-warning' : 
-                    pedido.estado === 'PROCESANDO' ? 'bg-info' : 
-                    pedido.estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
-                    {pedido.estado}
-                  </span>
-                </td>
-                <td>
-                  <Link 
-                    to={`/admin/pedidos/${pedido.id}`} 
-                    className="btn btn-sm btn-outline-primary"
-                  >
-                    Ver Detalles
-                  </Link>
-                </td>
-              </tr>
-            ))}
+            {pedidos.map((pedido) => {
+              const id = pedido.idPedido ?? pedido.id ?? pedido.id_pedido ?? "";
+              const nombres = pedido.nombresSolicitante ?? pedido.nombres ?? "";
+              const apellidos = pedido.apellidosSolicitante ?? pedido.apellidos ?? "";
+              const correo = pedido.correoSolicitante ?? pedido.correo ?? pedido.email ?? "";
+              const telefono = pedido.telefonoSolicitante ?? pedido.telefono ?? "";
+              const fechaRaw = pedido.fechaSolicitud ?? pedido.fechaPedido ?? pedido.fecha ?? null;
+              const fecha = fechaRaw ? new Date(fechaRaw).toLocaleDateString() : "";
+              const estado = pedido.estado ?? pedido.estadoPedido ?? "PENDIENTE";
+
+              return (
+                <tr key={id}>
+                  <td>{id}</td>
+                  <td>{nombres} {apellidos}</td>
+                  <td>{correo}</td>
+                  <td>{telefono}</td>
+                  <td>{fecha}</td>
+                  <td>
+                    <span className={`badge ${estado === 'PENDIENTE' ? 'bg-warning' : 
+                      estado === 'PROCESANDO' ? 'bg-info' : 
+                      estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
+                      {estado}
+                    </span>
+                  </td>
+                  <td>
+                    <Link 
+                      to={`/admin/pedidos/${id}`} 
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      Ver Detalles
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       )}
