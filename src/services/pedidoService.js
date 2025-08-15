@@ -23,7 +23,13 @@ export async function crearPedido(pedidoData) {
     correo: pedidoData.correo,
     telefono: pedidoData.telefono,
     fechaSolicitud: pedidoData.fechaSolicitud ?? new Date().toISOString(),
-    detalles: pedidoData.detalles || []
+    detalles: (pedidoData.detalles || []).map(d => ({
+      ...d,
+      producto: {
+        ...(d.producto || {}),
+        idProducto: String(d.producto?.idProducto ?? d.producto?.id ?? d.producto)
+      }
+    }))
   };
 
   console.log("[pedidoService] POST /pedidos ->", payload);

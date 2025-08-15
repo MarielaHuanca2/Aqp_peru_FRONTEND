@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { obtenerProductos } from "../services/productoService";
+import { obtenerProductos, importarCsvOfertas } from "../services/productoService";
+import { useNavigate } from "react-router-dom";
 import { useTipoCambio } from "../context/TipoCambioContext";
 import apiClient from "../services/authService";
 
@@ -15,6 +16,7 @@ const ProductosAdmin = () => {
   const [csvFile, setCsvFile] = useState(null);
   const [importandoCsv, setImportandoCsv] = useState(false);
   const { formatearPrecioSoles } = useTipoCambio();
+  const navigate = useNavigate();
   
   const [filtros, setFiltros] = useState({
     texto: "",
@@ -214,6 +216,10 @@ const ProductosAdmin = () => {
             + Agregar
           </Button>
 
+          <Button variant="outline-primary" onClick={() => navigate('/admin/ofertas')}>
+            Administrar Ofertas
+          </Button>
+
           <div className="d-flex align-items-center gap-2">
             <Form.Control
               type="file"
@@ -245,6 +251,43 @@ const ProductosAdmin = () => {
                 } finally {
                   setImportandoCsv(false);
                 }
+
+          {/* Importar CSV para ofertas */}
+          <div className="d-flex align-items-center gap-2">
+            <Form.Control
+              type="file"
+              accept=".csv,text/csv"
+              onChange={(e) => setCsvFile(e.target.files[0] || null)}
+              style={{ maxWidth: '220px' }}
+            />
+            <Button
+              variant="info"
+              onClick={async () => {
+                if (!csvFile) {
+                  setMensaje({ tipo: 'danger', texto: 'Selecciona un archivo CSV para ofertas primero.' });
+                  return;
+                }
+                setImportandoCsv(true);
+                setMensaje(null);
+                try {
+                  const formData = new FormData();
+                  formData.append('archivo', csvFile);
+                  const resp = await importarCsvOfertas(formData);
+                  setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV de ofertas importado correctamente.' });
+                  setCsvFile(null);
+                  cargarProductos();
+                } catch (err) {
+                  console.error('Error importando CSV ofertas:', err);
+                  setMensaje({ tipo: 'danger', texto: `Error al importar CSV de ofertas: ${err.response?.data?.message || err.message}` });
+                } finally {
+                  setImportandoCsv(false);
+                }
+              }}
+              disabled={importandoCsv}
+            >
+              {importandoCsv ? (<><Spinner size="sm" animation="border" className="me-2"/>Importando ofertas...</>) : 'Importar CSV Ofertas'}
+            </Button>
+          </div>
               }}
               disabled={importandoCsv}
             >

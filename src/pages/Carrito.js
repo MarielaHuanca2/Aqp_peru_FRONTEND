@@ -62,11 +62,11 @@ const Carrito = () => {
     try {
       // Crear pedido en el backend con el formato correcto
       const detallesPedido = carrito.map((item) => {
-        // Extraer el número del ID (ej: "PROD000001" -> "1")
-        const idNumerico = item.idProducto.replace(/\D/g, '') || "1";
+        // Preserve idProducto as-is (string). Offer items may have nested `producto` object.
+        const idVal = item.idProducto ?? item.id ?? item.nroSKU ?? item.producto?.idProducto ?? item.producto?.id ?? String(Date.now());
         return {
           producto: { 
-            idProducto: idNumerico 
+            idProducto: String(idVal)
           },
           cantidad: item.cantidad
         };
