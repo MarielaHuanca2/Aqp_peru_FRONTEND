@@ -36,6 +36,13 @@ function Admin() {
         Gestionar Productos
       </Button>
       <Button
+        variant="secondary"
+        className="mt-3 me-3"
+        onClick={() => navigate('/admin/mesa-ayuda')}
+      >
+        Mesa de ayuda
+      </Button>
+      <Button
         variant="warning"
         className="mt-3 me-3"
         onClick={() => navigate("/admin/tipo-cambio")}
