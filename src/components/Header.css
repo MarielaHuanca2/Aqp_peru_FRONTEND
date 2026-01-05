@@ -196,4 +196,186 @@
   }
 }
 
+/* Contenedor principal del item */
+.nav-item.mega-dropdown {
+  position: relative;
+  padding: 10px 15px; /* Espacio para que el mouse no salga del área */
+}
 
+/* El menú oculto por defecto */
+.mega-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* Justo debajo del nav-item */
+  left: 0;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  z-index: 1000;
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+  border-top: 3px solid #007bff; /* Opcional: línea de color superior */
+}
+
+/* TRUCO: El "Puente Invisible" */
+.mega-menu::before {
+  content: "";
+  position: absolute;
+  top: -20px; /* Cubre el hueco hacia arriba */
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: transparent; /* Invisible pero capta el mouse */
+}
+
+/* Mostrar el menú al hacer HOVER en el padre, sin necesidad de clic */
+.nav-item.mega-dropdown:hover .mega-menu {
+  display: block;
+  animation: slideIn 0.2s ease-out;
+}
+
+/* Animación suave para mejor UX */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos internos para que se vea ordenado */
+.menu-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.vertical-divider {
+  width: 1px;
+  background: #e0e0e0;
+  margin: 0 25px;
+}
+
+.mega-menu a {
+  display: block;
+  color: #555;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+
+.mega-menu a:hover {
+  color: #007bff;
+}
+
+.shopping-cart-icon {
+  font-size: 1.6rem;
+  color: #333;
+  margin-right: 10px;
+}
+
+/* ... (mantén tu CSS anterior y agrega esto al final) ... */
+
+/* Clase para forzar el cierre instantáneo al hacer clic */
+.nav-item.mega-dropdown.force-close .mega-menu {
+  display: none !important;
+}
+
+/* Aseguramos que los links del mega-menu ocupen su espacio para capturar el click */
+.mega-menu a {
+  display: block;
+  width: 100%;
+}
+
+/* --- Estructura de Navegación --- */
+.nav-item.mega-dropdown {
+  position: relative;
+}
+
+.nav-link-custom {
+  color: #222;
+  text-decoration: none;
+  padding: 30px 15px !important; /* El padding alto elimina el gap para el mouse */
+  display: block;
+}
+
+/* --- El Mega Menu --- */
+.mega-menu {
+  display: none;
+  position: absolute;
+  top: 85%; /* Alineado para que el mouse no pierda contacto */
+  left: 0;
+  background: white;
+  z-index: 1000;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 0 0 8px 8px;
+  border-top: 2px solid #eee;
+}
+
+/* Puente invisible para mantener el hover activo */
+.mega-menu::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 25px;
+  background: transparent;
+}
+
+/* Mostrar al apuntar con el mouse */
+.nav-item.mega-dropdown:hover .mega-menu {
+  display: block;
+}
+
+/* --- SOLUCIÓN OBSERVACIÓN 2: CIERRE FORZADO --- */
+.nav-item.mega-dropdown.forced-closed .mega-menu {
+  display: none !important;
+}
+
+/* --- Estilos de contenido interno --- */
+.menu-title-custom {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.vertical-divider-custom {
+  width: 1px;
+  background: #d1d5db;
+  margin: 0 16px;
+  align-self: stretch;
+}
+
+.list-unstyled li a {
+  color: #444;
+  text-decoration: none;
+  display: block;
+  padding: 5px 0;
+  transition: color 0.2s;
+}
+
+.list-unstyled li a:hover {
+  color: #007bff;
+}
+
+.exp-card-custom {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  width: 150px;
+  cursor: pointer;
+}
+
+.service-item-custom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.service-dot {
+  width: 8px;
+  height: 8px;
+  background: #007bff;
+  border-radius: 50%;
+}
