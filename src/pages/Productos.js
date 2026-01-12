@@ -5,6 +5,7 @@ import { useTipoCambio } from "../context/TipoCambioContext";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
+import { useFiltroProductos } from "../context/FiltroProductosContext";
 
 const ListaProductos = () => {
   const [productos, setProductos] = useState([]);
@@ -12,15 +13,7 @@ const ListaProductos = () => {
   const { agregarAlCarrito } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
 
-  const [filtros, setFiltros] = useState({
-    texto: "",
-    marca: "",
-    categoria: "",
-    subCategoria: "",
-    condicion: "",
-    precioMin: "",
-    precioMax: ""
-  });
+  const { filtros, setFiltros } = useFiltroProductos();
 
   // Obtener opciones únicas para los filtros
   const marcasDisponibles = [...new Set(productos.map(p => p.marca))].sort();
@@ -38,21 +31,38 @@ const ListaProductos = () => {
   }, []);
 
   const productosFiltrados = productos.filter((prod) => {
-    const texto = filtros.texto.toLowerCase();
+  const texto = filtros.texto.toLowerCase();
 
-    return (
-      (filtros.texto === "" ||
-        prod.producto.toLowerCase().includes(texto) ||
-        prod.descripcion?.toLowerCase().includes(texto) ||
-        prod.modelo?.toLowerCase().includes(texto)) &&
-      (filtros.marca === "" || prod.marca === filtros.marca) &&
-      (filtros.categoria === "" || prod.categoria?.categoria === filtros.categoria) &&
-      (filtros.subCategoria === "" || prod.subCategoria?.subCategoria === filtros.subCategoria) &&
-      (filtros.condicion === "" || prod.condicionProducto?.condicionProd === filtros.condicion) &&
-      (filtros.precioMin === "" || convertirAMonedaSoles(prod.precio) >= parseFloat(filtros.precioMin)) &&
-      (filtros.precioMax === "" || convertirAMonedaSoles(prod.precio) <= parseFloat(filtros.precioMax))
-    );
-  });
+  return (
+    (filtros.texto === "" ||
+      prod.producto.toLowerCase().includes(texto) ||
+      prod.descripcion?.toLowerCase().includes(texto) ||
+      prod.modelo?.toLowerCase().includes(texto)) &&
+
+    (filtros.marca === "" ||
+      prod.marca?.toLowerCase() === filtros.marca.toLowerCase()
+    ) &&
+
+    (filtros.categoria === "" ||
+      prod.categoria?.categoria?.toLowerCase() === filtros.categoria.toLowerCase()
+    ) &&
+
+    (filtros.subCategoria === "" ||
+      prod.subCategoria?.subCategoria?.toLowerCase() === filtros.subCategoria.toLowerCase()
+    ) &&
+
+    (filtros.condicion === "" ||
+      prod.condicionProducto?.condicionProd?.toLowerCase() === filtros.condicion.toLowerCase()
+    ) &&
+
+    (filtros.precioMin === "" ||
+      convertirAMonedaSoles(prod.precio) >= parseFloat(filtros.precioMin)) &&
+
+    (filtros.precioMax === "" ||
+      convertirAMonedaSoles(prod.precio) <= parseFloat(filtros.precioMax))
+  );
+});
+
 
   const limpiarFiltros = () => {
     setFiltros({

@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Productos from "./pages/Productos";
 import Marcas from "./pages/Marcas"; 
 import Experiencia from "./pages/Experiencia";
+import FiltroProductosContext, { FiltroProductosProvider } from "./context/FiltroProductosContext";
 import Servicios from "./pages/Servicios";
 import Ofertas from "./pages/Ofertas";
 import Login from "./pages/Login";
@@ -34,6 +35,7 @@ import './index.css';
 function App() {
   return (
     <TipoCambioProvider>
+      <FiltroProductosProvider>
       <CarritoProvider>
         <Router>
           <div className="App">
@@ -124,6 +126,7 @@ function App() {
           </div>
         </Router>
       </CarritoProvider>
+    </FiltroProductosProvider>
     </TipoCambioProvider>
   );
 }

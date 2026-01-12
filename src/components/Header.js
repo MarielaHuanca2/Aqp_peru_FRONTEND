@@ -1,31 +1,65 @@
+import React, { useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
-import { authService } from "../services/authService";
+import { useFiltroProductos } from "../context/FiltroProductosContext";
 import "./Header.css";
 
 function Header() {
   const navigate = useNavigate();
-  const isAuthenticated = authService.isAuthenticated();
-  const isAdmin = authService.isAdmin();
+  const { setFiltros } = useFiltroProductos();
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  // Estado para forzar el cierre del menú al hacer click
+  const [isMenuForcedClosed, setIsMenuForcedClosed] = useState(false);
+  // Estado para controlar el mega menú de Productos
+  const [isMegaOpen, setIsMegaOpen] = useState(false);
+
+  // Función para cerrar el menú inmediatamente
+  const closeMenu = () => {
+    setIsMenuForcedClosed(true);
+    setTimeout(() => setIsMenuForcedClosed(false), 300);
+  };
 
   const handleAdminClick = () => {
+    closeMenu();
     navigate("/admin");
   };
 
   const handleLoginClick = () => {
+    closeMenu();
     navigate("/login");
   };
 
-  const handleLogoutClick = () => {
-    authService.logout();
+  // 👉 FUNCIÓN CENTRAL DE FILTRADO
+  const irAProductosConFiltro = (nuevoFiltro) => {
+    setFiltros({
+      texto: "",
+      marca: "",
+      categoria: "",
+      subCategoria: "",
+      condicion: "",
+      precioMin: "",
+      precioMax: "",
+      ...nuevoFiltro,
+    });
+
+    // Cerrar mega menú y menu forzado antes de navegar
+    setIsMegaOpen(false);
+    closeMenu();
+    navigate("/productos");
   };
 
   return (
     <Navbar expand="lg" className="navbar-header">
       <Container fluid style={{ position: "relative" }}>
-        {/* Logo + Nombre */}
-        <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="navbar-brand-custom"
+          onClick={closeMenu}
+        >
           <img
             src="/logo_nuevo.png"
             alt="Logo"
@@ -33,306 +67,159 @@ function Header() {
           />
         </Navbar.Brand>
 
-        {/* Toggler para el menú de hamburguesa en pantallas pequeñas */}
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-        {/* Contenedor colapsable que agrupa los links y los botones */}
         <Navbar.Collapse id="responsive-navbar-nav">
-          {/* Links de navegación */}
           <Nav className="me-auto d-flex align-items-center">
-            {/* Productos */}
-            <div
-              className="nav-item mega-hover mega-dropdown"
-              style={{ position: "relative" }}
-            >
-              <Link to="/productos" className="nav-link-custom">
-                Productos
-              </Link>
-              <div className="mega-menu">
-                <div
-                  className="mega-menu-content"
-                  style={{
-                    display: "flex",
-                    flexWrap: "nowrap",
-                    gap: "0",
-                    minWidth: "500px",
-                    alignItems: "flex-start",
+            {/* PRODUCTOS (mega menú controlado por botón) */}
+            <div className={`nav-item mega-dropdown ${isMenuForcedClosed ? "forced-closed" : ""}`}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <Link to="/productos" className="nav-link-custom" onClick={() => { closeMenu(); setIsMegaOpen(false); }}>
+                  Productos
+                </Link>
+
+                <button
+                  type="button"
+                  className="mega-toggle-btn"
+                  aria-expanded={isMegaOpen}
+                  aria-label="Abrir mega menú Productos"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMegaOpen((v) => !v);
                   }}
                 >
-                  {/* Tipos de producto */}
-                  <div style={{ minWidth: "180px", marginRight: "16px" }}>
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: "1.1rem",
-                        marginBottom: "10px",
-                        textAlign: "left",
-                      }}
-                    >
+                  ▾
+                </button>
+              </div>
+
+              <div
+                className="mega-menu"
+                onMouseEnter={() => setIsMegaOpen(true)}
+                onMouseLeave={() => setIsMegaOpen(false)}
+                style={{ display: isMegaOpen ? 'block' : 'none' }}
+              >
+                <div className="mega-menu-content" style={{ display: "flex", minWidth: "500px" }}>
+                  {/* TIPOS */}
+                  <div style={{ minWidth: "180px" }}>
+                    <div style={{ fontWeight: 600, fontSize: "1.1rem", marginBottom: "10px" }}>
                       Tipos de Producto
                     </div>
-                    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                      <li>
-                        <Link
-                          to="/productos/laptops"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          Laptops
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/productos/servidores"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          Servidores
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/productos/pcs"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          PCs
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/productos/monitores"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          Monitores
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/productos/impresoras"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          Impresoras
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/productos/accesorios"
-                          style={{ color: "#222", textDecoration: "none" }}
-                        >
-                          Accesorios
-                        </Link>
-                      </li>
+
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      {["Laptops", "Servidores", "PCs", "Monitores", "Impresoras", "Accesorios"].map((tipo) => (
+                        <li key={tipo}>
+                          <span style={{ color: "#222", cursor: "pointer" }} onClick={() => { irAProductosConFiltro({ texto: tipo }); setIsMegaOpen(false); }}>
+                            {tipo}
+                          </span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
-                  {/* Separador vertical */}
-                  <div
-                    style={{
-                      width: "1px",
-                      background: "#d1d5db",
-                      height: "100%",
-                      margin: "0 16px",
-                    }}
-                  />
-                  {/* Marcas distribuidas en dos columnas */}
-                  <div
-                    style={{
-                      minWidth: "320px",
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: 0,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: "1.1rem",
-                        marginBottom: "10px",
-                        textAlign: "left",
-                      }}
-                    >
+
+                  <div style={{ width: "1px", background: "#d1d5db", margin: "0 16px" }} />
+
+                  {/* MARCAS */}
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: "1.1rem", marginBottom: "10px" }}>
                       Marcas
                     </div>
+
                     <div style={{ display: "flex", gap: "24px" }}>
-                      {/* Primera columna */}
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          margin: 0,
-                          width: "140px",
-                        }}
-                      >
-                        {[
-                          "DELL",
-                          "Lenovo",
-                          "HP",
-                          "HPE",
-                          "Cisco",
-                          "Extreme Networks",
-                          "Fortinet",
-                          "Microsoft",
-                        ].map((marca, idx) => (
-                          <li key={idx} style={{ marginBottom: "8px" }}>
-                            <Link
-                              to={`/productos/marca/${marca
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}`}
-                              style={{ color: "#222", textDecoration: "none" }}
-                            >
-                              {marca}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                      {/* Segunda columna */}
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          margin: 0,
-                          width: "140px",
-                        }}
-                      >
-                        {[
-                          "Samsung",
-                          "Qnap",
-                          "Intel",
-                          "AMD",
-                          "Kingston",
-                          "LG",
-                          "APC",
-                          "EPSON",
-                          "Dynabook",
-                        ].map((marca, idx) => (
-                          <li key={idx} style={{ marginBottom: "8px" }}>
-                            <Link
-                              to={`/productos/marca/${marca
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}`}
-                              style={{ color: "#222", textDecoration: "none" }}
-                            >
-                              {marca}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                      {[
+                        ["DELL","Lenovo","HP","HPE","Cisco","Extreme Networks","Fortinet","Microsoft"],
+                        ["Samsung","Qnap","Intel","AMD","Kingston","LG","APC","EPSON","Dynabook"],
+                      ].map((col, i) => (
+                        <ul key={i} style={{ listStyle: "none", padding: 0 }}>
+                          {col.map((marca) => (
+                            <li key={marca}>
+                              <span style={{ color: "#222", cursor: "pointer" }} onClick={() => { irAProductosConFiltro({ marca }); setIsMegaOpen(false); }}>
+                                {marca}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Marcas */}
+            {/* MARCAS (LOGOS) */}
             <div
-              className="nav-item mega-hover mega-dropdown"
-              style={{ position: "relative" }}
+              className={`nav-item mega-hover mega-dropdown ${
+                isMenuForcedClosed ? "forced-closed" : ""
+              }`}
             >
-              <Link to="/marcas" className="nav-link-custom">
+              <Link
+                to="/marcas"
+                className="nav-link-custom"
+                onClick={closeMenu}
+              >
                 Marcas
               </Link>
+
               <div className="mega-menu">
                 <div
                   className="mega-menu-content"
-                  style={{ flexWrap: "wrap", gap: "1.5rem" }}
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "1.5rem",
+                  }}
                 >
-                  {/* Logos de marcas distribuidas */}
                   {[
-                    {
-                      nombre: "DELL",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Dell_Logo.svg/640px-Dell_Logo.svg.png",
-                    },
-                    {
-                      nombre: "Lenovo",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Lenovo_%282015%29.svg/640px-Lenovo_%282015%29.svg.png",
-                    },
-                    {
-                      nombre: "HP",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/HP_logo_1979.svg/640px-HP_logo_1979.svg.png",
-                    },
-                    {
-                      nombre: "HPE",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/HPE-logo-2025.png/640px-HPE-logo-2025.png",
-                    },
-                    {
-                      nombre: "Cisco",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Cisco_logo_blue_2016.svg/640px-Cisco_logo_blue_2016.svg.png",
-                    },
+                    { nombre: "DELL", logo: "/marcas/Dell_marcas.png" },
+                    { nombre: "Lenovo", logo: "/marcas/Lenovo_marcas.png" },
+                    { nombre: "HP", logo: "/marcas/hp_marcas.png" },
+                    { nombre: "HPE", logo: "/marcas/hpe_marcas.png" },
+                    { nombre: "Cisco", logo: "/marcas/cisco_marcas.png" },
                     {
                       nombre: "Extreme Networks",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Logo_of_Extreme_Networks%2C_Inc._%28old%29.svg/640px-Logo_of_Extreme_Networks%2C_Inc._%28old%29.svg.png",
+                      logo: "/marcas/extreme_marcas.png",
                     },
                     {
                       nombre: "Fortinet",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Fortinet_logo.svg/640px-Fortinet_logo.svg.png",
+                      logo: "/marcas/fortinet_marcas.png",
                     },
                     {
                       nombre: "Microsoft",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/640px-Microsoft_logo_%282012%29.svg.png",
+                      logo: "/marcas/microsoft_marcas.png",
                     },
-                    {
-                      nombre: "Samsung",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/320px-Samsung_Logo.svg.png",
-                    },
-                    {
-                      nombre: "Qnap",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Qnap_Logo_2004.svg/640px-Qnap_Logo_2004.svg.png",
-                    },
-                    {
-                      nombre: "Intel",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Intel_logo_%282006-2020%29.svg/640px-Intel_logo_%282006-2020%29.svg.png",
-                    },
-                    {
-                      nombre: "AMD",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/AMD_logo_pre-2013.svg/640px-AMD_logo_pre-2013.svg.png",
-                    },
+                    { nombre: "Samsung", logo: "/marcas/samsung_marcas.png" },
+                    { nombre: "Qnap", logo: "/marcas/QNAP_marcas.png" },
+                    { nombre: "Intel", logo: "/marcas/intel_marcas.png" },
+                    { nombre: "AMD", logo: "/marcas/amd_marcas.png" },
                     {
                       nombre: "Kingston",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87_Kingston_WhiteHead_Black.png/640px-%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87_Kingston_WhiteHead_Black.png",
+                      logo: "/marcas/kingston_marcas.png",
                     },
-                    {
-                      nombre: "LG",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/LG_logo_%282014%2C_3D%29.svg/640px-LG_logo_%282014%2C_3D%29.svg.png",
-                    },
-                    {
-                      nombre: "APC",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/LogoAPC.svg/640px-LogoAPC.svg.png",
-                    },
-                    {
-                      nombre: "EPSON",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/EPSON-Logo.svg/640px-EPSON-Logo.svg.png",
-                    },
+                    { nombre: "LG", logo: "/marcas/LG_marcas.png" },
+                    { nombre: "APC", logo: "/marcas/apc_marcas.png" },
+                    { nombre: "EPSON", logo: "/marcas/epson_marcas.png" },
                     {
                       nombre: "Dynabook",
-                      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Dynabook_Logo.svg/640px-Dynabook_Logo.svg.png",
+                      logo: "/marcas/dynabook_marcas.png",
                     },
-                  ].map((marca, idx) => (
+                  ].map((marca) => (
                     <div
-                      key={idx}
+                      key={marca.nombre}
                       style={{
                         width: "120px",
                         textAlign: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        cursor: "pointer",
                       }}
+                      onClick={() =>
+                        irAProductosConFiltro({ marca: marca.nombre })
+                      }
                     >
                       <img
                         src={marca.logo}
                         alt={marca.nombre}
-                        style={{
-                          height: "54px",
-                          objectFit: "contain",
-                          marginBottom: "10px",
-                          maxWidth: "100px",
-                          filter:
-                            "drop-shadow(0 2px 6px rgba(0,0,0,0.08))",
-                        }}
+                        style={{ height: "54px", marginBottom: "10px" }}
                       />
                       <div
-                        style={{
-                          fontSize: "0.9rem",
-                          color: "#333",
-                          fontWeight: 500,
-                        }}
+                        style={{ fontSize: "0.9rem", fontWeight: 500 }}
                       >
                         {marca.nombre}
                       </div>
@@ -342,185 +229,42 @@ function Header() {
               </div>
             </div>
 
-            {/* Experiencia */}
-            <div
-              className="nav-item mega-hover mega-dropdown"
-              style={{ position: "relative" }}
+            <Link
+              to="/experiencia"
+              className="nav-link-custom"
+              onClick={closeMenu}
             >
-              <Link to="/experiencia" className="nav-link-custom">
-                Experiencia
-              </Link>
-              <div className="mega-menu">
-                <div
-                  className="mega-menu-content"
-                  style={{
-                    flexWrap: "wrap",
-                    gap: "1.5rem",
-                    justifyContent: "center",
-                    display: "flex",
-                  }}
-                >
-                  {/* Tarjetas de experiencia con logos */}
-                  {[
-                    {
-                      titulo: "Data Center SEAL",
-                      resumen:
-                        "Renovación de infraestructura crítica para SEAL (Arequipa).",
-                      logo: "/seal.png",
-                    },
-                    {
-                      titulo: "Servidores EGASA",
-                      resumen:
-                        "Modernización de servidores industriales para EGASA.",
-                      logo: "/egasa_logo.png",
-                    },
-                    {
-                      titulo: "Mantenimiento SUNARP",
-                      resumen:
-                        "Mantenimiento integral de servidores y data center SUNARP.",
-                      logo: "/sunarp_logo.png",
-                    },
-                    {
-                      titulo: "Video Vigilancia ZOFRATACNA",
-                      resumen:
-                        "Sistema CCTV IP y monitoreo centralizado en ZOFRATACNA.",
-                      logo: "/Zofratacna_logo.jpg",
-                    },
-                  ].map((exp, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        width: "140px",
-                        textAlign: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        background: "#f4f6fa",
-                        borderRadius: "10px",
-                        padding: "12px 8px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                      }}
-                    >
-                      <img
-                        src={exp.logo}
-                        alt={exp.titulo}
-                        style={{
-                          width: "60px",
-                          height: "60px",
-                          objectFit: "contain",
-                          marginBottom: "8px",
-                        }}
-                      />
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          fontSize: "1rem",
-                          marginBottom: "4px",
-                        }}
-                      >
-                        {exp.titulo}
-                      </div>
-                      <div style={{ fontSize: "0.85rem", color: "#555" }}>
-                        {exp.resumen}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+              Experiencia
+            </Link>
 
-            {/* Servicios */}
-            <div
-              className="nav-item mega-hover mega-dropdown"
-              style={{ position: "relative" }}
+            <Link
+              to="/servicios"
+              className="nav-link-custom"
+              onClick={closeMenu}
             >
-              <Link to="/servicios" className="nav-link-custom">
-                Servicios
-              </Link>
-              <div className="mega-menu">
-                <div className="mega-menu-content">
-                  <div className="mega-menu-column">
-                    <img
-                      src="/images/instalacion.jpg"
-                      alt="Instalación"
-                      className="mega-menu-img"
-                    />
-                    <Link to="/servicios/instalacion">
-                      <h5>Instalación</h5>
-                    </Link>
-                    <p>Instalación profesional de equipos.</p>
-                  </div>
-                  <div className="mega-menu-column">
-                    <img
-                      src="/images/garantia.jpg"
-                      alt="Garantía"
-                      className="mega-menu-img"
-                    />
-                    <Link to="/servicios/garantia">
-                      <h5>Garantía</h5>
-                    </Link>
-                    <p>Garantía extendida y soporte técnico.</p>
-                  </div>
-                  <div className="mega-menu-column">
-                    <img
-                      src="/images/mantenimiento.jpg"
-                      alt="Mantenimiento"
-                      className="mega-menu-img"
-                    />
-                    <Link to="/servicios/mantenimiento">
-                      <h5>Mantenimiento</h5>
-                    </Link>
-                    <p>Mantenimiento preventivo y correctivo.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+              Servicios
+            </Link>
 
-            {/* Sobre Nosotros */}
-            <div
-              className="nav-item mega-hover mega-dropdown"
-              style={{ position: "relative" }}
+            <Link
+              to="/sobre-nosotros"
+              className="nav-link-custom"
+              onClick={closeMenu}
             >
-              <Link to="/sobre-nosotros" className="nav-link-custom">
-                Sobre Nosotros
-              </Link>
-            </div>
+              Sobre Nosotros
+            </Link>
           </Nav>
 
-          {/* Grupo de botones y carrito alineado a la derecha */}
-          <div className="d-flex align-items-center gap-2 mt-2 mt-lg-0">
-            {/* Ícono del carrito */}
-            <Link
-              to="/carrito"
-              className="shopping-cart-icon"
-              style={{ fontSize: "1.6rem", color: "#000" }}
-            >
+          <div className="d-flex align-items-center gap-2">
+            <Link to="/carrito" onClick={closeMenu}>
               <FaShoppingCart />
             </Link>
 
-            {/* Botones de sesión */}
-            <Button
-              className="btn-offer"
-              onClick={() => navigate("/ofertas")}
-            >
-              Ofertas
-            </Button>
-            {isAuthenticated ? (
-              <>
-                {isAdmin ? (
-                  <Button variant="outline-dark" onClick={handleAdminClick}>
-                    Admin
-                  </Button>
-                ) : null}
-                <Button variant="outline-danger" onClick={handleLogoutClick}>
-                  Cerrar Sesión
-                </Button>
-              </>
+            <Button onClick={() => navigate("/ofertas")}>Ofertas</Button>
+
+            {isLoggedIn ? (
+              <Button onClick={handleAdminClick}>Admin</Button>
             ) : (
-              <Button variant="outline-dark" onClick={handleLoginClick}>
-                Iniciar Sesión
-              </Button>
+              <Button onClick={handleLoginClick}>Iniciar Sesión</Button>
             )}
           </div>
         </Navbar.Collapse>
@@ -530,3 +274,4 @@ function Header() {
 }
 
 export default Header;
+
