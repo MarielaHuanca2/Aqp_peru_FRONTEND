@@ -8,7 +8,7 @@ function Footer() {
       <div className="footer-top">
         <div className="footer-section">
           <h5>Contacto</h5>
-          <p><strong>Teléfono:</strong> +51 123 456 7890</p>
+          <p><strong>Teléfono:</strong> +51 958 952 138</p>
           <p><strong>Email:</strong> ventas@computershops.pe</p>
           <p><strong>Dirección:</strong> Av. Venezuela Mza. B Lote 14 Urb. Ampliación La Negrita – Arequipa – Arequipa – Arequipa</p>
         </div>
