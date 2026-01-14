@@ -11,7 +11,7 @@ export const importarCsvOfertas = (formData) => apiClient.post(`${OFERTAS_URL}/i
 	headers: { 'Content-Type': 'multipart/form-data' }
 });
 
-export const obtenerOfertas = () => apiClient.get(OFERTAS_URL);
+export const obtenerOfertas = () => apiClient.get(OFERTAS_URL, { skipAuthRedirect: true });
 // CRUD para una oferta individual
 export const obtenerOferta = (id) => apiClient.get(`${OFERTAS_URL}/${id}`);
 export const crearOferta = (oferta) => apiClient.post(OFERTAS_URL, oferta);

@@ -28,13 +28,21 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expirado o inválido, limpiar localStorage y redirigir al login
+    const status = error.response?.status;
+    const skipRedirect = error.config?.skipAuthRedirect;
+
+    // Si la petición indicó que no haga redirección al login, re-lanzar el error sin limpiar/redirigir
+    if (skipRedirect) {
+      return Promise.reject(error);
+    }
+
+    if (status === 401 || status === 403) {
+      // Token expirado, inválido o acceso denegado: limpiar localStorage y redirigir al login
       localStorage.removeItem("authToken");
       localStorage.removeItem("userData");
       localStorage.removeItem("userRole");
       localStorage.setItem("isLoggedIn", "false");
-      
+
       // Redirigir al login si no estamos ya ahí
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
@@ -48,11 +56,9 @@ apiClient.interceptors.response.use(
 export const authService = {
   // Verificar si el usuario está autenticado
   isAuthenticated: () => {
-  const token = localStorage.getItem("authToken");
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const hasUserData = Boolean(localStorage.getItem("userData") || localStorage.getItem("user"));
-  // Consider authenticated if token present, or isLoggedIn flag true, or user data exists
-  return Boolean(token || isLoggedIn || hasUserData);
+    const token = localStorage.getItem("authToken");
+    // Consider authenticated ONLY if a token exists (avoids stale isLoggedIn/userData flags)
+    return Boolean(token && token !== "null" && token !== "undefined");
   },
 
   // Obtener el token actual

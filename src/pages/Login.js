@@ -10,10 +10,14 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 🔐 Redirige si ya está logeado
+  // 🔐 Redirige si ya está logeado (admin -> /admin, user -> /)
   useEffect(() => {
     if (authService.isAuthenticated()) {
-      navigate("/admin");
+      if (authService.isAdmin()) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
   }, [navigate]);
 
@@ -25,7 +29,11 @@ function Login() {
     try {
       const userData = await authService.login(correo, clave);
       console.log("Login exitoso:", userData);
-      navigate("/admin");
+      if (authService.isAdmin()) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       console.error("Error de login:", err);
       if (err.response?.status === 401) {

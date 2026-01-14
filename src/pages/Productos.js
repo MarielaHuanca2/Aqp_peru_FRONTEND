@@ -229,8 +229,10 @@ const ListaProductos = () => {
               <Card className="h-100">
                 <Card.Img
                   variant="top"
-                  src={prod.foto1}
-                  alt={prod.producto}
+                  src={prod.foto1 || "/productos/fd.png"}
+                  alt={prod.producto || "Imagen del producto"}
+                  onError={(e) => { e.target.onerror = null; e.target.src = "/productos/fd.png"; }}
+                  loading="lazy"
                   style={{ objectFit: "cover", height: "250px" }}
                 />
                 <Card.Body className="d-flex flex-column">

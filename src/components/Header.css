@@ -1,228 +1,467 @@
+/* ========================================
+   HEADER - Professional Design
+   Color Palette: #0070b8 (primary blue), #005a94 (dark blue), #ff5722 (accent orange)
+   ======================================== */
+
 .navbar-header {
-  background-color: #0070b8; 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+  background-color: #0070b8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   overflow: visible;
+  padding: 0;
 }
 
+.navbar-header .container-fluid {
+  padding: 0 1.5rem;
+}
+
+/* ========== BRAND ========== */
 .navbar-brand-custom {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  font-size: 1.9rem; 
+  font-size: 1.9rem;
   color: #ffffff;
   text-decoration: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0.5rem 0;
 }
 
-.navbar-brand-custom span {
+.navbar-brand-custom:hover {
   color: #ffffff;
+  text-decoration: none;
 }
 
-.navbar-title {
-  font-size: 1.8rem; 
-  font-weight: 700;
-  color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: 0.5rem;
-}
-
+/* ========== NAV LINKS ========== */
 .nav-link-custom {
   font-weight: 500;
-  font-size: 1.2rem; 
+  font-size: 1rem;
   color: #ffffff;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border-radius: 4px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .nav-link-custom:hover {
   color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #005a94;
   text-decoration: none;
 }
 
-.btn-offer {
-  background-color: #ff5722;
-  border: none;
-  color: #ffffff;
-  font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-offer:hover {
-  background-color: #e64a19;
-}
-
-.btn-outline-dark {
-  background-color: #000000;
-  color: #ffffff;
-  border: none;
-  font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-outline-dark:hover {
-  background-color: #333333;
-  color: #ffffff;
-}
-
-.shopping-cart-icon {
-  font-size: 1.6rem; 
-  color: #ffffff;
-  transition: color 0.3s ease;
-}
-
-.shopping-cart-icon:hover {
-  color: #d4e8f7;
-}
-
+/* ========== MEGA DROPDOWN ========== */
 .mega-dropdown {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
+.mega-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+}
+
+.mega-dropdown-trigger:hover,
+.mega-dropdown.open .mega-dropdown-trigger,
+.mega-dropdown:hover .mega-dropdown-trigger {
+  background-color: #005a94;
+  color: #ffffff;
+} 
+
+.mega-toggle-icon {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.mega-dropdown.open .mega-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Toggle button - white and larger hit area */
+.mega-toggle-btn {
+  background-color: #ffffff;
+  color: #0070b8;
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  transition: background-color 0.15s ease, transform 0.06s ease;
+}
+
+.mega-toggle-btn:hover {
+  background-color: #f5f7f9;
+}
+
+.mega-toggle-btn:focus {
+  outline: 2px solid rgba(0,112,184,0.2);
+  outline-offset: 2px;
+} 
+
+/* ========== MEGA MENU PANEL ========== */
 .mega-menu {
-  /* hidden by default; shown via hover (.mega-hover) or inline style from React */
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 3000;
-  padding: 1rem;
-  border-radius: 4px;
+  padding: 1.5rem;
+  border-radius: 0 0 8px 8px;
+  border-top: 3px solid #ff5722;
+  min-width: 600px;
 }
 
-/* keep old hover behavior for items that still use it (eg. Marcas logos) */
-.mega-hover:hover .mega-menu {
+.mega-dropdown.open .mega-menu,
+.mega-menu.show {
   display: block;
-}
-
-.mega-toggle-btn {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-}
-
-.mega-toggle-btn:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-/* Ensure navbar collapse doesn't clip dropdown */
-.navbar, .navbar-collapse, .navbar-header, .container-fluid {
-  overflow: visible;
-}
-
-/* Make sure menu items are readable and clickable */
-.mega-menu span,
-.mega-menu li {
-  color: #222 !important;
-  cursor: pointer;
-}
-
-.mega-menu a {
-  color: #222 !important;
-  text-decoration: none;
 }
 
 .mega-menu-content {
   display: flex;
+  gap: 2rem;
+}
+
+.mega-menu-section {
+  min-width: 180px;
+}
+
+.mega-menu-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #0070b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mega-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mega-menu-item {
+  padding: 0.4rem 0;
+}
+
+.mega-menu-link {
+  color: #333;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+}
+
+.mega-menu-link:hover {
+  color: #0070b8;
+  padding-left: 4px;
+}
+
+.mega-menu-divider {
+  width: 1px;
+  background-color: #e9ecef;
+  margin: 0 0.5rem;
+}
+
+/* Marcas grid in mega menu */
+.mega-menu-brands {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
-.mega-menu-column {
-  flex: 1;
-  min-width: 150px;
+.mega-menu-brand-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mega-menu-brand-item:hover {
+  background-color: #f8f9fa;
+}
+
+.mega-menu-brand-item img {
+  height: 36px;
+  object-fit: contain;
+  margin-bottom: 0.25rem;
+}
+
+.mega-menu-brand-item span {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+}
+
+/* ========== HEADER RIGHT SECTION ========== */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Cart Icon */
+.cart-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  font-size: 1.25rem;
+}
+
+.cart-link:hover {
+  background-color: #005a94;
+  color: #ffffff;
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-size: 0.9rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333333;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
 }
 
-.mega-menu-column h5 {
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  background-color: #ffffff;
   color: #0070b8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
 }
 
-.mega-menu-column p {
-  font-size: 0.95rem;
-  color: #555555;
-  line-height: 1.4;
-}
-
-.mega-menu-img {
-  width: 100%;
-  height: auto;
+.user-name {
   max-width: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* ========== BUTTONS ========== */
+.btn-header {
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.btn-offers {
+  background-color: #ff5722;
+  color: #ffffff;
+  border-color: #ff5722;
+}
+
+.btn-offers:hover {
+  background-color: #e64a19;
+  border-color: #e64a19;
+  color: #ffffff;
+}
+
+.btn-admin {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-admin:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.btn-login {
+  background-color: #ffffff;
+  color: #0070b8;
+  border-color: #ffffff;
+}
+
+.btn-login:hover {
+  background-color: #f0f0f0;
+  border-color: #f0f0f0;
+  color: #005a94;
+}
+
+.btn-logout {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========== NAVBAR TOGGLE (MOBILE) ========== */
+.navbar-header .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+  padding: 0.4rem 0.6rem;
+}
+
+.navbar-header .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ========== RESPONSIVE ========== */
 @media (max-width: 991.98px) {
   .navbar-brand-custom {
-    font-size: 1.5rem; 
-  }
-
-  .nav-link-custom {
-    color: #333333 !important;
-    font-size: 1.1rem; 
-    padding: 0.75rem 1rem !important;
-  }
-  .nav-link-custom:hover {
-    background-color: #f0f0f0 !important;
-    color: #0070b8 !important;
+    font-size: 1.5rem;
   }
 
   .navbar-collapse {
     background-color: #ffffff;
     padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 0 0 8px 8px;
+    margin-top: 0.5rem;
   }
 
-  .navbar-collapse .nav-item {
-    width: 100%;
-    border-bottom: 1px solid #eeeeee;
+  .nav-link-custom,
+  .mega-dropdown-trigger {
+    color: #333333 !important;
+    font-size: 1rem;
+    padding: 0.75rem 1rem !important;
+    border-radius: 6px;
   }
 
-  .navbar-collapse .nav-item:last-child {
-    border-bottom: none;
+  .nav-link-custom:hover,
+  .mega-dropdown-trigger:hover {
+    background-color: #f0f0f0 !important;
+    color: #0070b8 !important;
   }
 
   .mega-menu {
     position: static;
     box-shadow: none;
-    padding: 0;
+    padding: 0.5rem 1rem;
     border-radius: 0;
+    border-top: none;
+    border-left: 3px solid #0070b8;
+    margin-left: 1rem;
+    min-width: auto;
   }
 
   .mega-menu-content {
     flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mega-menu-brands {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mega-menu-divider {
+    display: none;
+  }
+
+  .header-right {
+    flex-direction: column;
+    align-items: stretch;
     gap: 0.5rem;
-  }
-
-  .mega-menu-column {
-    padding: 0.5rem 1rem;
-  }
-
-  .d-flex.align-items-center.gap-2 {
     margin-top: 1rem;
-    justify-content: space-around;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
   }
+
+  .user-info {
+    background-color: #f8f9fa;
+    color: #333;
+  }
+
+  .user-avatar {
+    background-color: #0070b8;
+    color: #ffffff;
+  }
+
+  .btn-header {
+    justify-content: center;
+  }
+
+  .btn-offers {
+    background-color: #ff5722;
+    color: #ffffff;
+  }
+
+  .btn-admin {
+    background-color: #0070b8;
+    color: #ffffff;
+    border-color: #0070b8;
+  }
+
+  .btn-login {
+    background-color: #0070b8;
+    color: #ffffff;
+    border-color: #0070b8;
+  }
+
+  .btn-logout {
+    color: #666;
+    border-color: #ddd;
+  }
+
+  .cart-link {
+    color: #0070b8;
+  }
+}
+
+/* Ensure proper stacking */
+.navbar,
+.navbar-collapse,
+.navbar-header,
+.container-fluid {
+  overflow: visible;
 }
 
 

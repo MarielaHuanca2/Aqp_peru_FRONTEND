@@ -116,7 +116,9 @@ const OfertasAdmin = () => {
       await cargarOfertas();
     } catch (err) {
       console.error('Error importando CSV de ofertas:', err);
-      setError('Error al importar el CSV. Revisa el formato y vuelve a intentar.');
+      // Mostrar mensaje detallado del backend si existe (por ejemplo: "Error en línea 2 ... Data too long for column 'id_condicion_prod'...")
+      const backendMsg = err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response.data : JSON.stringify(err.response?.data));
+      setError(backendMsg || err.message || 'Error al importar el CSV. Revisa el formato y vuelve a intentar.');
     } finally {
       setImporting(false);
     }
