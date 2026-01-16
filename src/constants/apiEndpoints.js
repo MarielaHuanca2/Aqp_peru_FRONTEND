@@ -46,8 +46,9 @@ export const AUTH_ROLES = {
 };
 
 // Configuración de localStorage
+// Nota: El token JWT ahora se almacena en cookie HTTP-only, no en localStorage
 export const STORAGE_KEYS = {
-  AUTH_TOKEN: "authToken",
+  // AUTH_TOKEN ya no se usa - el JWT está en cookie HTTP-only
   USER_DATA: "userData",
   USER_ROLE: "userRole",
   IS_LOGGED_IN: "isLoggedIn"

@@ -3,24 +3,11 @@ import axios from "axios";
 // Configurar la URL base
 const API_BASE_URL = "http://localhost:8080/api";
 
-// Crear instancia de axios
+// Crear instancia de axios con soporte para cookies
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true, // Enviar cookies automáticamente en cada petición
 });
-
-// Interceptor para agregar el token a todas las peticiones
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 // Interceptor para manejar respuestas y errores de autenticación
 apiClient.interceptors.response.use(
@@ -38,7 +25,7 @@ apiClient.interceptors.response.use(
 
     if (status === 401 || status === 403) {
       // Token expirado, inválido o acceso denegado: limpiar localStorage y redirigir al login
-      localStorage.removeItem("authToken");
+      // Nota: La cookie JWT se limpiará automáticamente al expirar o desde el backend
       localStorage.removeItem("userData");
       localStorage.removeItem("userRole");
       localStorage.setItem("isLoggedIn", "false");
@@ -55,15 +42,18 @@ apiClient.interceptors.response.use(
 // Funciones de autenticación
 export const authService = {
   // Verificar si el usuario está autenticado
+  // Con JWT en cookie HTTP-only, verificamos el estado local (userData y isLoggedIn)
+  // La cookie se envía automáticamente y el backend valida su autenticidad
   isAuthenticated: () => {
-    const token = localStorage.getItem("authToken");
-    // Consider authenticated ONLY if a token exists (avoids stale isLoggedIn/userData flags)
-    return Boolean(token && token !== "null" && token !== "undefined");
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userData = localStorage.getItem("userData");
+    return isLoggedIn && Boolean(userData && userData !== "null" && userData !== "undefined");
   },
 
-  // Obtener el token actual
+  // El token está en cookie HTTP-only, no accesible desde JavaScript
+  // Este método se mantiene por compatibilidad pero retorna null
   getToken: () => {
-    return localStorage.getItem("authToken");
+    return null; // JWT está en cookie HTTP-only
   },
 
   // Obtener el rol del usuario
@@ -84,25 +74,33 @@ export const authService = {
   },
 
   // Cerrar sesión
-  logout: () => {
-    localStorage.removeItem("authToken");
+  logout: async () => {
+    try {
+      // Llamar al endpoint de logout para limpiar la cookie en el servidor
+      await apiClient.post("/auth/logout");
+    } catch (error) {
+      console.warn("Error al cerrar sesión en el servidor:", error);
+    }
+    // Limpiar datos locales (la cookie JWT se limpia desde el servidor)
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.setItem("isLoggedIn", "false");
     window.location.href = "/login";
   },
 
-  // Login (ya manejado en el componente Login)
+  // Login - El backend envía el JWT como cookie HTTP-only
   login: async (correo, clave) => {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, {
       correo,
       clave
+    }, {
+      withCredentials: true // Importante: permite recibir y guardar la cookie del servidor
     });
     
-    // Guardar datos en localStorage
+    // Guardar datos en localStorage (el token JWT está en cookie HTTP-only)
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userData", JSON.stringify(response.data));
-    localStorage.setItem("authToken", response.data.token);
+    // No guardamos el token en localStorage - está en cookie HTTP-only
     localStorage.setItem("userRole", response.data.rol);
     
     return response.data;

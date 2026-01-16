@@ -18,17 +18,15 @@ const PedidoDetalle = () => {
     const obtenerPedido = async () => {
       try {
         setLoading(true);
-        // Use a local axios instance without the auth interceptor so a 401 doesn't force a redirect
-        const localClient = axios.create({ baseURL: apiClient.defaults.baseURL });
-        // Attach JWT manually from localStorage so the request includes the token but bypasses the global interceptor
-        const token = localStorage.getItem("authToken");
-        if (token) {
-          localClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        }
+        // Usar instancia de axios con withCredentials para enviar cookie JWT automáticamente
+        const localClient = axios.create({ 
+          baseURL: apiClient.defaults.baseURL,
+          withCredentials: true // Enviar cookie JWT automáticamente
+        });
         const response = await localClient.get(`/pedidos/${id}`);
         setPedido(response.data);
-        // record whether we attempted to send a token
-        setDebugInfo((d) => ({ ...(d || {}), tokenSent: !!token }));
+        // record whether we attempted to send a token (cookie-based now)
+        setDebugInfo((d) => ({ ...(d || {}), tokenSent: true, method: 'cookie' }));
         setError(null);
       } catch (err) {
         // Capture debug information for the UI

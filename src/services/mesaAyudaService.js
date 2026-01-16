@@ -1,21 +1,15 @@
 import axios from 'axios';
 
-// Create a simple axios client for mesa de ayuda
+// Create a simple axios client for mesa de ayuda con soporte para cookies
 const mesaAyudaClient = axios.create({
   baseURL: 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true // Enviar cookies automáticamente (JWT en cookie HTTP-only)
 });
 
-// Add auth token if available
-mesaAyudaClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// Ya no se necesita interceptor para agregar token - la cookie se envía automáticamente
 
 const MESA_AYUDA_URL = '/mesa-ayuda';
 

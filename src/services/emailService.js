@@ -1,4 +1,3 @@
-import apiClient from "./authService";
 import axios from "axios";
 
 // Public client without auth interceptors for endpoints that must be callable anonymously
