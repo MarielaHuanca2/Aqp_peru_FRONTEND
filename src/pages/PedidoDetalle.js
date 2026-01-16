@@ -13,8 +13,20 @@ const PedidoDetalle = () => {
     const obtenerPedido = async () => {
       try {
         setLoading(true);
+<<<<<<< Updated upstream
         const response = await axios.get(`http://localhost:8080/api/pedidos/${id}`);
         setPedido(response.data);
+=======
+        // Usar un cliente local que sólo envía la cookie httpOnly y evita redirecciones automáticas
+        const localClient = axios.create({ 
+          baseURL: apiClient.defaults.baseURL,
+          withCredentials: true
+        });
+        const response = await localClient.get(`/pedidos/${id}`);
+        setPedido(response.data);
+        // Registrar que usamos cookies en la llamada para depurar
+        setDebugInfo((d) => ({ ...(d || {}), usedCookieAuth: true }));
+>>>>>>> Stashed changes
         setError(null);
       } catch (err) {
         setError("Error al cargar el pedido");
