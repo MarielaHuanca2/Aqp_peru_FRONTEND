@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Table, Alert, Spinner, Button } from "react-bootstrap";
+import { Container, Card, Table, Alert, Spinner, Button, Form } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import apiClient from "../services/authService";
 import axios from "axios";
 import { useTipoCambio } from "../context/TipoCambioContext";
+
+const ESTADOS_PEDIDO = [
+  { value: 'PENDIENTE', label: 'Pendiente', color: 'warning' },
+  { value: 'EN_PROCESO', label: 'En Proceso', color: 'info' },
+  { value: 'FINALIZADO', label: 'Finalizado', color: 'success' },
+  { value: 'RECHAZADO', label: 'Rechazado', color: 'danger' },
+  { value: 'CANCELADO', label: 'Cancelado', color: 'secondary' }
+];
 
 const PedidoDetalle = () => {
   const { id } = useParams();
@@ -11,6 +19,8 @@ const PedidoDetalle = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null);
+  const [actualizandoEstado, setActualizandoEstado] = useState(false);
+  const [mensajeEstado, setMensajeEstado] = useState(null);
   // Hook must be called unconditionally at top-level
   const { tipoCambio: tipoCambioGlobal, convertirAMonedaSoles } = useTipoCambio();
 
@@ -45,6 +55,43 @@ const PedidoDetalle = () => {
 
     obtenerPedido();
   }, [id]);
+
+  // Función para cambiar el estado del pedido
+  const cambiarEstadoPedido = async (nuevoEstado) => {
+    try {
+      setActualizandoEstado(true);
+      setMensajeEstado(null);
+      
+      const localClient = axios.create({ 
+        baseURL: apiClient.defaults.baseURL,
+        withCredentials: true
+      });
+      
+      await localClient.patch(`/pedidos/${id}/estado`, {
+        estadoPedido: nuevoEstado
+      });
+      
+      // Actualizar el estado local del pedido
+      setPedido(prev => ({ ...prev, estadoPedido: nuevoEstado }));
+      setMensajeEstado({ tipo: 'success', texto: 'Estado actualizado correctamente' });
+      
+      // Limpiar mensaje después de 3 segundos
+      setTimeout(() => setMensajeEstado(null), 3000);
+    } catch (err) {
+      setMensajeEstado({ 
+        tipo: 'danger', 
+        texto: err.response?.data?.message || 'Error al actualizar el estado' 
+      });
+    } finally {
+      setActualizandoEstado(false);
+    }
+  };
+
+  // Helper para obtener el color del badge según el estado
+  const obtenerColorEstado = (estado) => {
+    const estadoInfo = ESTADOS_PEDIDO.find(e => e.value === estado);
+    return estadoInfo?.color || 'secondary';
+  };
 
   if (loading) {
     return (
@@ -84,13 +131,37 @@ const PedidoDetalle = () => {
   const fechaDisplay = fechaRaw ? new Date(fechaRaw).toLocaleString() : "";
   const estado = pedido.estado ?? pedido.estadoPedido ?? "PENDIENTE";
 
-  const monedaSimbolo = pedido.detalles?.[0]?.producto?.moneda?.simboloMoneda ?? 'S/';
+  const monedaSimbolo = pedido.detalles?.[0]?.producto?.moneda?.simboloMoneda ?? '$';
+
+  // Helper para obtener el nombre del producto (soporta productos eliminados)
+  const obtenerNombreProducto = (detalle) => {
+    if (detalle.producto) {
+      return detalle.producto.producto || detalle.producto.nombre || 'Sin nombre';
+    }
+    return detalle.productoNombre || detalle.nombreProducto || 'Producto no disponible';
+  };
+
+  // Helper para obtener la marca del producto
+  const obtenerMarcaProducto = (detalle) => {
+    if (detalle.producto) {
+      return detalle.producto.marca || '-';
+    }
+    return '-';
+  };
+
+  // Helper para obtener el precio del producto
+  const obtenerPrecioProducto = (detalle) => {
+    if (detalle.producto) {
+      return Number(detalle.producto.precio ?? 0);
+    }
+    return Number(detalle.precioUnitario ?? detalle.precio ?? 0);
+  };
 
   const calcularTotal = () => {
     return (
       pedido.detalles?.reduce((total, detalle) => {
         const cantidad = Number(detalle.cantidad ?? 0);
-        const precio = Number(detalle.producto?.precio ?? 0);
+        const precio = obtenerPrecioProducto(detalle);
         return total + cantidad * precio;
       }, 0) || 0
     );
@@ -106,7 +177,7 @@ const PedidoDetalle = () => {
     return (
       pedido.detalles?.reduce((total, detalle) => {
         const cantidad = Number(detalle.cantidad ?? 0);
-        const precio = Number(detalle.producto?.precio ?? 0);
+        const precio = obtenerPrecioProducto(detalle);
         return total + cantidad * convertirConDetalle(precio, detalle);
       }, 0) || 0
     );
@@ -129,14 +200,49 @@ const PedidoDetalle = () => {
             </div>
             <div className="col-md-6">
               <p><strong>Fecha del Pedido:</strong> {fechaDisplay}</p>
-              <p><strong>Estado:</strong> 
-                <span className={`badge ms-2 ${estado === 'PENDIENTE' ? 'bg-warning' : 
-                  estado === 'PROCESANDO' ? 'bg-info' : 
-                  estado === 'COMPLETADO' ? 'bg-success' : 'bg-danger'}`}>
-                  {estado}
+              <p><strong>Estado actual:</strong> 
+                <span className={`badge ms-2 bg-${obtenerColorEstado(estado)}`}>
+                  {ESTADOS_PEDIDO.find(e => e.value === estado)?.label || estado}
                 </span>
               </p>
             </div>
+          </div>
+        </Card.Body>
+      </Card>
+
+      {/* Cambiar Estado del Pedido */}
+      <Card className="mb-4">
+        <Card.Header>
+          <h5>Cambiar Estado del Pedido</h5>
+        </Card.Header>
+        <Card.Body>
+          {mensajeEstado && (
+            <Alert variant={mensajeEstado.tipo} dismissible onClose={() => setMensajeEstado(null)}>
+              {mensajeEstado.texto}
+            </Alert>
+          )}
+          <div className="d-flex align-items-center gap-3 flex-wrap">
+            <Form.Group className="d-flex align-items-center gap-2">
+              <Form.Label className="mb-0 fw-bold">Nuevo estado:</Form.Label>
+              <Form.Select
+                style={{ width: 'auto' }}
+                value={estado}
+                onChange={(e) => cambiarEstadoPedido(e.target.value)}
+                disabled={actualizandoEstado}
+              >
+                {ESTADOS_PEDIDO.map(est => (
+                  <option key={est.value} value={est.value}>
+                    {est.label}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            {actualizandoEstado && (
+              <Spinner animation="border" size="sm" />
+            )}
+          </div>
+          <div className="mt-3">
+            <small className="text-muted">Selecciona un nuevo estado para actualizar el pedido.</small>
           </div>
         </Card.Body>
       </Card>
@@ -158,27 +264,50 @@ const PedidoDetalle = () => {
                 </tr>
               </thead>
               <tbody>
-        {pedido.detalles.map((detalle, index) => (
-                      <tr key={index}>
-                        <td>{detalle.producto.producto}</td>
-                        <td>{detalle.producto.marca}</td>
-                        {
-                          (() => {
-                            const precioUsd = Number(detalle.producto?.precio ?? 0);
-                            const tc = Number(detalle.tipoCambioValor ?? detalle.tipoCambio?.valor ?? tipoCambioGlobal ?? 0);
-                            const precioSoles = precioUsd * tc;
-                            return (
-                              <td>
-                                {detalle.producto.moneda?.simboloMoneda ?? '$'} {precioUsd.toFixed(2)}
-                                <div className="text-muted small">S/ {precioSoles.toFixed(2)} (TC {tc.toFixed(4)})</div>
-                              </td>
-                            );
-                          })()
-                        }
-                        <td>{Number(detalle.cantidad ?? 0)}</td>
-                        <td>S/ {(Number(detalle.cantidad ?? 0) * Number(detalle.producto?.precio ?? 0) * (Number(detalle.tipoCambioValor ?? detalle.tipoCambio?.valor ?? tipoCambioGlobal ?? 0))).toFixed(2)}</td>
-                      </tr>
-                ))}
+                {pedido.detalles.map((detalle, index) => {
+                  const nombreProducto = obtenerNombreProducto(detalle);
+                  const marcaProducto = obtenerMarcaProducto(detalle);
+                  const precioUsd = obtenerPrecioProducto(detalle);
+                  const tc = Number(detalle.tipoCambioValor ?? detalle.tipoCambio?.valor ?? tipoCambioGlobal ?? 0);
+                  const precioSoles = precioUsd * tc;
+                  const cantidad = Number(detalle.cantidad ?? 0);
+                  const subtotal = cantidad * precioSoles;
+                  const productoEliminado = detalle.productoEliminado || !detalle.producto;
+
+                  return (
+                    <tr key={detalle.idDetalle ?? index} className={productoEliminado ? 'table-warning' : ''}>
+                      <td>
+                        {nombreProducto}
+                        {productoEliminado && (
+                          <span className="badge bg-secondary ms-2">Eliminado</span>
+                        )}
+                      </td>
+                      <td>{marcaProducto}</td>
+                      <td>
+                        {precioUsd > 0 ? (
+                          <>
+                            {detalle.producto?.moneda?.simboloMoneda ?? '$'} {precioUsd.toFixed(2)}
+                            {tc > 0 && (
+                              <div className="text-muted small">
+                                S/ {precioSoles.toFixed(2)} (TC {tc.toFixed(4)})
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <span className="text-muted">No disponible</span>
+                        )}
+                      </td>
+                      <td>{cantidad}</td>
+                      <td>
+                        {precioUsd > 0 && tc > 0 ? (
+                          <>S/ {subtotal.toFixed(2)}</>
+                        ) : (
+                          <span className="text-muted">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
           ) : (

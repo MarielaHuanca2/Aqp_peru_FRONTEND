@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
-import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Pagination } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
 import { useFiltroProductos } from "../context/FiltroProductosContext";
@@ -10,6 +10,8 @@ import { useFiltroProductos } from "../context/FiltroProductosContext";
 const ListaProductos = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [productosPorPagina, setProductosPorPagina] = useState(12);
   const { agregarAlCarrito } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
 
@@ -63,6 +65,33 @@ const ListaProductos = () => {
   );
 });
 
+  // Resetear a página 1 cuando cambian los filtros
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [filtros]);
+
+  // Cálculos de paginación
+  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const indiceInicio = (paginaActual - 1) * productosPorPagina;
+  const indiceFin = indiceInicio + productosPorPagina;
+  const productosEnPagina = productosFiltrados.slice(indiceInicio, indiceFin);
+
+  // Generar números de página para mostrar
+  const generarNumerosPaginas = () => {
+    const paginas = [];
+    const maxPaginasVisibles = 5;
+    let inicio = Math.max(1, paginaActual - Math.floor(maxPaginasVisibles / 2));
+    let fin = Math.min(totalPaginas, inicio + maxPaginasVisibles - 1);
+    
+    if (fin - inicio + 1 < maxPaginasVisibles) {
+      inicio = Math.max(1, fin - maxPaginasVisibles + 1);
+    }
+    
+    for (let i = inicio; i <= fin; i++) {
+      paginas.push(i);
+    }
+    return paginas;
+  };
 
   const limpiarFiltros = () => {
     setFiltros({
@@ -207,15 +236,36 @@ const ListaProductos = () => {
 
         {/* Botón para limpiar filtros y contador de resultados */}
         <Row className="align-items-center pt-2 border-top">
-          <Col md={6}>
+          <Col md={4}>
             <button className="btn btn-outline-secondary btn-sm" onClick={limpiarFiltros}>
               <i className="bi bi-arrow-clockwise me-1"></i>
               Limpiar filtros
             </button>
           </Col>
-          <Col md={6} className="text-end">
+          <Col md={4} className="text-center">
+            <Form.Group className="d-inline-flex align-items-center gap-2">
+              <Form.Label className="small text-muted mb-0">Mostrar:</Form.Label>
+              <Form.Select
+                size="sm"
+                style={{ width: 'auto' }}
+                value={productosPorPagina}
+                onChange={(e) => {
+                  setProductosPorPagina(Number(e.target.value));
+                  setPaginaActual(1);
+                }}
+              >
+                <option value={6}>6</option>
+                <option value={12}>12</option>
+                <option value={24}>24</option>
+                <option value={48}>48</option>
+              </Form.Select>
+              <span className="small text-muted">por página</span>
+            </Form.Group>
+          </Col>
+          <Col md={4} className="text-end">
             <small className="text-muted fw-bold">
               📦 {productosFiltrados.length} de {productos.length} productos
+              {totalPaginas > 1 && ` (Página ${paginaActual} de ${totalPaginas})`}
             </small>
           </Col>
         </Row>
@@ -223,8 +273,8 @@ const ListaProductos = () => {
 
       {/* Lista de productos */}
       <Row>
-        {productosFiltrados.length > 0 ? (
-          productosFiltrados.map((prod) => (
+        {productosEnPagina.length > 0 ? (
+          productosEnPagina.map((prod) => (
             <Col md={4} sm={6} xs={12} className="mb-4" key={prod.idProducto}>
               <Card className="h-100">
                 <Card.Img
@@ -283,6 +333,59 @@ const ListaProductos = () => {
           </Col>
         )}
       </Row>
+
+      {/* Paginación */}
+      {totalPaginas > 1 && (
+        <div className="d-flex justify-content-center mt-4 mb-4">
+          <Pagination>
+            <Pagination.First 
+              onClick={() => setPaginaActual(1)} 
+              disabled={paginaActual === 1}
+            />
+            <Pagination.Prev 
+              onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))} 
+              disabled={paginaActual === 1}
+            />
+            
+            {generarNumerosPaginas()[0] > 1 && (
+              <>
+                <Pagination.Item onClick={() => setPaginaActual(1)}>1</Pagination.Item>
+                {generarNumerosPaginas()[0] > 2 && <Pagination.Ellipsis disabled />}
+              </>
+            )}
+            
+            {generarNumerosPaginas().map(numero => (
+              <Pagination.Item
+                key={numero}
+                active={numero === paginaActual}
+                onClick={() => setPaginaActual(numero)}
+              >
+                {numero}
+              </Pagination.Item>
+            ))}
+            
+            {generarNumerosPaginas()[generarNumerosPaginas().length - 1] < totalPaginas && (
+              <>
+                {generarNumerosPaginas()[generarNumerosPaginas().length - 1] < totalPaginas - 1 && (
+                  <Pagination.Ellipsis disabled />
+                )}
+                <Pagination.Item onClick={() => setPaginaActual(totalPaginas)}>
+                  {totalPaginas}
+                </Pagination.Item>
+              </>
+            )}
+            
+            <Pagination.Next 
+              onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))} 
+              disabled={paginaActual === totalPaginas}
+            />
+            <Pagination.Last 
+              onClick={() => setPaginaActual(totalPaginas)} 
+              disabled={paginaActual === totalPaginas}
+            />
+          </Pagination>
+        </div>
+      )}
     </Container>
   );
 };
