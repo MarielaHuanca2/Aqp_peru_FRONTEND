@@ -1,7 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../constants/apiEndpoints";
 
 // Public client without auth interceptors for endpoints that must be callable anonymously
-const API_BASE_URL = "http://localhost:8080/api";
 const publicClient = axios.create({ baseURL: API_BASE_URL });
 
 export function enviarCorreoPedido({ para, cliente, pedidoId, total, urlDetalle, items }) {
