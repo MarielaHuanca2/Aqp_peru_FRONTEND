@@ -82,22 +82,31 @@ const ProductoDetalle = () => {
           <p className="mb-1"><strong>Especificaciones:</strong> {producto.especificaciones}</p>
           {producto.observaciones && <p className="mb-1"><strong>Observaciones:</strong> {producto.observaciones}</p>}
           <div className="d-flex flex-column gap-2 mt-3">
-            <div className="d-flex align-items-center gap-2 mb-2">
-              <label htmlFor="cantidad" className="fw-bold">Cantidad:</label>
-              <input
-                id="cantidad"
-                type="number"
-                min="1"
-                max={producto.stock || 99}
-                value={cantidad}
-                onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
-                className="form-control"
-                style={{ width: "80px" }}
-              />
-            </div>
-            <Button variant="success" onClick={handleAgregarCarrito}>
-              Añadir al carrito ({cantidad} {cantidad === 1 ? 'unidad' : 'unidades'})
-            </Button>
+            {producto.stock > 0 ? (
+              <>
+                <div className="d-flex align-items-center gap-2 mb-2">
+                  <label htmlFor="cantidad" className="fw-bold">Cantidad:</label>
+                  <input
+                    id="cantidad"
+                    type="number"
+                    min="1"
+                    max={producto.stock || 99}
+                    value={cantidad}
+                    onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
+                    className="form-control"
+                    style={{ width: "80px" }}
+                  />
+                </div>
+                <Button variant="success" onClick={handleAgregarCarrito}>
+                  Añadir al carrito ({cantidad} {cantidad === 1 ? 'unidad' : 'unidades'})
+                </Button>
+              </>
+            ) : (
+              <div className="alert alert-warning text-center mb-2">
+                <strong>❌ Producto Agotado</strong>
+                <p className="mb-0 small">Este producto no está disponible actualmente.</p>
+              </div>
+            )}
             {producto.linkHojaDeDatos && (
               <a
                 href={producto.linkHojaDeDatos}
