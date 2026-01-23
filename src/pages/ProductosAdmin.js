@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { obtenerProductos, importarCsvOfertas } from "../services/productoService";
-import { useNavigate } from "react-router-dom";
 import { useTipoCambio } from "../context/TipoCambioContext";
 import apiClient from "../services/authService";
 
@@ -181,6 +180,11 @@ const ProductosAdmin = () => {
       
       {mensaje && <Alert variant={mensaje.tipo} dismissible onClose={() => setMensaje(null)}>{mensaje.texto}</Alert>}
       
+      {/* Botón para volver al panel de administrador */}
+      <Button variant="primary" className="mb-3" onClick={() => navigate("/admin")}>
+        Volver al Panel de Administrador
+      </Button>
+
       {/* Filtros y acciones (más compactos y alineados) */}
       <Row className="mb-4 p-3 bg-light rounded align-items-center">
         <Col md={7} className="d-flex gap-2">

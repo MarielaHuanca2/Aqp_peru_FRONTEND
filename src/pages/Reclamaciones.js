@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import "./Reclamaciones.css";
 
@@ -18,6 +18,10 @@ const initialForm = {
   detallesReclamo: "",
 };
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 const ReclamacionesPage = () => {
   const [form, setForm] = useState(initialForm);
   const [enviado, setEnviado] = useState(false);
@@ -25,6 +29,10 @@ const ReclamacionesPage = () => {
   const [validationErrors, setValidationErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [debugInfo, setDebugInfo] = useState(null);
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

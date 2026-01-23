@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../services/authService";
 
 const PedidosAdmin = () => {
@@ -13,6 +13,8 @@ const PedidosAdmin = () => {
     fechaFin: "",
     correo: ""
   });
+
+  const navigate = useNavigate();
 
   const obtenerPedidos = async () => {
     try {
@@ -61,6 +63,10 @@ const PedidosAdmin = () => {
     setFiltros({ fechaInicio: "", fechaFin: "", correo: "" });
   };
 
+  const goToAdminPanel = () => {
+    navigate("/admin");
+  };
+
   if (loading) {
     return (
       <Container className="mt-5 text-center">
@@ -72,6 +78,9 @@ const PedidosAdmin = () => {
 
   return (
     <Container className="mt-5">
+      <Button variant="primary" className="mb-3" onClick={goToAdminPanel}>
+        Volver al Panel de Administrador
+      </Button>
       <h2>Administrar Pedidos</h2>
       
       {/* Filtros */}
@@ -185,11 +194,9 @@ const PedidosAdmin = () => {
         </Table>
       )}
 
-      <div className="mt-3">
-        <Link to="/admin" className="btn btn-secondary">
-          Volver al Panel Admin
-        </Link>
-      </div>
+      <Button variant="primary" className="mt-3" onClick={goToAdminPanel}>
+        Volver al Panel de Administrador
+      </Button>
     </Container>
   );
 };

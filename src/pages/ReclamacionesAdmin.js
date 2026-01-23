@@ -17,6 +17,10 @@ const ReclamacionesAdmin = () => {
       .catch(() => setLoading(false));
   }, []);
 
+  const goToAdminPanel = () => {
+    navigate("/admin");
+  };
+
   if (loading) {
     return (
       <Container className="mt-5">
@@ -28,6 +32,9 @@ const ReclamacionesAdmin = () => {
 
   return (
     <Container className="mt-5">
+      <Button variant="primary" className="mb-3" onClick={goToAdminPanel}>
+        Volver al Panel de Administrador
+      </Button>
       <h2>Reclamaciones</h2>
       <Table striped bordered hover responsive>
         <thead>
@@ -67,6 +74,9 @@ const ReclamacionesAdmin = () => {
           ))}
         </tbody>
       </Table>
+      <Button variant="primary" className="mt-3" onClick={goToAdminPanel}>
+        Volver al Panel de Administrador
+      </Button>
     </Container>
   );
 };

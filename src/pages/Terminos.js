@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import "./Terminos.css";
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 const TerminosPage = () => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+
   return (
     <div className="terms-page">
       <div className="terms-header">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Accordion } from 'react-bootstrap';
 import './FaqPage.css';
 
@@ -67,7 +67,15 @@ const faqs = [
   }
 ];
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function FaqPage() {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+
   return (
     <div className="faq-page">
       <Container className="py-5">
@@ -75,7 +83,7 @@ function FaqPage() {
         
         {faqs.map(section => (
           <div key={section.id} className="faq-section mb-5">
-            <h2 className="faq-section-title">{section.title}</h2>
+            <h2 className="faq-section-title" onClick={scrollToTop}>{section.title}</h2>
             <Accordion defaultActiveKey="0" flush>
               {section.questions.map((item, index) => (
                 <Accordion.Item eventKey={index.toString()} key={index}>
