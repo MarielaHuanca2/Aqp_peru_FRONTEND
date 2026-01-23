@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { obtenerProductos, importarCsvOfertas } from "../services/productoService";
+import { obtenerProductos, importarCsvOfertas, toggleOfertaProducto } from "../services/productoService";
 import { useTipoCambio } from "../context/TipoCambioContext";
 import apiClient from "../services/authService";
 
@@ -165,6 +165,25 @@ const ProductosAdmin = () => {
     }
   };
 
+  const handleToggleOferta = async (producto) => {
+    try {
+      const nuevoEstado = !producto.esOferta;
+      await toggleOfertaProducto(producto.idProducto, nuevoEstado);
+      setMensaje({ 
+        tipo: "success", 
+        texto: nuevoEstado 
+          ? `"${producto.producto}" marcado como oferta` 
+          : `"${producto.producto}" ya no es oferta` 
+      });
+      cargarProductos();
+    } catch (err) {
+      setMensaje({ 
+        tipo: "danger", 
+        texto: `Error al cambiar estado de oferta: ${err.response?.data?.message || err.message}` 
+      });
+    }
+  };
+
   if (loading) {
     return (
       <Container className="mt-5 text-center">
@@ -218,10 +237,6 @@ const ProductosAdmin = () => {
         <Col md={5} className="d-flex justify-content-end align-items-center gap-2">
           <Button variant="success" onClick={() => abrirModalEditar()}>
             + Agregar
-          </Button>
-
-          <Button variant="outline-primary" onClick={() => navigate('/admin/ofertas')}>
-            Administrar Ofertas
           </Button>
 
           <div className="d-flex align-items-center gap-2">
@@ -318,6 +333,7 @@ const ProductosAdmin = () => {
             <th>Precio</th>
             <th>Stock</th>
             <th>Estado</th>
+            <th>Oferta</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -334,6 +350,14 @@ const ProductosAdmin = () => {
                 <span className={`badge ${producto.estadoProducto?.estadoProd === 'Activo' ? 'bg-success' : 'bg-danger'}`}>
                   {producto.estadoProducto?.estadoProd || 'N/A'}
                 </span>
+              </td>
+              <td className="text-center">
+                <Form.Check
+                  type="checkbox"
+                  checked={producto.esOferta || false}
+                  onChange={() => handleToggleOferta(producto)}
+                  title={producto.esOferta ? 'Quitar de ofertas' : 'Marcar como oferta'}
+                />
               </td>
               <td>
                 <Button 

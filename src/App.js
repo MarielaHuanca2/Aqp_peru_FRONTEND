@@ -26,7 +26,6 @@ import PedidosAdmin from "./pages/PedidosAdmin";
 import PedidoDetalle from "./pages/PedidoDetalle";
 import ProductosAdmin from "./pages/ProductosAdmin";
 import TipoCambioAdmin from "./pages/TipoCambioAdmin";
-import OfertasAdmin from "./pages/OfertasAdmin";
 import MesaAyuda from "./pages/MesaAyuda";
 import Registro from "./pages/Registro";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -101,14 +100,6 @@ function App() {
                 element={
                   <PrivateRoute requireAdmin={true}>
                     <ProductosAdmin />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/admin/ofertas" 
-                element={
-                  <PrivateRoute requireAdmin={true}>
-                    <OfertasAdmin />
                   </PrivateRoute>
                 } 
               />
