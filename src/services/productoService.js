@@ -12,6 +12,10 @@ export const importarCsvOfertas = (formData) => apiClient.post(`${OFERTAS_URL}/i
 });
 
 export const obtenerOfertas = () => apiClient.get(OFERTAS_URL, { skipAuthRedirect: true });
+
+// Toggle oferta status for a product
+export const toggleOfertaProducto = (id, esOferta) => apiClient.patch(`${PRODUCTOS_URL}/${id}/oferta`, { esOferta });
+
 // CRUD para una oferta individual
 export const obtenerOferta = (id) => apiClient.get(`${OFERTAS_URL}/${id}`);
 export const crearOferta = (oferta) => apiClient.post(OFERTAS_URL, oferta);

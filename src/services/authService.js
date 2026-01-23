@@ -7,6 +7,10 @@ import { API_BASE_URL } from "../constants/apiEndpoints";
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true, // Enviar cookies automáticamente en cada petición
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest', // Evita popup de autenticación básica del navegador
+    'Content-Type': 'application/json'
+  }
 });
 
 // Interceptor para manejar respuestas y errores de autenticación
