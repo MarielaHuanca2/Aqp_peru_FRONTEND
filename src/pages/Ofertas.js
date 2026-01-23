@@ -6,7 +6,7 @@ import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
 
 function Ofertas() {
-  const placeholderHero = "/images/45001.2018.jpg";
+  const placeholderHero = "/CSC-webinicio-02.jpg";
   const [ofertas, setOfertas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -98,6 +98,44 @@ function Servicios() {
           </Col>
         </Row>
 
+        {/* Nuevos Servicios */}
+        <Row className="mb-5 align-items-center">
+          <Col md={6}>
+            <div className="service-card p-4">
+              <h4 className="service-title">Mantenimiento y Soporte de Equipos Informáticos</h4>
+              <p className="service-text">
+                Brindamos mantenimiento preventivo y correctivo a computadoras, laptops, impresoras y servidores, asegurando su correcto funcionamiento y prolongando su vida útil. Incluye diagnóstico técnico, repotenciación de equipos y validación de garantías.
+              </p>
+            </div>
+          </Col>
+          <Col md={6}>
+            <div className="service-card p-4">
+              <h4 className="service-title">Infraestructura Tecnológica y Servidores</h4>
+              <p className="service-text">
+                Diseñamos, instalamos y mantenemos infraestructura tecnológica para empresas: servidores, pozo a tierra, ordenamiento de cableado y cableado estructurado, garantizando seguridad, estabilidad y rendimiento de sus sistemas.
+              </p>
+            </div>
+          </Col>
+        </Row>
+
+        <Row className="mb-5 align-items-center">
+          <Col md={6}>
+            <div className="service-card p-4">
+              <h4 className="service-title">Servicios de Almacenamiento y Respaldo</h4>
+              <p className="service-text">
+                Ofrecemos backups de discos duros y alquiler de almacenamiento en la nube, protegiendo su información crítica y asegurando la continuidad del negocio ante pérdidas de datos o fallas técnicas.
+              </p>
+            </div>
+          </Col>
+          <Col md={6}>
+            <div className="service-card p-4">
+              <h4 className="service-title">Alquiler y Suministro de Tecnología</h4>
+              <p className="service-text">
+                Contamos con alquiler de equipos informáticos (computadoras, impresoras y servidores), así como venta de licencias y soluciones tecnológicas adaptadas a las necesidades de su empresa.
+              </p>
+            </div>
+          </Col>
+        </Row>
       </Container>
     </div>
   );
