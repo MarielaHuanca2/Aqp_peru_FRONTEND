@@ -139,9 +139,15 @@ function Ofertas() {
                         <Link to={`/productos/${id}`} className="btn btn-outline-primary btn-sm">
                           Ver Detalles
                         </Link>
-                        <Button variant="success" size="sm" onClick={() => handleAgregar(o)}>
-                          🛒 Agregar al carrito
-                        </Button>
+                        {o.stock > 0 ? (
+                          <Button variant="success" size="sm" onClick={() => handleAgregar(o)}>
+                            🛒 Agregar al carrito
+                          </Button>
+                        ) : (
+                          <Button variant="secondary" size="sm" disabled>
+                            ❌ Agotado
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </Card.Body>

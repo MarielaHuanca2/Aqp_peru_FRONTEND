@@ -1,12 +1,16 @@
 import axios from "axios";
+import { API_BASE_URL } from "../constants/apiEndpoints";
 
-// Configurar la URL base
-const API_BASE_URL = "http://localhost:8080/api";
+// Configurar la URL base desde constantes centralizadas
 
 // Crear instancia de axios con soporte para cookies
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true, // Enviar cookies automáticamente en cada petición
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest', // Evita popup de autenticación básica del navegador
+    'Content-Type': 'application/json'
+  }
 });
 
 // Interceptor para manejar respuestas y errores de autenticación

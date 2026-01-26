@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../constants/apiEndpoints';
 
 // Create a simple axios client for mesa de ayuda con soporte para cookies
 const mesaAyudaClient = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   },

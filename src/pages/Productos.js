@@ -344,12 +344,21 @@ const ListaProductos = () => {
                     <Link to={`/productos/${prod.idProducto}`} className="btn btn-primary btn-sm">
                       Ver Detalles
                     </Link>
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => agregarAlCarrito(prod)}
-                    >
-                      🛒 Añadir al carrito
-                    </button>
+                    {prod.stock > 0 ? (
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={() => agregarAlCarrito(prod)}
+                      >
+                        🛒 Añadir al carrito
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        disabled
+                      >
+                        ❌ Agotado
+                      </button>
+                    )}
                     {prod.linkHojaDeDatos && (
                       <a
                         href={prod.linkHojaDeDatos}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
+import { API_BASE_URL } from "../constants/apiEndpoints";
 import "./Reclamaciones.css";
 
 const initialForm = {
@@ -59,7 +60,7 @@ const ReclamacionesPage = () => {
     setSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:8080/api/reclamos", {
+      const response = await fetch(`${API_BASE_URL}/reclamos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -235,10 +235,6 @@ const ProductosAdmin = () => {
           </Form.Select>
         </Col>
         <Col md={5} className="d-flex justify-content-end align-items-center gap-2">
-          <Button variant="success" onClick={() => abrirModalEditar()}>
-            + Agregar
-          </Button>
-
           <div className="d-flex align-items-center gap-2">
             <Form.Control
               type="file"
