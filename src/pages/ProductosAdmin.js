@@ -14,6 +14,10 @@ const ProductosAdmin = () => {
   const [mensaje, setMensaje] = useState(null);
   const [csvFile, setCsvFile] = useState(null);
   const [importandoCsv, setImportandoCsv] = useState(false);
+  const [showCategoriaModal, setShowCategoriaModal] = useState(false);
+  const [productoParaCategorizar, setProductoParaCategorizar] = useState(null);
+  const [categorias, setCategorias] = useState([]);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const { formatearPrecioSoles } = useTipoCambio();
   const navigate = useNavigate();
   
@@ -46,6 +50,7 @@ const ProductosAdmin = () => {
 
   useEffect(() => {
     cargarProductos();
+    cargarCategorias();
   }, []);
 
   const cargarProductos = async () => {
@@ -58,6 +63,45 @@ const ProductosAdmin = () => {
       setError("Error al cargar los productos");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const cargarCategorias = async () => {
+    try {
+      const response = await apiClient.get('/categorias');
+      setCategorias(response.data);
+    } catch (err) {
+      console.error("Error al cargar categorías:", err);
+    }
+  };
+
+  const abrirModalCategoria = (producto) => {
+    setProductoParaCategorizar(producto);
+    setCategoriaSeleccionada(producto.categoria?.idCategoria || "");
+    setShowCategoriaModal(true);
+  };
+
+  const actualizarCategoria = async () => {
+    if (!categoriaSeleccionada) {
+      setMensaje({ tipo: "warning", texto: "Selecciona una categoría" });
+      return;
+    }
+    
+    try {
+      await apiClient.patch(`/productos/${productoParaCategorizar.idProducto}/categoria`, {
+        idCategoria: categoriaSeleccionada
+      });
+      setMensaje({ 
+        tipo: "success", 
+        texto: `Categoría actualizada para "${productoParaCategorizar.producto}"` 
+      });
+      setShowCategoriaModal(false);
+      cargarProductos();
+    } catch (err) {
+      setMensaje({ 
+        tipo: "danger", 
+        texto: `Error al actualizar categoría: ${err.response?.data?.message || err.message}` 
+      });
     }
   };
 
@@ -365,6 +409,14 @@ const ProductosAdmin = () => {
                   Editar
                 </Button>
                 <Button 
+                  variant="outline-warning" 
+                  size="sm" 
+                  className="me-2"
+                  onClick={() => abrirModalCategoria(producto)}
+                >
+                  Categoría
+                </Button>
+                <Button 
                   variant="outline-danger" 
                   size="sm"
                   onClick={() => eliminarProducto(producto.idProducto)}
@@ -580,6 +632,45 @@ const ProductosAdmin = () => {
             </div>
           </Form>
         </Modal.Body>
+      </Modal>
+
+      {/* Modal para cambiar categoría */}
+      <Modal show={showCategoriaModal} onHide={() => setShowCategoriaModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cambiar Categoría</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {productoParaCategorizar && (
+            <>
+              <p><strong>Producto:</strong> {productoParaCategorizar.producto}</p>
+              <p><strong>Categoría actual:</strong> {productoParaCategorizar.categoria?.categoria || 'Sin categoría'}</p>
+              
+              <Form.Group className="mb-3">
+                <Form.Label>Nueva Categoría</Form.Label>
+                <Form.Select
+                  value={categoriaSeleccionada}
+                  onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+                  required
+                >
+                  <option value="">Selecciona una categoría</option>
+                  {categorias.map((cat) => (
+                    <option key={cat.idCategoria} value={cat.idCategoria}>
+                      {cat.categoria}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowCategoriaModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={actualizarCategoria}>
+            Actualizar Categoría
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <div className="mt-3">

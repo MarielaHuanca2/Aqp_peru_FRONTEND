@@ -2,7 +2,7 @@
 
 // Base URL del backend - usa variable de entorno o fallback a IP local
 // Para cambiar la URL, edita el archivo .env en la raíz del proyecto
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://192.168.0.189:8080/api";
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api";
 
 export const API_ENDPOINTS = {
   // Autenticación
