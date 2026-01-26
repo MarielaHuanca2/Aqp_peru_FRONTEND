@@ -19,9 +19,9 @@ const ListaProductos = () => {
 
   // Obtener opciones únicas para los filtros
   const marcasDisponibles = [...new Set(productos.map(p => p.marca))].sort();
-  const categoriasDisponibles = [...new Set(productos.map(p => p.categoria?.categoria).filter(Boolean))].sort();
-  const subCategoriasDisponibles = [...new Set(productos.map(p => p.subCategoria?.subCategoria).filter(Boolean))].sort();
-  const condicionesDisponibles = [...new Set(productos.map(p => p.condicionProducto?.condicionProd).filter(Boolean))].sort();
+  const categoriasDisponibles = [...new Set(productos.map(p => p.categoria?.categoria?.toLowerCase().trim()).filter(Boolean))].sort();
+  const subCategoriasDisponibles = [...new Set(productos.map(p => p.subCategoria?.subCategoria?.toLowerCase().trim()).filter(Boolean))].sort();
+  const condicionesDisponibles = [...new Set(productos.map(p => p.condicionProducto?.condicionProd?.toLowerCase().trim()).filter(Boolean))].sort();
 
   useEffect(() => {
     obtenerProductos()
@@ -33,37 +33,31 @@ const ListaProductos = () => {
   }, []);
 
   const productosFiltrados = productos.filter((prod) => {
-  const texto = filtros.texto.toLowerCase();
+    const texto = filtros.texto.toLowerCase().trim();
 
-  return (
-    (filtros.texto === "" ||
-      prod.producto.toLowerCase().includes(texto) ||
-      prod.descripcion?.toLowerCase().includes(texto) ||
-      prod.modelo?.toLowerCase().includes(texto)) &&
+    const resultado = (
+      (filtros.texto === "" ||
+        prod.descripcion?.toLowerCase().includes(texto) ||
+        prod.modelo?.toLowerCase().includes(texto)) &&
 
-    (filtros.marca === "" ||
-      prod.marca?.toLowerCase() === filtros.marca.toLowerCase()
-    ) &&
+      (filtros.marca === "" ||
+        prod.marca?.toLowerCase().trim() === filtros.marca.toLowerCase().trim()) &&
 
-    (filtros.categoria === "" ||
-      prod.categoria?.categoria?.toLowerCase() === filtros.categoria.toLowerCase()
-    ) &&
+      (filtros.categoria === "" ||
+        prod.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim()) &&
 
-    (filtros.subCategoria === "" ||
-      prod.subCategoria?.subCategoria?.toLowerCase() === filtros.subCategoria.toLowerCase()
-    ) &&
+      (filtros.subCategoria === "" ||
+        prod.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim())
+    );
 
-    (filtros.condicion === "" ||
-      prod.condicionProducto?.condicionProd?.toLowerCase() === filtros.condicion.toLowerCase()
-    ) &&
+    if (!resultado) {
+      console.log("Producto filtrado:", prod, "Filtros aplicados:", filtros); // Debugging log
+    }
 
-    (filtros.precioMin === "" ||
-      convertirAMonedaSoles(prod.precio) >= parseFloat(filtros.precioMin)) &&
+    return resultado;
+  });
 
-    (filtros.precioMax === "" ||
-      convertirAMonedaSoles(prod.precio) <= parseFloat(filtros.precioMax))
-  );
-});
+  console.log("Productos filtrados:", productosFiltrados); // Debugging log
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
@@ -82,11 +76,11 @@ const ListaProductos = () => {
     const maxPaginasVisibles = 5;
     let inicio = Math.max(1, paginaActual - Math.floor(maxPaginasVisibles / 2));
     let fin = Math.min(totalPaginas, inicio + maxPaginasVisibles - 1);
-    
+
     if (fin - inicio + 1 < maxPaginasVisibles) {
       inicio = Math.max(1, fin - maxPaginasVisibles + 1);
     }
-    
+
     for (let i = inicio; i <= fin; i++) {
       paginas.push(i);
     }
@@ -101,7 +95,7 @@ const ListaProductos = () => {
       subCategoria: "",
       condicion: "",
       precioMin: "",
-      precioMax: ""
+      precioMax: "",
     });
   };
 

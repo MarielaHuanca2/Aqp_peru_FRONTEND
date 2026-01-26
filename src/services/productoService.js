@@ -3,7 +3,22 @@ import apiClient from "./authService";
 const PRODUCTOS_URL = "/productos";
 const OFERTAS_URL = "/productos-ofertas";
 
-export const obtenerProductos = () => apiClient.get(PRODUCTOS_URL);
+export const obtenerProductos = () =>
+  apiClient.get(PRODUCTOS_URL).then((res) => {
+    // Normalize category data
+    const normalizedData = res.data.map((product) => ({
+      ...product,
+      categoria: {
+        ...product.categoria,
+        categoria: product.categoria?.categoria?.toLowerCase().trim(),
+      },
+      subCategoria: {
+        ...product.subCategoria,
+        subCategoria: product.subCategoria?.subCategoria?.toLowerCase().trim(),
+      },
+    }));
+    return { data: normalizedData };
+  });
 
 // Ofertas endpoints
 export const crearProductosOfertas = (productos) => apiClient.post(OFERTAS_URL, productos);

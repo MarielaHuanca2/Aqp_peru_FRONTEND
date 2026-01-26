@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useFiltroProductos } from "../context/FiltroProductosContext";
 import { authService } from "../services/authService";
+import { obtenerProductos } from "../services/productoService";
 import "./Header.css";
 
 function Header() {
@@ -21,6 +22,9 @@ function Header() {
   const [expanded, setExpanded] = useState(false);
   const megaRef = useRef(null);
   const toggleRef = useRef(null);
+
+  // State for dynamic categories
+  const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
     function handleDocClick(e) {
@@ -44,6 +48,17 @@ function Header() {
     };
   }, [isMegaOpen]);
 
+  useEffect(() => {
+    // Fetch categories dynamically
+    obtenerProductos()
+      .then((res) => {
+        const categoriasUnicas = [...new Set(res.data.map(p => p.categoria?.categoria?.toLowerCase().trim()).filter(Boolean))].sort();
+        console.log("Categorías obtenidas:", categoriasUnicas); // Debugging log
+        setCategorias(categoriasUnicas);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+
   const closeMenu = () => {
     setExpanded(false);
     setIsMegaOpen(false);
@@ -56,6 +71,7 @@ function Header() {
 
   // Función central de filtrado
   const irAProductosConFiltro = (nuevoFiltro) => {
+    console.log("Applying filter:", nuevoFiltro);
     setFiltros({
       texto: "",
       marca: "",
@@ -70,16 +86,16 @@ function Header() {
     navigate("/productos");
   };
 
-  // Categorías y marcas para el mega menú
-  const categorias = [
-    { nombre: "Laptops", icono: "💻" },
-    { nombre: "Servidores", icono: "🖥️" },
-    { nombre: "PCs", icono: "🖳" },
-    { nombre: "Monitores", icono: "🖵" },
-    { nombre: "Impresoras", icono: "🖨️" },
-    { nombre: "Accesorios", icono: "⌨️" },
-  ];
+  const handleCategoryFilter = (categoria) => {
+    console.log("Categoría seleccionada:", categoria); // Debugging log
+    setFiltros((prevFiltros) => ({
+      ...prevFiltros,
+      categoria: categoria.toLowerCase().trim(),
+    }));
+    navigate("/productos");
+  };
 
+  // Categorías y marcas para el mega menú
   const marcas = [
     { nombre: "DELL", logo: "/marcas/Dell_marcas.png" },
     { nombre: "Lenovo", logo: "/marcas/Lenovo_marcas.png" },
@@ -138,12 +154,12 @@ function Header() {
                     <div className="mega-menu-title">Categorías</div> 
                     <ul className="mega-menu-list">
                       {categorias.map((cat) => (
-                        <li key={cat.nombre} className="mega-menu-item">
+                        <li key={cat} className="mega-menu-item">
                           <span
                             className="mega-menu-link"
-                            onClick={() => irAProductosConFiltro({ texto: cat.nombre })}
+                            onClick={() => irAProductosConFiltro({ texto: cat })}
                           >
-                            {cat.icono} {cat.nombre}
+                            {cat}
                           </span>
                         </li>
                       ))}
