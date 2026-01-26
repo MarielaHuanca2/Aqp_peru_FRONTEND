@@ -75,12 +75,11 @@ function Header() {
     setFiltros({
       texto: "",
       marca: "",
-      categoria: "",
+      categoria: nuevoFiltro.categoria || "", // Cambiado para usar categoría
       subCategoria: "",
       condicion: "",
       precioMin: "",
       precioMax: "",
-      ...nuevoFiltro,
     });
     closeMenu();
     navigate("/productos");
@@ -157,7 +156,7 @@ function Header() {
                         <li key={cat} className="mega-menu-item">
                           <span
                             className="mega-menu-link"
-                            onClick={() => irAProductosConFiltro({ texto: cat })}
+                            onClick={() => irAProductosConFiltro({ categoria: cat })} // Cambiado para usar categoría
                           >
                             {cat}
                           </span>
