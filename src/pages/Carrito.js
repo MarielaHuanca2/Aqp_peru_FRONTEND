@@ -213,8 +213,7 @@ const Carrito = () => {
           <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
             <Button variant="outline-danger" onClick={vaciarCarrito}>Vaciar carrito</Button>
             <div className="text-end">
-              <div>Sin IGV: <strong>S/ {formatearPrecioSoles(subtotalSinIgv)}</strong></div>
-              <div>Sin IGV: <strong>{formatearPrecioSoles(subtotalSinIgv)}</strong></div>
+              <div>Sin IGV: <strong> {formatearPrecioSoles(subtotalSinIgv)}</strong></div>
               <div>IGV (18%): <strong>{formatearPrecioSoles(igv)}</strong></div>
               <h4 className="mt-1">Total (con IGV): {formatearPrecioSoles(totalConIgv)}</h4>
             </div>

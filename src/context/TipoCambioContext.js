@@ -89,7 +89,7 @@ export const TipoCambioProvider = ({ children }) => {
 
   const formatearPrecioSoles = (precioUSD) => {
     const precioSoles = convertirAMonedaSoles(precioUSD);
-    return `S/ ${precioSoles.toFixed(2)}`;
+    return `S/ ${precioSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
 
