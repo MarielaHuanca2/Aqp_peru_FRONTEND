@@ -47,7 +47,9 @@ const ListaProductos = () => {
         prod.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim()) &&
 
       (filtros.subCategoria === "" ||
-        prod.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim())
+        prod.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim()) &&
+
+      (!filtros.soloOfertas || prod.esOferta === true)
     );
 
     if (!resultado) {
@@ -96,6 +98,7 @@ const ListaProductos = () => {
       condicion: "",
       precioMin: "",
       precioMax: "",
+      soloOfertas: false,
     });
   };
 
@@ -231,10 +234,19 @@ const ListaProductos = () => {
         {/* Botón para limpiar filtros y contador de resultados */}
         <Row className="align-items-center pt-2 border-top">
           <Col md={4}>
-            <button className="btn btn-outline-secondary btn-sm" onClick={limpiarFiltros}>
-              <i className="bi bi-arrow-clockwise me-1"></i>
-              Limpiar filtros
-            </button>
+            <div className="d-flex gap-3 align-items-center">
+              <button className="btn btn-outline-secondary btn-sm" onClick={limpiarFiltros}>
+                <i className="bi bi-arrow-clockwise me-1"></i>
+                Limpiar filtros
+              </button>
+              <Form.Check
+                type="checkbox"
+                label="🔥 Solo ofertas"
+                checked={filtros.soloOfertas || false}
+                onChange={(e) => setFiltros({ ...filtros, soloOfertas: e.target.checked })}
+                className="text-danger fw-bold"
+              />
+            </div>
           </Col>
           <Col md={4} className="text-center">
             <Form.Group className="d-inline-flex align-items-center gap-2">
@@ -291,14 +303,14 @@ const ListaProductos = () => {
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
                 }}
               >
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', backgroundColor: '#f8f9fa' }}>
                   <Card.Img
                     variant="top"
                     src={prod.foto1 || "/productos/fd.png"}
                     alt={prod.producto || "Imagen del producto"}
                     onError={(e) => { e.target.onerror = null; e.target.src = "/productos/fd.png"; }}
                     loading="lazy"
-                    style={{ objectFit: "cover", height: "220px" }}
+                    style={{ objectFit: "contain", height: "220px", width: "100%", padding: "10px" }}
                   />
                   {prod.esOferta && (
                     <Badge 

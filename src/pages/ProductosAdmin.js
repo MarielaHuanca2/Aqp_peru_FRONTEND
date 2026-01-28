@@ -248,117 +248,130 @@ const ProductosAdmin = () => {
         Volver al Panel de Administrador
       </Button>
 
-      {/* Filtros y acciones (más compactos y alineados) */}
-      <Row className="mb-4 p-3 bg-light rounded align-items-center">
-        <Col md={7} className="d-flex gap-2">
-          <Form.Control
-            type="text"
-            placeholder="Buscar productos..."
-            value={filtros.texto}
-            onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
-          />
-          <Form.Select
-            value={filtros.marca}
-            onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
-            style={{ maxWidth: '220px' }}
-          >
-            <option value="">Todas las marcas</option>
-            {marcasDisponibles.map((marca) => (
-              <option key={marca} value={marca}>{marca}</option>
-            ))}
-          </Form.Select>
-          <Form.Select
-            value={filtros.categoria}
-            onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
-            style={{ maxWidth: '220px' }}
-          >
-            <option value="">Todas las categorías</option>
-            {categoriasDisponibles.map((categoria) => (
-              <option key={categoria} value={categoria}>{categoria}</option>
-            ))}
-          </Form.Select>
-        </Col>
-        <Col md={5} className="d-flex justify-content-end align-items-center gap-2">
-          <div className="d-flex align-items-center gap-2">
-            <Form.Control
-              type="file"
-              accept=".csv,text/csv"
-              onChange={(e) => setCsvFile(e.target.files[0] || null)}
-              style={{ maxWidth: '220px' }}
-            />
-            <Button
-              variant="primary"
-              onClick={async () => {
-                if (!csvFile) {
-                  setMensaje({ tipo: 'danger', texto: 'Selecciona un archivo CSV primero.' });
-                  return;
-                }
-                setImportandoCsv(true);
-                setMensaje(null);
-                try {
-                  const formData = new FormData();
-                  formData.append('archivo', csvFile);
-                  const resp = await apiClient.post('/productos/importar-csv', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                  });
-                  setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV importado correctamente.' });
-                  setCsvFile(null);
-                  cargarProductos();
-                } catch (err) {
-                  console.error('Error importando CSV:', err);
-                  setMensaje({ tipo: 'danger', texto: `Error al importar CSV: ${err.response?.data?.message || err.message}` });
-                } finally {
-                  setImportandoCsv(false);
-                }
+      {/* Filtros y acciones mejorados */}
+      <div className="mb-4 p-3 bg-light rounded shadow-sm">
+        {/* Fila de búsqueda y filtros */}
+        <Row className="mb-3 align-items-center">
+          <Col md={12}>
+            <div className="d-flex flex-wrap gap-2 align-items-center">
+              <div style={{ flex: '1 1 300px', minWidth: '200px' }}>
+                <Form.Control
+                  type="text"
+                  placeholder="🔍 Buscar por nombre, descripción o marca..."
+                  value={filtros.texto}
+                  onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
+                  className="shadow-sm"
+                />
+              </div>
+              <div style={{ flex: '0 1 200px', minWidth: '150px' }}>
+                <Form.Select
+                  value={filtros.marca}
+                  onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
+                  className="shadow-sm"
+                >
+                  <option value="">🏷️ Todas las marcas</option>
+                  {marcasDisponibles.map((marca) => (
+                    <option key={marca} value={marca}>{marca}</option>
+                  ))}
+                </Form.Select>
+              </div>
+              <div style={{ flex: '0 1 200px', minWidth: '150px' }}>
+                <Form.Select
+                  value={filtros.categoria}
+                  onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
+                  className="shadow-sm"
+                >
+                  <option value="">📂 Todas las categorías</option>
+                  {categoriasDisponibles.map((categoria) => (
+                    <option key={categoria} value={categoria}>{categoria}</option>
+                  ))}
+                </Form.Select>
+              </div>
+              {(filtros.texto || filtros.marca || filtros.categoria) && (
+                <Button 
+                  variant="outline-secondary" 
+                  size="sm"
+                  onClick={() => setFiltros({ texto: "", marca: "", categoria: "" })}
+                  title="Limpiar filtros"
+                >
+                  ✕ Limpiar
+                </Button>
+              )}
+            </div>
+          </Col>
+        </Row>
 
-          {/* Importar CSV para ofertas */}
-          <div className="d-flex align-items-center gap-2">
-            <Form.Control
-              type="file"
-              accept=".csv,text/csv"
-              onChange={(e) => setCsvFile(e.target.files[0] || null)}
-              style={{ maxWidth: '220px' }}
-            />
-            <Button
-              variant="info"
-              onClick={async () => {
-                if (!csvFile) {
-                  setMensaje({ tipo: 'danger', texto: 'Selecciona un archivo CSV para ofertas primero.' });
-                  return;
-                }
-                setImportandoCsv(true);
-                setMensaje(null);
-                try {
-                  const formData = new FormData();
-                  formData.append('archivo', csvFile);
-                  const resp = await importarCsvOfertas(formData);
-                  setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV de ofertas importado correctamente.' });
-                  setCsvFile(null);
-                  cargarProductos();
-                } catch (err) {
-                  console.error('Error importando CSV ofertas:', err);
-                  setMensaje({ tipo: 'danger', texto: `Error al importar CSV de ofertas: ${err.response?.data?.message || err.message}` });
-                } finally {
-                  setImportandoCsv(false);
-                }
-              }}
-              disabled={importandoCsv}
-            >
-              {importandoCsv ? (<><Spinner size="sm" animation="border" className="me-2"/>Importando ofertas...</>) : 'Importar CSV Ofertas'}
-            </Button>
-          </div>
-              }}
-              disabled={importandoCsv}
-            >
-              {importandoCsv ? (<><Spinner size="sm" animation="border" className="me-2"/>Importando...</>) : 'Importar CSV'}
-            </Button>
-          </div>
+        {/* Fila de acciones */}
+        <Row className="align-items-center">
+          <Col md={12}>
+            <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+              <div className="d-flex flex-wrap gap-2 align-items-center">
+                <Button variant="secondary" onClick={cargarProductos}>
+                  🔄 Refrescar
+                </Button>
+              </div>
+              
+              <div className="d-flex flex-wrap gap-2 align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                  <Form.Control
+                    type="file"
+                    accept=".csv,text/csv"
+                    onChange={(e) => setCsvFile(e.target.files[0] || null)}
+                    style={{ width: '200px' }}
+                    size="sm"
+                  />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={async () => {
+                      if (!csvFile) {
+                        setMensaje({ tipo: 'danger', texto: 'Selecciona un archivo CSV primero.' });
+                        return;
+                      }
+                      setImportandoCsv(true);
+                      setMensaje(null);
+                      try {
+                        const formData = new FormData();
+                        formData.append('archivo', csvFile);
+                        const resp = await apiClient.post('/productos/importar-csv', formData, {
+                          headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                        setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV importado correctamente.' });
+                        setCsvFile(null);
+                        cargarProductos();
+                      } catch (err) {
+                        console.error('Error importando CSV:', err);
+                        setMensaje({ tipo: 'danger', texto: `Error al importar CSV: ${err.response?.data?.message || err.message}` });
+                      } finally {
+                        setImportandoCsv(false);
+                      }
+                    }}
+                    disabled={importandoCsv}
+                  >
+                    {importandoCsv ? (
+                      <>
+                        <Spinner size="sm" animation="border" className="me-1"/>
+                        Importando...
+                      </>
+                    ) : (
+                      '📄 Importar CSV'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
 
-          <Button variant="secondary" onClick={cargarProductos}>
-            Refrescar
-          </Button>
-        </Col>
-      </Row>
+        {/* Contador de resultados */}
+        <Row className="mt-2">
+          <Col>
+            <small className="text-muted">
+              Mostrando <strong>{productosFiltrados.length}</strong> de <strong>{productos.length}</strong> productos
+            </small>
+          </Col>
+        </Row>
+      </div>
 
       {error && <Alert variant="danger">{error}</Alert>}
 

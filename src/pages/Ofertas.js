@@ -98,12 +98,12 @@ function Ofertas() {
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
                 }}
                 >
-                  <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'relative', backgroundColor: '#f8f9fa' }}>
                     <Card.Img 
                       variant="top" 
                       src={o.foto1 || o.imagen || '/productos/fd.png'} 
                       onError={(e) => { e.target.onerror = null; e.target.src = '/productos/fd.png'; }}
-                      style={{ height: 180, objectFit: 'cover' }} 
+                      style={{ height: 180, objectFit: 'contain', width: '100%', padding: '10px' }} 
                     />
                     <Badge 
                       bg="danger" 
