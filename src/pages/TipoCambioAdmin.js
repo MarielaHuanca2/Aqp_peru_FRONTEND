@@ -133,7 +133,7 @@ const TipoCambioAdmin = () => {
 
       <div className="mt-4">
         <Link to="/admin" className="btn btn-secondary">
-          Volver al Panel Admin
+          Volver al Panel de Administrador
         </Link>
       </div>
     </Container>

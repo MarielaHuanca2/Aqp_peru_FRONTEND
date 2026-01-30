@@ -24,7 +24,9 @@ const ProductosAdmin = () => {
   const [filtros, setFiltros] = useState({
     texto: "",
     marca: "",
-    categoria: ""
+    categoria: "",
+    nroParte: "",
+    nroSKU: ""
   });
 
   const [formProducto, setFormProducto] = useState({
@@ -107,13 +109,17 @@ const ProductosAdmin = () => {
 
   const productosFiltrados = productos.filter((prod) => {
     const texto = filtros.texto.toLowerCase();
+    const parte = filtros.nroParte.toLowerCase();
+    const sku = filtros.nroSKU.toLowerCase();
     return (
       (filtros.texto === "" ||
         prod.producto.toLowerCase().includes(texto) ||
         prod.descripcion?.toLowerCase().includes(texto) ||
         prod.marca.toLowerCase().includes(texto)) &&
       (filtros.marca === "" || prod.marca === filtros.marca) &&
-      (filtros.categoria === "" || prod.categoria?.categoria === filtros.categoria)
+      (filtros.categoria === "" || prod.categoria?.categoria === filtros.categoria) &&
+      (parte === "" || prod.nroParte?.toLowerCase().includes(parte)) &&
+      (sku === "" || prod.nroSKU?.toLowerCase().includes(sku))
     );
   });
 
@@ -254,12 +260,30 @@ const ProductosAdmin = () => {
         <Row className="mb-3 align-items-center">
           <Col md={12}>
             <div className="d-flex flex-wrap gap-2 align-items-center">
-              <div style={{ flex: '1 1 300px', minWidth: '200px' }}>
+              <div style={{ flex: '1 1 250px', minWidth: '200px' }}>
                 <Form.Control
                   type="text"
                   placeholder="🔍 Buscar por nombre, descripción o marca..."
                   value={filtros.texto}
                   onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
+                  className="shadow-sm"
+                />
+              </div>
+              <div style={{ flex: '0 1 180px', minWidth: '150px' }}>
+                <Form.Control
+                  type="text"
+                  placeholder="Nro. de parte"
+                  value={filtros.nroParte}
+                  onChange={(e) => setFiltros({ ...filtros, nroParte: e.target.value })}
+                  className="shadow-sm"
+                />
+              </div>
+              <div style={{ flex: '0 1 160px', minWidth: '150px' }}>
+                <Form.Control
+                  type="text"
+                  placeholder="SKU"
+                  value={filtros.nroSKU}
+                  onChange={(e) => setFiltros({ ...filtros, nroSKU: e.target.value })}
                   className="shadow-sm"
                 />
               </div>
@@ -287,11 +311,11 @@ const ProductosAdmin = () => {
                   ))}
                 </Form.Select>
               </div>
-              {(filtros.texto || filtros.marca || filtros.categoria) && (
+              {(filtros.texto || filtros.marca || filtros.categoria || filtros.nroParte || filtros.nroSKU) && (
                 <Button 
                   variant="outline-secondary" 
                   size="sm"
-                  onClick={() => setFiltros({ texto: "", marca: "", categoria: "" })}
+                  onClick={() => setFiltros({ texto: "", marca: "", categoria: "", nroParte: "", nroSKU: "" })}
                   title="Limpiar filtros"
                 >
                   ✕ Limpiar
@@ -688,7 +712,7 @@ const ProductosAdmin = () => {
 
       <div className="mt-3">
         <Link to="/admin" className="btn btn-secondary">
-          Volver al Panel Admin
+          Volver al Panel de Administrador
         </Link>
       </div>
     </Container>

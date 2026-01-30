@@ -167,6 +167,24 @@ const PedidoDetalle = () => {
     );
   };
 
+  const calcularSubtotalUSD = () => {
+    return (
+      pedido.detalles?.reduce((total, detalle) => {
+        const cantidad = Number(detalle.cantidad ?? 0);
+        const precio = obtenerPrecioProducto(detalle);
+        return total + cantidad * precio;
+      }, 0) || 0
+    );
+  };
+
+  const calcularIGV_USD = () => {
+    return calcularSubtotalUSD() * 0.18;
+  };
+
+  const calcularTotalConIGV_USD = () => {
+    return calcularSubtotalUSD() + calcularIGV_USD();
+  };
+
   // Tipo de cambio helper: preferir el valor enviado por detalle, si existe
   const convertirConDetalle = (precioUsd, detalle) => {
     const tc = Number(detalle?.tipoCambioValor ?? detalle?.tipoCambio?.valor ?? tipoCambioGlobal ?? 0);
@@ -181,6 +199,24 @@ const PedidoDetalle = () => {
         return total + cantidad * convertirConDetalle(precio, detalle);
       }, 0) || 0
     );
+  };
+
+  const calcularSubtotalSoles = () => {
+    return (
+      pedido.detalles?.reduce((total, detalle) => {
+        const cantidad = Number(detalle.cantidad ?? 0);
+        const precio = obtenerPrecioProducto(detalle);
+        return total + cantidad * convertirConDetalle(precio, detalle);
+      }, 0) || 0
+    );
+  };
+
+  const calcularIGV_Soles = () => {
+    return calcularSubtotalSoles() * 0.18;
+  };
+
+  const calcularTotalConIGV_Soles = () => {
+    return calcularSubtotalSoles() + calcularIGV_Soles();
   };
 
   return (
@@ -314,8 +350,50 @@ const PedidoDetalle = () => {
             <Alert variant="info">No hay productos en este pedido.</Alert>
           )}
         </Card.Body>
-        <Card.Footer className="text-end">
-          <h5>Total (S/): {calcularTotalSoles().toFixed(2)}</h5>
+        <Card.Footer>
+          <div className="row">
+            <div className="col-md-6">
+              <h6 className="mb-3 text-muted">Resumen en Dólares (USD)</h6>
+              <table className="table table-sm">
+                <tbody>
+                  <tr>
+                    <td><strong>Subtotal (sin IGV):</strong></td>
+                    <td className="text-end">{monedaSimbolo} {calcularSubtotalUSD().toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>IGV (18%):</strong></td>
+                    <td className="text-end">{monedaSimbolo} {calcularIGV_USD().toFixed(2)}</td>
+                  </tr>
+                  <tr className="table-primary">
+                    <td><strong>Total (con IGV):</strong></td>
+                    <td className="text-end"><strong>{monedaSimbolo} {calcularTotalConIGV_USD().toFixed(2)}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="col-md-6">
+              <h6 className="mb-3 text-muted">Resumen en Soles (PEN)</h6>
+              <table className="table table-sm">
+                <tbody>
+                  <tr>
+                    <td><strong>Subtotal (sin IGV):</strong></td>
+                    <td className="text-end">S/ {calcularSubtotalSoles().toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>IGV (18%):</strong></td>
+                    <td className="text-end">S/ {calcularIGV_Soles().toFixed(2)}</td>
+                  </tr>
+                  <tr className="table-success">
+                    <td><strong>Total (con IGV):</strong></td>
+                    <td className="text-end"><strong>S/ {calcularTotalConIGV_Soles().toFixed(2)}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <small className="text-muted">
+                Tipo de cambio promedio: S/ {tipoCambioGlobal?.toFixed(4) || 'N/A'}
+              </small>
+            </div>
+          </div>
         </Card.Footer>
       </Card>
 

@@ -304,14 +304,21 @@ const ListaProductos = () => {
                 }}
               >
                 <div style={{ position: 'relative', backgroundColor: '#f8f9fa' }}>
-                  <Card.Img
-                    variant="top"
-                    src={prod.foto1 || "/productos/fd.png"}
-                    alt={prod.producto || "Imagen del producto"}
-                    onError={(e) => { e.target.onerror = null; e.target.src = "/productos/fd.png"; }}
-                    loading="lazy"
-                    style={{ objectFit: "contain", height: "220px", width: "100%", padding: "10px" }}
-                  />
+                  <Link
+                    to={`/productos/${prod.idProducto}`}
+                    className="d-block"
+                    aria-label={`Ir al detalle de ${prod.producto}`}
+                    style={{ display: 'block' }}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={prod.foto1 || "/productos/fd.png"}
+                      alt={prod.producto || "Imagen del producto"}
+                      onError={(e) => { e.target.onerror = null; e.target.src = "/productos/fd.png"; }}
+                      loading="lazy"
+                      style={{ objectFit: "contain", height: "220px", width: "100%", padding: "10px" }}
+                    />
+                  </Link>
                   {prod.esOferta && (
                     <Badge 
                       bg="danger" 

@@ -11,6 +11,31 @@ export function useCarrito() {
 export function CarritoProvider({ children }) {
   const [carrito, setCarrito] = useState([]);
 
+  const actualizarCantidad = (idProducto, cantidadSolicitada) => {
+    if (!Number.isFinite(cantidadSolicitada) || cantidadSolicitada < 1) {
+      return;
+    }
+
+    setCarrito((prev) =>
+      prev.map((item) => {
+        if (item.idProducto !== idProducto) {
+          return item;
+        }
+
+        if (item.stock && cantidadSolicitada > item.stock) {
+          toast.error("No puedes solicitar más unidades que las disponibles en stock.");
+          return item;
+        }
+
+        if (item.cantidad === cantidadSolicitada) {
+          return item;
+        }
+
+        return { ...item, cantidad: cantidadSolicitada };
+      })
+    );
+  };
+
   const agregarAlCarrito = (producto, cantidad = 1) => {
     let alertaMostrada = false;
 
@@ -78,7 +103,13 @@ export function CarritoProvider({ children }) {
 
   return (
     <CarritoContext.Provider
-      value={{ carrito, agregarAlCarrito, quitarDelCarrito, vaciarCarrito }}
+      value={{
+        carrito,
+        agregarAlCarrito,
+        quitarDelCarrito,
+        vaciarCarrito,
+        actualizarCantidad,
+      }}
     >
       {children}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />

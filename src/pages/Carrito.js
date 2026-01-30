@@ -1,23 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Table, Button, Alert, Form, Row, Col, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../context/CarritoContext";
 import { useTipoCambio } from "../context/TipoCambioContext";
 import { enviarCorreoPedido, notificarEmpresa } from "../services/emailService";
 import { crearPedido as crearPedidoService } from "../services/pedidoService";
-import { authService } from "../services/authService";
+import apiClient, { authService } from "../services/authService";
+
+const emptyFormTemplate = {
+  para: "",
+  cliente: "",
+  apellidos: "",
+  telefono: "",
+  direccion: "",
+};
+
+const mergeWithPerfil = (values, perfil = {}) => ({
+  para: values.para || perfil.para || "",
+  cliente: values.cliente || perfil.cliente || "",
+  apellidos: values.apellidos || perfil.apellidos || "",
+  telefono: values.telefono || perfil.telefono || "",
+  direccion: values.direccion || perfil.direccion || "",
+});
 
 const Carrito = () => {
-  const { carrito, quitarDelCarrito, vaciarCarrito } = useCarrito();
+  const { carrito, quitarDelCarrito, vaciarCarrito, actualizarCantidad } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ 
-    para: "", 
-    cliente: "", 
-    apellidos: "",
-    telefono: "", 
-    direccion: ""
-  });
+  const [defaultFormValues, setDefaultFormValues] = useState(() => ({ ...emptyFormTemplate }));
+  const [form, setForm] = useState(() => ({ ...emptyFormTemplate }));
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
   // Normalize: keep totals in base currency (USD) and convert only when formatting/sending
@@ -30,6 +39,50 @@ const Carrito = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      return;
+    }
+
+    let cancel = false;
+
+    const cargarPerfil = async () => {
+      try {
+        const { data } = await apiClient.get("/auth/me");
+        if (cancel) return;
+
+        const perfil = {
+          para: data.correo ?? data.email ?? data.usuario ?? "",
+          cliente: data.razonSocial ?? data.nombre ?? data.nombres ?? "",
+          apellidos: data.apellidos ?? data.apellido ?? "",
+          telefono: data.telefono ?? data.celular ?? data.phone ?? "",
+          direccion:
+            data.direccion ?? data.domicilio ?? data.direccionEntrega ?? "",
+        };
+
+        setDefaultFormValues((prev) => mergeWithPerfil(prev, perfil));
+        setForm((prev) => mergeWithPerfil(prev, perfil));
+      } catch (error) {
+        if (!cancel) {
+          console.warn("No se pudo obtener el perfil del usuario:", error);
+        }
+      }
+    };
+
+    cargarPerfil();
+    return () => {
+      cancel = true;
+    };
+  }, []);
+
+  const handleCantidadChange = (idProducto, valor) => {
+    const cantidad = Number.parseInt(valor, 10);
+    if (Number.isNaN(cantidad)) {
+      return;
+    }
+    actualizarCantidad(idProducto, cantidad);
   };
 
   const handleEnviar = async (e) => {
@@ -166,7 +219,7 @@ const Carrito = () => {
         setMensaje({ tipo: "info", texto: "El proceso terminó con advertencias. Revisa la consola para más detalles." });
       }
       vaciarCarrito();
-      setForm({ para: "", cliente: "", apellidos: "", telefono: "", direccion: "" });
+      setForm({ ...defaultFormValues });
     } catch (err) {
       console.error("❌ ERROR AL PROCESAR PEDIDO:", err);
       console.error("📄 Respuesta del servidor:", err.response?.data);
@@ -195,19 +248,39 @@ const Carrito = () => {
               </tr>
             </thead>
             <tbody>
-              {carrito.map((item) => (
-                <tr key={item.idProducto}>
-                  <td>{item.producto}</td>
-                  <td>{formatearPrecioSoles(item.precio || 0)}</td>
-                  <td>{item.cantidad}</td>
-                  <td>{formatearPrecioSoles((item.precio || 0) * item.cantidad)}</td>
-                  <td>
-                    <Button variant="danger" size="sm" onClick={() => quitarDelCarrito(item.idProducto)}>
-                      Quitar
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+              {carrito.map((item) => {
+                const stockDisponible =
+                  item.stock === null || item.stock === undefined ? undefined : Number(item.stock);
+                const maxCantidad = Number.isFinite(stockDisponible) ? stockDisponible : undefined;
+
+                return (
+                  <tr key={item.idProducto}>
+                    <td>{item.producto}</td>
+                    <td>{formatearPrecioSoles(item.precio || 0)}</td>
+                    <td>
+                      <Form.Control
+                        type="number"
+                        min={1}
+                        max={maxCantidad}
+                        value={item.cantidad}
+                        onChange={(e) => handleCantidadChange(item.idProducto, e.target.value)}
+                        style={{ width: "100px" }}
+                      />
+                      {maxCantidad !== undefined && (
+                        <Form.Text className="text-muted" style={{ fontSize: "0.75rem" }}>
+                          Disponible: {maxCantidad}
+                        </Form.Text>
+                      )}
+                    </td>
+                    <td>{formatearPrecioSoles((item.precio || 0) * item.cantidad)}</td>
+                    <td>
+                      <Button variant="danger" size="sm" onClick={() => quitarDelCarrito(item.idProducto)}>
+                        Quitar
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
           <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
