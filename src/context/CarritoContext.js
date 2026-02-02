@@ -1,15 +1,34 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CarritoContext = createContext();
+const CARRITO_STORAGE_KEY = "carritoCompras";
 
 export function useCarrito() {
   return useContext(CarritoContext);
 }
 
 export function CarritoProvider({ children }) {
-  const [carrito, setCarrito] = useState([]);
+  // Inicializar carrito desde localStorage
+  const [carrito, setCarrito] = useState(() => {
+    try {
+      const carritoGuardado = localStorage.getItem(CARRITO_STORAGE_KEY);
+      return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+    } catch (error) {
+      console.error("Error al cargar carrito desde localStorage:", error);
+      return [];
+    }
+  });
+
+  // Guardar carrito en localStorage cada vez que cambie
+  useEffect(() => {
+    try {
+      localStorage.setItem(CARRITO_STORAGE_KEY, JSON.stringify(carrito));
+    } catch (error) {
+      console.error("Error al guardar carrito en localStorage:", error);
+    }
+  }, [carrito]);
 
   const actualizarCantidad = (idProducto, cantidadSolicitada) => {
     if (!Number.isFinite(cantidadSolicitada) || cantidadSolicitada < 1) {
@@ -99,7 +118,14 @@ export function CarritoProvider({ children }) {
     );
   };
 
-  const vaciarCarrito = () => setCarrito([]);
+  const vaciarCarrito = () => {
+    setCarrito([]);
+    try {
+      localStorage.removeItem(CARRITO_STORAGE_KEY);
+    } catch (error) {
+      console.error("Error al limpiar carrito en localStorage:", error);
+    }
+  };
 
   return (
     <CarritoContext.Provider

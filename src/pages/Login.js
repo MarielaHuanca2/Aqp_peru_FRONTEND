@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { authService } from "../services/authService";
 
@@ -10,6 +10,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [mostrarClave, setMostrarClave] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   // 🔐 Redirige si ya está logeado (admin -> /admin, user -> /)
   useEffect(() => {
@@ -30,7 +32,11 @@ function Login() {
     try {
       const userData = await authService.login(correo, clave);
       console.log("Login exitoso:", userData);
-      if (authService.isAdmin()) {
+      
+      // Redirigir según el parámetro redirect o rol
+      if (redirect === "carrito") {
+        navigate("/carrito");
+      } else if (authService.isAdmin()) {
         navigate("/admin");
       } else {
         navigate("/");
@@ -116,7 +122,7 @@ function Login() {
 
       <div className="text-center">
         <p className="mb-0">¿No tienes cuenta?</p>
-        <Link to="/registro" className="btn btn-link">
+        <Link to={redirect ? `/registro?redirect=${redirect}` : "/registro"} className="btn btn-link">
           Crear cuenta nueva
         </Link>
       </div>

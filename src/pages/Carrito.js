@@ -291,6 +291,14 @@ const Carrito = () => {
               <h4 className="mt-1">Total (con IGV): {formatearPrecioSoles(totalConIgv)}</h4>
             </div>
           </div>
+          
+          {/* Mensaje informativo */}
+          <Alert variant="info" className="mb-3">
+            <strong>📞 Importante:</strong> Esta no es una página de checkout o pago en línea. 
+            Al confirmar el pedido, enviaremos tu solicitud a nuestro equipo para que se comuniquen 
+            contigo y coordinar los detalles de la compra.
+          </Alert>
+          
           <Form onSubmit={handleEnviar} className="border p-3 rounded bg-light">
             <Row className="mb-3">
               <Col md={6}>
@@ -358,9 +366,43 @@ const Carrito = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Button type="submit" variant="primary" disabled={enviando}>
-              {enviando ? <Spinner animation="border" size="sm" /> : "Confirmar pedido y enviar correos"}
-            </Button>
+            
+            {!authService.isAuthenticated() ? (
+              <Alert variant="warning" className="mt-3">
+                <strong>⚠️ Debe iniciar sesión para confirmar el pedido</strong>
+                <div className="mt-2">
+                  <Button 
+                    variant="primary" 
+                    href="/login?redirect=carrito"
+                    className="me-2"
+                  >
+                    Iniciar Sesión
+                  </Button>
+                  <Button 
+                    variant="outline-primary" 
+                    href="/registro?redirect=carrito"
+                  >
+                    Crear Cuenta
+                  </Button>
+                </div>
+              </Alert>
+            ) : (
+              <div>
+                <Button type="submit" variant="primary" disabled={enviando}>
+                  {enviando ? (
+                    <>
+                      <Spinner animation="border" size="sm" className="me-2" />
+                      Enviando solicitud...
+                    </>
+                  ) : (
+                    "📧 Confirmar pedido y contactar con la empresa"
+                  )}
+                </Button>
+                <Form.Text className="d-block mt-2 text-muted">
+                  Se enviará tu solicitud a nuestro equipo para coordinar la venta.
+                </Form.Text>
+              </div>
+            )}
           </Form>
         </>
       )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Container, Form, Button, Alert, Spinner, Row, Col } from "react-bootstrap";
 import apiClient from "../services/authService";
 
@@ -18,6 +18,8 @@ function Registro() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const handleChange = (e) => {
     setFormData({
@@ -57,9 +59,13 @@ function Registro() {
       console.log("Registro exitoso:", response.data);
       setSuccess("¡Usuario registrado exitosamente! Redirigiendo al login...");
       
-      // Redirigir al login después de 2 segundos
+      // Redirigir al login después de 2 segundos, pasando el parámetro redirect si existe
       setTimeout(() => {
-        navigate("/login");
+        if (redirect) {
+          navigate(`/login?redirect=${redirect}`);
+        } else {
+          navigate("/login");
+        }
       }, 2000);
       
     } catch (err) {
