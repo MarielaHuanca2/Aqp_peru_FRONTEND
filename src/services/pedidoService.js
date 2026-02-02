@@ -1,6 +1,4 @@
-import axios from "axios";
-import { API_BASE_URL } from "../constants/apiEndpoints";
-const publicClient = axios.create({ baseURL: API_BASE_URL });
+import apiClient from "./authService";
 
 // Ejemplo de JSON de pedido (para pruebas)
 export const EJEMPLO_PEDIDO = {
@@ -32,7 +30,12 @@ export async function crearPedido(pedidoData) {
   };
 
   console.log("[pedidoService] POST /pedidos ->", payload);
-  return publicClient.post("/pedidos", payload);
+  return apiClient.post("/pedidos", payload);
 }
 
-export default { crearPedido, EJEMPLO_PEDIDO };
+export async function obtenerPedidosPorCorreo(correo) {
+  console.log("[pedidoService] GET /pedidos/buscar/correo ->", correo);
+  return apiClient.get(`/pedidos/buscar/correo/${correo}`);
+}
+
+export default { crearPedido, obtenerPedidosPorCorreo, EJEMPLO_PEDIDO };

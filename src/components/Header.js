@@ -226,7 +226,18 @@ function Header() {
             {isLoggedIn ? (
               <>
                 {/* User Info */}
-                <div className="user-info">
+                <div 
+                  className="user-info clickable" 
+                  onClick={() => { closeMenu(); navigate("/mis-pedidos"); }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      closeMenu();
+                      navigate("/mis-pedidos");
+                    }
+                  }}
+                >
                   <div className="user-avatar">
                     <FaUser />
                   </div>

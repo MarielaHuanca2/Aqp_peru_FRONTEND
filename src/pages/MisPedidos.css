@@ -1,0 +1,78 @@
+.mis-pedidos-container {
+  max-width: 1200px;
+  margin-top: 100px;
+  padding: 20px;
+}
+
+.mis-pedidos-container h1 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.pedidos-list {
+  margin-top: 20px;
+}
+
+.pedido-card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.pedido-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pedido-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  padding: 15px;
+}
+
+.pedido-info {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.pedido-detalles {
+  margin-top: 15px;
+}
+
+.pedido-detalles h6 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.pedido-detalles table {
+  margin-top: 10px;
+}
+
+.pedido-detalles table th {
+  background-color: #e9ecef;
+  color: #495057;
+  font-weight: 600;
+}
+
+.pedido-detalles table tfoot {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .mis-pedidos-container {
+    margin-top: 80px;
+    padding: 10px;
+  }
+
+  .pedido-card .card-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .pedido-card .card-header > div:last-child {
+    margin-top: 10px;
+  }
+}

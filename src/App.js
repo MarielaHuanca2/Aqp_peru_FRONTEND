@@ -28,6 +28,7 @@ import ProductosAdmin from "./pages/ProductosAdmin";
 import TipoCambioAdmin from "./pages/TipoCambioAdmin";
 import MesaAyuda from "./pages/MesaAyuda";
 import Registro from "./pages/Registro";
+import MisPedidos from "./pages/MisPedidos";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import './index.css';
@@ -55,6 +56,14 @@ function App() {
               <Route path="/terminos" element={<Terminos />} />
               <Route path="/reclamaciones" element={<Reclamaciones />} />
               <Route path="/faq" element={<FaqPage />} />
+              <Route 
+                path="/mis-pedidos" 
+                element={
+                  <PrivateRoute requireAdmin={false}>
+                    <MisPedidos />
+                  </PrivateRoute>
+                } 
+              />
               <Route 
                 path="/admin" 
                 element={
