@@ -18,6 +18,10 @@ const ProductosAdmin = () => {
   const [productoParaCategorizar, setProductoParaCategorizar] = useState(null);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+  const [showSubCategoriaModal, setShowSubCategoriaModal] = useState(false);
+  const [productoParaSubCategorizar, setProductoParaSubCategorizar] = useState(null);
+  const [subCategorias, setSubCategorias] = useState([]);
+  const [subCategoriaSeleccionada, setSubCategoriaSeleccionada] = useState("");
   const { formatearPrecioSoles } = useTipoCambio();
   const navigate = useNavigate();
   
@@ -28,6 +32,10 @@ const ProductosAdmin = () => {
     nroParte: "",
     nroSKU: ""
   });
+
+  // Estados de paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [productosPorPagina, setProductosPorPagina] = useState(10);
 
   const [formProducto, setFormProducto] = useState({
     nroModelo: "",
@@ -53,6 +61,7 @@ const ProductosAdmin = () => {
   useEffect(() => {
     cargarProductos();
     cargarCategorias();
+    cargarSubCategorias();
   }, []);
 
   const cargarProductos = async () => {
@@ -74,6 +83,15 @@ const ProductosAdmin = () => {
       setCategorias(response.data);
     } catch (err) {
       console.error("Error al cargar categorías:", err);
+    }
+  };
+
+  const cargarSubCategorias = async () => {
+    try {
+      const response = await apiClient.get('/subcategorias');
+      setSubCategorias(response.data);
+    } catch (err) {
+      console.error("Error al cargar subcategorías:", err);
     }
   };
 
@@ -107,6 +125,36 @@ const ProductosAdmin = () => {
     }
   };
 
+  const abrirModalSubCategoria = (producto) => {
+    setProductoParaSubCategorizar(producto);
+    setSubCategoriaSeleccionada(producto.subCategoria?.idSubCategoria || "");
+    setShowSubCategoriaModal(true);
+  };
+
+  const actualizarSubCategoria = async () => {
+    if (!subCategoriaSeleccionada) {
+      setMensaje({ tipo: "warning", texto: "Selecciona una subcategoría" });
+      return;
+    }
+    
+    try {
+      await apiClient.patch(`/productos/${productoParaSubCategorizar.idProducto}/subcategoria`, {
+        idSubCategoria: subCategoriaSeleccionada
+      });
+      setMensaje({ 
+        tipo: "success", 
+        texto: `Subcategoría actualizada para "${productoParaSubCategorizar.producto}"` 
+      });
+      setShowSubCategoriaModal(false);
+      cargarProductos();
+    } catch (err) {
+      setMensaje({ 
+        tipo: "danger", 
+        texto: `Error al actualizar subcategoría: ${err.response?.data?.message || err.message}` 
+      });
+    }
+  };
+
   const productosFiltrados = productos.filter((prod) => {
     const texto = filtros.texto.toLowerCase();
     const parte = filtros.nroParte.toLowerCase();
@@ -125,6 +173,120 @@ const ProductosAdmin = () => {
 
   const marcasDisponibles = [...new Set(productos.map(p => p.marca))].sort();
   const categoriasDisponibles = [...new Set(productos.map(p => p.categoria?.categoria).filter(Boolean))].sort();
+
+  // Cálculos de paginación
+  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const indiceUltimo = paginaActual * productosPorPagina;
+  const indicePrimero = indiceUltimo - productosPorPagina;
+  const productosActuales = productosFiltrados.slice(indicePrimero, indiceUltimo);
+
+  // Resetear página cuando cambien los filtros
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [filtros]);
+
+  const cambiarPagina = (numeroPagina) => {
+    setPaginaActual(numeroPagina);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const generarBotonesPaginacion = () => {
+    const botones = [];
+    const rango = 2; // Botones a cada lado de la página actual
+    
+    // Botón Primera página
+    if (paginaActual > 1) {
+      botones.push(
+        <Button
+          key="primero"
+          variant="outline-primary"
+          size="sm"
+          onClick={() => cambiarPagina(1)}
+          className="me-1"
+        >
+          ««
+        </Button>
+      );
+    }
+    
+    // Botón Anterior
+    if (paginaActual > 1) {
+      botones.push(
+        <Button
+          key="anterior"
+          variant="outline-primary"
+          size="sm"
+          onClick={() => cambiarPagina(paginaActual - 1)}
+          className="me-1"
+        >
+          ‹
+        </Button>
+      );
+    }
+    
+    // Botones de páginas
+    let inicio = Math.max(1, paginaActual - rango);
+    let fin = Math.min(totalPaginas, paginaActual + rango);
+    
+    // Mostrar puntos suspensivos al inicio
+    if (inicio > 1) {
+      botones.push(
+        <span key="inicio-dots" className="mx-1 align-self-center">...</span>
+      );
+    }
+    
+    for (let i = inicio; i <= fin; i++) {
+      botones.push(
+        <Button
+          key={i}
+          variant={paginaActual === i ? "primary" : "outline-primary"}
+          size="sm"
+          onClick={() => cambiarPagina(i)}
+          className="me-1"
+        >
+          {i}
+        </Button>
+      );
+    }
+    
+    // Mostrar puntos suspensivos al final
+    if (fin < totalPaginas) {
+      botones.push(
+        <span key="fin-dots" className="mx-1 align-self-center">...</span>
+      );
+    }
+    
+    // Botón Siguiente
+    if (paginaActual < totalPaginas) {
+      botones.push(
+        <Button
+          key="siguiente"
+          variant="outline-primary"
+          size="sm"
+          onClick={() => cambiarPagina(paginaActual + 1)}
+          className="me-1"
+        >
+          ›
+        </Button>
+      );
+    }
+    
+    // Botón Última página
+    if (paginaActual < totalPaginas) {
+      botones.push(
+        <Button
+          key="ultimo"
+          variant="outline-primary"
+          size="sm"
+          onClick={() => cambiarPagina(totalPaginas)}
+        >
+          »»
+        </Button>
+      );
+    }
+    
+    return botones;
+  };
 
   const abrirModalEditar = (producto = null) => {
     if (producto) {
@@ -387,12 +549,32 @@ const ProductosAdmin = () => {
           </Col>
         </Row>
 
-        {/* Contador de resultados */}
+        {/* Contador de resultados y selector de productos por página */}
         <Row className="mt-2">
-          <Col>
+          <Col md={6}>
             <small className="text-muted">
-              Mostrando <strong>{productosFiltrados.length}</strong> de <strong>{productos.length}</strong> productos
+              Mostrando <strong>{indicePrimero + 1}</strong> a <strong>{Math.min(indiceUltimo, productosFiltrados.length)}</strong> de <strong>{productosFiltrados.length}</strong> productos filtrados (Total: <strong>{productos.length}</strong>)
             </small>
+          </Col>
+          <Col md={6} className="text-end">
+            <div className="d-inline-flex align-items-center gap-2">
+              <small className="text-muted">Mostrar:</small>
+              <Form.Select
+                size="sm"
+                value={productosPorPagina}
+                onChange={(e) => {
+                  setProductosPorPagina(Number(e.target.value));
+                  setPaginaActual(1);
+                }}
+                style={{ width: 'auto' }}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </Form.Select>
+              <small className="text-muted">por página</small>
+            </div>
           </Col>
         </Row>
       </div>
@@ -415,7 +597,7 @@ const ProductosAdmin = () => {
           </tr>
         </thead>
         <tbody>
-          {productosFiltrados.map((producto) => (
+          {productosActuales.map((producto) => (
             <tr key={producto.idProducto}>
               <td>{producto.idProducto}</td>
               <td>{producto.producto}</td>
@@ -454,6 +636,14 @@ const ProductosAdmin = () => {
                   Categoría
                 </Button>
                 <Button 
+                  variant="outline-info" 
+                  size="sm" 
+                  className="me-2"
+                  onClick={() => abrirModalSubCategoria(producto)}
+                >
+                  SubCategoría
+                </Button>
+                <Button 
                   variant="outline-danger" 
                   size="sm"
                   onClick={() => eliminarProducto(producto.idProducto)}
@@ -465,6 +655,37 @@ const ProductosAdmin = () => {
           ))}
         </tbody>
       </Table>
+
+      {/* Controles de paginación */}
+      {totalPaginas > 1 && (
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <small className="text-muted">
+              Página <strong>{paginaActual}</strong> de <strong>{totalPaginas}</strong>
+            </small>
+          </div>
+          <div className="d-flex align-items-center">
+            {generarBotonesPaginacion()}
+          </div>
+          <div>
+            <Form.Control
+              type="number"
+              size="sm"
+              min="1"
+              max={totalPaginas}
+              value={paginaActual}
+              onChange={(e) => {
+                const pagina = Number(e.target.value);
+                if (pagina >= 1 && pagina <= totalPaginas) {
+                  cambiarPagina(pagina);
+                }
+              }}
+              style={{ width: '80px' }}
+              placeholder="Ir a..."
+            />
+          </div>
+        </div>
+      )}
 
       {/* Modal para editar/crear producto */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
@@ -706,6 +927,45 @@ const ProductosAdmin = () => {
           </Button>
           <Button variant="primary" onClick={actualizarCategoria}>
             Actualizar Categoría
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para cambiar subcategoría */}
+      <Modal show={showSubCategoriaModal} onHide={() => setShowSubCategoriaModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cambiar Subcategoría</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {productoParaSubCategorizar && (
+            <>
+              <p><strong>Producto:</strong> {productoParaSubCategorizar.producto}</p>
+              <p><strong>Subcategoría actual:</strong> {productoParaSubCategorizar.subCategoria?.subCategoria || 'Sin subcategoría'}</p>
+              
+              <Form.Group className="mb-3">
+                <Form.Label>Nueva Subcategoría</Form.Label>
+                <Form.Select
+                  value={subCategoriaSeleccionada}
+                  onChange={(e) => setSubCategoriaSeleccionada(e.target.value)}
+                  required
+                >
+                  <option value="">Selecciona una subcategoría</option>
+                  {subCategorias.map((subCat) => (
+                    <option key={subCat.idSubCategoria} value={subCat.idSubCategoria}>
+                      {subCat.subCategoria}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowSubCategoriaModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={actualizarSubCategoria}>
+            Actualizar Subcategoría
           </Button>
         </Modal.Footer>
       </Modal>

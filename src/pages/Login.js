@@ -8,6 +8,7 @@ function Login() {
   const [clave, setClave] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mostrarClave, setMostrarClave] = useState(false);
   const navigate = useNavigate();
 
   // 🔐 Redirige si ya está logeado (admin -> /admin, user -> /)
@@ -67,13 +68,33 @@ function Login() {
 
         <Form.Group controlId="formClave" className="mb-3">
           <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Contraseña"
-            value={clave}
-            onChange={(e) => setClave(e.target.value)}
-            required
-          />
+          <div className="position-relative">
+            <Form.Control
+              type={mostrarClave ? "text" : "password"}
+              placeholder="Contraseña"
+              value={clave}
+              onChange={(e) => setClave(e.target.value)}
+              required
+              style={{ paddingRight: "40px" }}
+            />
+            <Button
+              variant="link"
+              onClick={() => setMostrarClave(!mostrarClave)}
+              className="position-absolute"
+              style={{
+                right: "0",
+                top: "0",
+                bottom: "0",
+                border: "none",
+                background: "transparent",
+                color: "#6c757d",
+                padding: "0.375rem 0.75rem"
+              }}
+              type="button"
+            >
+              {mostrarClave ? "👁️" : "👁️‍🗨️"}
+            </Button>
+          </div>
         </Form.Group>
 
         <Button 

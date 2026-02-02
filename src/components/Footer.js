@@ -42,8 +42,8 @@ function Footer() {
             <a href="https://twitter.com" target="_blank" rel="noreferrer"><FaTwitter /></a>
           </div>
           <h5>Horario</h5>
-          <p>Lunes a Sábado: 9:00am - 8:00pm</p>
-          <p>Domingo: 10:00am - 6:00pm</p>
+          <p>Lunes a Viernes: 8:00am - 6:00pm</p>
+          <p>Sábado: 9:00am - 1:00pm</p>
         </div>
       </div>
 
