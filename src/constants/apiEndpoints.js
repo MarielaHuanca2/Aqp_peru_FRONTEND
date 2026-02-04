@@ -45,8 +45,7 @@ export const API_ENDPOINTS = {
 
 // Estados de autenticación
 export const AUTH_ROLES = {
-  USER: "ROLE_USER",
-  ADMIN: "ROLE_ADMIN"
+  USER: "ROLE_USER",  ADMIN: "ROLE_ADMIN"
 };
 
 // Configuración de localStorage
