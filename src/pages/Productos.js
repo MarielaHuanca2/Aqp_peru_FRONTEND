@@ -357,6 +357,7 @@ const ListaProductos = () => {
                     }}>
                       {formatearPrecioSoles(prod.precio || 0)}
                     </div>
+                    <small className="text-muted d-block">Precio sin IGV</small>
                     <small className="text-muted">Stock: {prod.stock}</small>
                   </div>
                   <div className="mt-auto d-grid gap-2">

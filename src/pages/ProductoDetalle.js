@@ -74,7 +74,7 @@ const ProductoDetalle = () => {
           <p className="mb-1"><strong>Condición:</strong> {producto.condicionProducto?.condicionProd}</p>
           <p className="mb-1"><strong>Estado:</strong> {producto.estadoProducto?.estadoProd}</p>
           <p className="mb-1"><strong>Stock:</strong> {producto.stock}</p>
-          <p className="mb-1"><strong>Precio:</strong> {formatearPrecioSoles(producto.precio || 0)}</p>
+          <p className="mb-1"><strong>Precio:</strong> {formatearPrecioSoles(producto.precio || 0)} <span className="text-muted small">(sin IGV)</span></p>
           <p className="mb-1"><strong>Garantía:</strong> {producto.garantia} {producto.umGarantia}</p>
           <p className="mb-1"><strong>Fecha Alta:</strong> {producto.fechaAlta}</p>
           <hr />

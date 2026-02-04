@@ -51,6 +51,13 @@ function MisPedidos() {
     });
   };
 
+  const formatearNumero = (numero) => {
+    return numero.toLocaleString('es-PE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
   const getEstadoBadge = (estado) => {
     const estadoMap = {
       'PENDIENTE': 'warning',
@@ -212,10 +219,10 @@ function MisPedidos() {
                                 <td>
                                   {precioUsd > 0 ? (
                                     <>
-                                      {detalle.producto?.moneda?.simboloMoneda ?? '$'} {precioUsd.toFixed(2)}
+                                      {detalle.producto?.moneda?.simboloMoneda ?? '$'} {formatearNumero(precioUsd)}
                                       {tc > 0 && (
                                         <div className="text-muted small">
-                                          S/ {precioSoles.toFixed(2)}
+                                          S/ {formatearNumero(precioSoles)}
                                         </div>
                                       )}
                                     </>
@@ -225,7 +232,7 @@ function MisPedidos() {
                                 </td>
                                 <td>
                                   {precioUsd > 0 && tc > 0 ? (
-                                    <>S/ {subtotal.toFixed(2)}</>
+                                    <>S/ {formatearNumero(subtotal)}</>
                                   ) : (
                                     '-'
                                   )}
@@ -246,15 +253,15 @@ function MisPedidos() {
                         <tbody>
                           <tr>
                             <td><strong>Subtotal (sin IGV):</strong></td>
-                            <td className="text-end">{monedaSimbolo} {calcularSubtotalUSD().toFixed(2)}</td>
+                            <td className="text-end">{monedaSimbolo} {formatearNumero(calcularSubtotalUSD())}</td>
                           </tr>
                           <tr>
                             <td><strong>IGV (18%):</strong></td>
-                            <td className="text-end">{monedaSimbolo} {calcularIGV_USD().toFixed(2)}</td>
+                            <td className="text-end">{monedaSimbolo} {formatearNumero(calcularIGV_USD())}</td>
                           </tr>
                           <tr className="table-primary">
                             <td><strong>Total (con IGV):</strong></td>
-                            <td className="text-end"><strong>{monedaSimbolo} {calcularTotalConIGV_USD().toFixed(2)}</strong></td>
+                            <td className="text-end"><strong>{monedaSimbolo} {formatearNumero(calcularTotalConIGV_USD())}</strong></td>
                           </tr>
                         </tbody>
                       </table>
@@ -265,15 +272,15 @@ function MisPedidos() {
                         <tbody>
                           <tr>
                             <td><strong>Subtotal (sin IGV):</strong></td>
-                            <td className="text-end">S/ {calcularSubtotalSoles().toFixed(2)}</td>
+                            <td className="text-end">S/ {formatearNumero(calcularSubtotalSoles())}</td>
                           </tr>
                           <tr>
                             <td><strong>IGV (18%):</strong></td>
-                            <td className="text-end">S/ {calcularIGV_Soles().toFixed(2)}</td>
+                            <td className="text-end">S/ {formatearNumero(calcularIGV_Soles())}</td>
                           </tr>
                           <tr className="table-success">
                             <td><strong>Total (con IGV):</strong></td>
-                            <td className="text-end"><strong>S/ {calcularTotalConIGV_Soles().toFixed(2)}</strong></td>
+                            <td className="text-end"><strong>S/ {formatearNumero(calcularTotalConIGV_Soles())}</strong></td>
                           </tr>
                         </tbody>
                       </table>
