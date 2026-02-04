@@ -22,7 +22,7 @@ const SobreNosotros = () => {
           </Col>
           <Col md={6} className="order-1 order-md-2 mb-4 mb-md-0">
             <Image
-              src="/grupo_trabajo.png"
+              src="/grupo_tra.png"
               alt="Nuestro equipo"
               fluid
               rounded
