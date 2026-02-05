@@ -12,6 +12,9 @@ const ListaProductos = () => {
   const [loading, setLoading] = useState(true);
   const [paginaActual, setPaginaActual] = useState(1);
   const [productosPorPagina, setProductosPorPagina] = useState(12);
+  const [ordenarPor, setOrdenarPor] = useState("");
+  const [paginaInput, setPaginaInput] = useState("");
+  const [sidebarVisible, setSidebarVisible] = useState(true);
   const { agregarAlCarrito } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
 
@@ -20,7 +23,15 @@ const ListaProductos = () => {
   // Obtener opciones únicas para los filtros
   const marcasDisponibles = [...new Set(productos.map(p => p.marca))].sort();
   const categoriasDisponibles = [...new Set(productos.map(p => p.categoria?.categoria?.toLowerCase().trim()).filter(Boolean))].sort();
-  const subCategoriasDisponibles = [...new Set(productos.map(p => p.subCategoria?.subCategoria?.toLowerCase().trim()).filter(Boolean))].sort();
+  
+  // Subcategorías filtradas según la categoría seleccionada
+  const subCategoriasDisponibles = [...new Set(
+    productos
+      .filter(p => filtros.categoria === "" || p.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim())
+      .map(p => p.subCategoria?.subCategoria?.toLowerCase().trim())
+      .filter(Boolean)
+  )].sort();
+  
   const condicionesDisponibles = [...new Set(productos.map(p => p.condicionProducto?.condicionProd?.toLowerCase().trim()).filter(Boolean))].sort();
 
   useEffect(() => {
@@ -32,45 +43,103 @@ const ListaProductos = () => {
       .catch(() => setLoading(false));
   }, []);
 
+  // Limpiar subcategoría cuando cambia la categoría
+  useEffect(() => {
+    if (filtros.categoria !== "") {
+      // Verificar si la subcategoría actual existe en la categoría seleccionada
+      const subCatExiste = productos.some(
+        p => p.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim() &&
+             p.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim()
+      );
+      if (!subCatExiste && filtros.subCategoria !== "") {
+        setFiltros(prev => ({ ...prev, subCategoria: "" }));
+      }
+    }
+  }, [filtros.categoria]);
+
   const productosFiltrados = productos.filter((prod) => {
     const texto = filtros.texto.toLowerCase().trim();
+    
+    // Filtro por precio
+    const precioProducto = prod.precio || 0;
+    const precioMin = filtros.precioMin ? parseFloat(filtros.precioMin) : 0;
+    const precioMax = filtros.precioMax ? parseFloat(filtros.precioMax) : Infinity;
 
     const resultado = (
+      // Búsqueda por texto (nombre, descripción, modelo, marca)
       (filtros.texto === "" ||
+        prod.producto?.toLowerCase().includes(texto) ||
         prod.descripcion?.toLowerCase().includes(texto) ||
-        prod.modelo?.toLowerCase().includes(texto)) &&
+        prod.modelo?.toLowerCase().includes(texto) ||
+        prod.marca?.toLowerCase().includes(texto)) &&
 
+      // Filtro por marca
       (filtros.marca === "" ||
         prod.marca?.toLowerCase().trim() === filtros.marca.toLowerCase().trim()) &&
 
+      // Filtro por categoría
       (filtros.categoria === "" ||
         prod.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim()) &&
 
+      // Filtro por subcategoría
       (filtros.subCategoria === "" ||
         prod.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim()) &&
 
+      // Filtro por condición
+      (filtros.condicion === "" ||
+        prod.condicionProducto?.condicionProd?.toLowerCase().trim() === filtros.condicion.toLowerCase().trim()) &&
+
+      // Filtro por rango de precio
+      (precioProducto >= precioMin && precioProducto <= precioMax) &&
+
+      // Filtro solo ofertas
       (!filtros.soloOfertas || prod.esOferta === true)
     );
-
-    if (!resultado) {
-      console.log("Producto filtrado:", prod, "Filtros aplicados:", filtros); // Debugging log
-    }
 
     return resultado;
   });
 
-  console.log("Productos filtrados:", productosFiltrados); // Debugging log
+  // Ordenar productos
+  const productosOrdenados = [...productosFiltrados].sort((a, b) => {
+    switch (ordenarPor) {
+      case "nombre-asc":
+        return (a.producto || "").localeCompare(b.producto || "");
+      case "nombre-desc":
+        return (b.producto || "").localeCompare(a.producto || "");
+      case "precio-asc":
+        return (a.precio || 0) - (b.precio || 0);
+      case "precio-desc":
+        return (b.precio || 0) - (a.precio || 0);
+      default:
+        return 0;
+    }
+  });
 
   // Resetear a página 1 cuando cambian los filtros
   useEffect(() => {
     setPaginaActual(1);
-  }, [filtros]);
+  }, [filtros, ordenarPor]);
+
+  // Scroll al inicio cuando cambia la página
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [paginaActual]);
 
   // Cálculos de paginación
-  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const totalPaginas = Math.ceil(productosOrdenados.length / productosPorPagina);
   const indiceInicio = (paginaActual - 1) * productosPorPagina;
   const indiceFin = indiceInicio + productosPorPagina;
-  const productosEnPagina = productosFiltrados.slice(indiceInicio, indiceFin);
+  const productosEnPagina = productosOrdenados.slice(indiceInicio, indiceFin);
+
+  // Manejar navegación directa a página
+  const irAPagina = (e) => {
+    e.preventDefault();
+    const pagina = parseInt(paginaInput, 10);
+    if (pagina >= 1 && pagina <= totalPaginas) {
+      setPaginaActual(pagina);
+      setPaginaInput("");
+    }
+  };
 
   // Generar números de página para mostrar
   const generarNumerosPaginas = () => {
@@ -112,176 +181,375 @@ const ListaProductos = () => {
   }
 
   return (
-    <Container className="mt-5">
-      <h1 className="text-center mb-4">Productos</h1>
+    <Container fluid className="mt-4 px-4">
+      <h1 className="text-center mb-4" style={{ fontWeight: '700', color: '#212529' }}>Productos</h1>
 
-      {/* Filtros mejorados */}
-      <div className="mb-4 p-4 bg-light rounded shadow-sm">
-        <h6 className="mb-3 text-muted fw-bold">🔍 FILTROS DE BÚSQUEDA</h6>
-        
-        {/* Primera fila de filtros */}
-        <Row className="g-2 mb-3">
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Buscar producto</Form.Label>
-              <Form.Control
-                size="sm"
-                type="text"
-                placeholder="Nombre, descripción o modelo..."
-                value={filtros.texto}
-                onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Marca</Form.Label>
-              <Form.Select
-                size="sm"
-                value={filtros.marca}
-                onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
+      <Row>
+        {/* Sidebar de Filtros */}
+        <Col 
+          lg={sidebarVisible ? 3 : 'auto'} 
+          md={sidebarVisible ? 4 : 'auto'} 
+          className="mb-4"
+          style={{
+            transition: 'all 0.3s ease',
+            minWidth: sidebarVisible ? undefined : '60px',
+            maxWidth: sidebarVisible ? undefined : '60px'
+          }}
+        >
+          <div style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            overflow: 'hidden',
+            position: 'sticky',
+            top: '10px',
+            transition: 'all 0.3s ease',
+            maxHeight: 'calc(100vh - 100px)',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Header del sidebar con botón toggle */}
+            <div style={{
+              background: 'linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%)',
+              padding: sidebarVisible ? '10px 14px' : '10px 8px',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: sidebarVisible ? 'space-between' : 'center',
+              flexShrink: 0
+            }}>
+              {sidebarVisible && (
+                <span className="fw-bold d-flex align-items-center gap-1" style={{ fontSize: '0.85rem' }}>
+                  🔍 Filtros
+                </span>
+              )}
+              <button
+                onClick={() => setSidebarVisible(!sidebarVisible)}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  border: 'none',
+                  borderRadius: '6px',
+                  color: 'white',
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                  fontSize: '0.85rem'
+                }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
+                onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                title={sidebarVisible ? 'Ocultar filtros' : 'Mostrar filtros'}
               >
-                <option value="">Todas</option>
-                {marcasDisponibles.map((marca) => (
-                  <option key={marca} value={marca}>
-                    {marca}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Categoría</Form.Label>
-              <Form.Select
-                size="sm"
-                value={filtros.categoria}
-                onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
-              >
-                <option value="">Todas</option>
-                {categoriasDisponibles.map((categoria) => (
-                  <option key={categoria} value={categoria}>
-                    {categoria}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        {/* Segunda fila de filtros */}
-        <Row className="g-2 mb-3">
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Subcategoría</Form.Label>
-              <Form.Select
-                size="sm"
-                value={filtros.subCategoria}
-                onChange={(e) => setFiltros({ ...filtros, subCategoria: e.target.value })}
-              >
-                <option value="">Todas</option>
-                {subCategoriasDisponibles.map((subCategoria) => (
-                  <option key={subCategoria} value={subCategoria}>
-                    {subCategoria}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Condición</Form.Label>
-              <Form.Select
-                size="sm"
-                value={filtros.condicion}
-                onChange={(e) => setFiltros({ ...filtros, condicion: e.target.value })}
-              >
-                <option value="">Todas</option>
-                {condicionesDisponibles.map((condicion) => (
-                  <option key={condicion} value={condicion}>
-                    {condicion}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Precio mínimo (S/)</Form.Label>
-              <Form.Control
-                size="sm"
-                type="number"
-                placeholder="S/ 0.00"
-                value={filtros.precioMin}
-                onChange={(e) => setFiltros({ ...filtros, precioMin: e.target.value })}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label className="small text-muted mb-1">Precio máximo (S/)</Form.Label>
-              <Form.Control
-                size="sm"
-                type="number"
-                placeholder="S/ 99,999"
-                value={filtros.precioMax}
-                onChange={(e) => setFiltros({ ...filtros, precioMax: e.target.value })}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        {/* Botón para limpiar filtros y contador de resultados */}
-        <Row className="align-items-center pt-2 border-top">
-          <Col md={4}>
-            <div className="d-flex gap-3 align-items-center">
-              <button className="btn btn-outline-secondary btn-sm" onClick={limpiarFiltros}>
-                <i className="bi bi-arrow-clockwise me-1"></i>
-                Limpiar filtros
+                {sidebarVisible ? '◀' : '▶'}
               </button>
-              <Form.Check
-                type="checkbox"
-                label="🔥 Solo ofertas"
-                checked={filtros.soloOfertas || false}
-                onChange={(e) => setFiltros({ ...filtros, soloOfertas: e.target.checked })}
-                className="text-danger fw-bold"
-              />
             </div>
-          </Col>
-          <Col md={4} className="text-center">
-            <Form.Group className="d-inline-flex align-items-center gap-2">
-              <Form.Label className="small text-muted mb-0">Mostrar:</Form.Label>
-              <Form.Select
-                size="sm"
-                style={{ width: 'auto' }}
-                value={productosPorPagina}
-                onChange={(e) => {
-                  setProductosPorPagina(Number(e.target.value));
-                  setPaginaActual(1);
+
+            {sidebarVisible && (
+            <div style={{ padding: '12px', overflowY: 'auto', flex: 1 }}>
+              {/* Búsqueda */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1 d-flex align-items-center gap-1" style={{ color: '#6c757d', letterSpacing: '0.3px', fontSize: '0.7rem' }}>
+                  🔎 Buscar
+                </Form.Label>
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nombre, marca..."
+                    value={filtros.texto}
+                    onChange={(e) => setFiltros({ ...filtros, texto: e.target.value })}
+                    style={{
+                      borderRadius: '8px',
+                      border: '1px solid #dee2e6',
+                      padding: '8px 10px',
+                      fontSize: '0.8rem',
+                      transition: 'all 0.2s ease',
+                      backgroundColor: '#fafbfc'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#0d6efd';
+                      e.target.style.backgroundColor = '#fff';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#dee2e6';
+                      e.target.style.backgroundColor = '#fafbfc';
+                    }}
+                  />
+                  {filtros.texto && (
+                    <button
+                      onClick={() => setFiltros({ ...filtros, texto: '' })}
+                      style={{
+                        position: 'absolute',
+                        right: '8px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: '#e9ecef',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '16px',
+                        height: '16px',
+                        fontSize: '10px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#6c757d'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Marca */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1" style={{ color: '#6c757d', fontSize: '0.7rem' }}>
+                  🎯 Marca
+                </Form.Label>
+                <Form.Select
+                  size="sm"
+                  value={filtros.marca}
+                  onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid #dee2e6',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    backgroundColor: '#fafbfc'
+                  }}
+                >
+                  <option value="">Todas</option>
+                  {marcasDisponibles.map((marca) => (
+                    <option key={marca} value={marca}>{marca}</option>
+                  ))}
+                </Form.Select>
+              </div>
+
+              {/* Categoría */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1" style={{ color: '#6c757d', fontSize: '0.7rem' }}>
+                  📂 Categoría
+                </Form.Label>
+                <Form.Select
+                  size="sm"
+                  value={filtros.categoria}
+                  onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value, subCategoria: "" })}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid #dee2e6',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    backgroundColor: '#fafbfc'
+                  }}
+                >
+                  <option value="">Todas</option>
+                  {categoriasDisponibles.map((categoria) => (
+                    <option key={categoria} value={categoria}>{categoria}</option>
+                  ))}
+                </Form.Select>
+              </div>
+
+              {/* Subcategoría */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1" style={{ color: '#6c757d', fontSize: '0.7rem' }}>
+                  📌 Subcategoría
+                </Form.Label>
+                <Form.Select
+                  size="sm"
+                  value={filtros.subCategoria}
+                  onChange={(e) => setFiltros({ ...filtros, subCategoria: e.target.value })}
+                  disabled={subCategoriasDisponibles.length === 0}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid #dee2e6',
+                    fontSize: '0.8rem',
+                    cursor: subCategoriasDisponibles.length === 0 ? 'not-allowed' : 'pointer',
+                    opacity: subCategoriasDisponibles.length === 0 ? 0.5 : 1,
+                    backgroundColor: subCategoriasDisponibles.length === 0 ? '#f0f0f0' : '#fafbfc'
+                  }}
+                >
+                  <option value="">Todas</option>
+                  {subCategoriasDisponibles.map((subCategoria) => (
+                    <option key={subCategoria} value={subCategoria}>{subCategoria}</option>
+                  ))}
+                </Form.Select>
+              </div>
+
+              {/* Condición */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1" style={{ color: '#6c757d', fontSize: '0.7rem' }}>
+                  ✨ Condición
+                </Form.Label>
+                <Form.Select
+                  size="sm"
+                  value={filtros.condicion}
+                  onChange={(e) => setFiltros({ ...filtros, condicion: e.target.value })}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid #dee2e6',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    backgroundColor: '#fafbfc'
+                  }}
+                >
+                  <option value="">Todas</option>
+                  {condicionesDisponibles.map((condicion) => (
+                    <option key={condicion} value={condicion}>{condicion}</option>
+                  ))}
+                </Form.Select>
+              </div>
+
+              {/* Rango de precios */}
+              <div className="mb-3">
+                <Form.Label className="small fw-bold text-uppercase mb-1" style={{ color: '#6c757d', fontSize: '0.7rem' }}>
+                  💰 Precio (S/)
+                </Form.Label>
+                <div className="d-flex gap-2 align-items-center">
+                  <Form.Control
+                    size="sm"
+                    type="number"
+                    placeholder="Min"
+                    min="0"
+                    value={filtros.precioMin}
+                    onChange={(e) => setFiltros({ ...filtros, precioMin: e.target.value })}
+                    style={{
+                      borderRadius: '8px',
+                      border: '1px solid #dee2e6',
+                      fontSize: '0.8rem',
+                      backgroundColor: '#fafbfc'
+                    }}
+                  />
+                  <span style={{ color: '#adb5bd', fontSize: '0.8rem' }}>-</span>
+                  <Form.Control
+                    size="sm"
+                    type="number"
+                    placeholder="Max"
+                    min="0"
+                    value={filtros.precioMax}
+                    onChange={(e) => setFiltros({ ...filtros, precioMax: e.target.value })}
+                    style={{
+                      borderRadius: '8px',
+                      border: '1px solid #dee2e6',
+                      fontSize: '0.8rem',
+                      backgroundColor: '#fafbfc'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Solo ofertas */}
+              <div className="mb-3 p-2 rounded" style={{ background: filtros.soloOfertas ? '#fff3cd' : '#f8f9fa', transition: 'all 0.2s ease' }}>
+                <Form.Check
+                  type="switch"
+                  id="solo-ofertas-switch"
+                  label={<span className="fw-semibold" style={{ fontSize: '0.8rem' }}>🔥 Ofertas</span>}
+                  checked={filtros.soloOfertas || false}
+                  onChange={(e) => setFiltros({ ...filtros, soloOfertas: e.target.checked })}
+                />
+              </div>
+
+              {/* Botón limpiar */}
+              <button 
+                className="btn btn-sm w-100" 
+                onClick={limpiarFiltros}
+                style={{
+                  borderRadius: '8px',
+                  background: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px',
+                  fontWeight: '500',
+                  fontSize: '0.8rem'
                 }}
               >
-                <option value={6}>6</option>
-                <option value={12}>12</option>
-                <option value={24}>24</option>
-                <option value={48}>48</option>
-              </Form.Select>
-              <span className="small text-muted">por página</span>
-            </Form.Group>
-          </Col>
-          <Col md={4} className="text-end">
-            <small className="text-muted fw-bold">
-              📦 {productosFiltrados.length} de {productos.length} productos
-              {totalPaginas > 1 && ` (Página ${paginaActual} de ${totalPaginas})`}
-            </small>
-          </Col>
-        </Row>
-      </div>
+                ↻ Limpiar
+              </button>
+            </div>
+            )}
+          </div>
+        </Col>
 
-      {/* Lista de productos */}
-      <Row>
+        {/* Contenido principal */}
+        <Col lg={sidebarVisible ? 9 : 12} md={sidebarVisible ? 8 : 12} style={{ transition: 'all 0.3s ease' }}>
+          {/* Barra superior de ordenamiento */}
+          <div className="mb-4 p-3 rounded-3 d-flex flex-wrap justify-content-between align-items-center gap-3" style={{
+            background: 'white',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            border: '1px solid #e9ecef'
+          }}>
+            {/* Contador de resultados */}
+            <div className="d-flex align-items-center gap-2">
+              <div className="px-3 py-2 rounded-pill" style={{ background: '#e7f1ff', border: '1px solid #b6d4fe' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#0d6efd' }}>
+                  📦 {productosOrdenados.length} productos
+                </span>
+              </div>
+              {totalPaginas > 1 && (
+                <span className="badge" style={{ background: '#6c757d', borderRadius: '8px', padding: '6px 12px', fontSize: '0.8rem' }}>
+                  Pág. {paginaActual} de {totalPaginas}
+                </span>
+              )}
+            </div>
+
+            {/* Opciones de ordenamiento y visualización */}
+            <div className="d-flex align-items-center gap-3 flex-wrap">
+              {/* Ordenar por */}
+              <div className="d-flex align-items-center gap-2">
+                <span className="small fw-semibold" style={{ color: '#6c757d', whiteSpace: 'nowrap' }}>Ordenar:</span>
+                <Form.Select
+                  value={ordenarPor}
+                  onChange={(e) => setOrdenarPor(e.target.value)}
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '8px 12px',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    minWidth: '180px'
+                  }}
+                >
+                  <option value="">Relevancia</option>
+                  <option value="nombre-asc">Nombre A-Z</option>
+                  <option value="nombre-desc">Nombre Z-A</option>
+                  <option value="precio-asc">Precio: Menor a Mayor</option>
+                  <option value="precio-desc">Precio: Mayor a Menor</option>
+                </Form.Select>
+              </div>
+
+              {/* Productos por página */}
+              <div className="d-flex align-items-center gap-2">
+                <span className="small fw-semibold" style={{ color: '#6c757d', whiteSpace: 'nowrap' }}>Mostrar:</span>
+                <Form.Select
+                  value={productosPorPagina}
+                  onChange={(e) => {
+                    setProductosPorPagina(Number(e.target.value));
+                    setPaginaActual(1);
+                  }}
+                  style={{
+                    borderRadius: '8px',
+                    border: '2px solid #e9ecef',
+                    padding: '8px 12px',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    width: 'auto'
+                  }}
+                >
+                  <option value={6}>6</option>
+                  <option value={12}>12</option>
+                  <option value={24}>24</option>
+                  <option value={48}>48</option>
+                </Form.Select>
+              </div>
+            </div>
+          </div>
+
+          {/* Lista de productos */}
+          <Row>
         {productosEnPagina.length > 0 ? (
           productosEnPagina.map((prod) => (
-            <Col md={4} sm={6} xs={12} className="mb-4" key={prod.idProducto}>
+            <Col lg={4} md={6} xs={12} className="mb-4" key={prod.idProducto}>
               <Card 
                 className="h-100 shadow-sm border-0" 
                 style={{ 
@@ -409,11 +677,12 @@ const ListaProductos = () => {
 
       {/* Paginación */}
       {totalPaginas > 1 && (
-        <div className="d-flex justify-content-center mt-4 mb-4">
-          <Pagination>
+        <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-4 mb-4 p-3 rounded" style={{ background: '#f8f9fa' }}>
+          <Pagination className="mb-0" style={{ gap: '2px' }}>
             <Pagination.First 
               onClick={() => setPaginaActual(1)} 
               disabled={paginaActual === 1}
+              style={{ borderRadius: '8px 0 0 8px' }}
             />
             <Pagination.Prev 
               onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))} 
@@ -432,6 +701,7 @@ const ListaProductos = () => {
                 key={numero}
                 active={numero === paginaActual}
                 onClick={() => setPaginaActual(numero)}
+                style={numero === paginaActual ? { fontWeight: 'bold' } : {}}
               >
                 {numero}
               </Pagination.Item>
@@ -455,10 +725,45 @@ const ListaProductos = () => {
             <Pagination.Last 
               onClick={() => setPaginaActual(totalPaginas)} 
               disabled={paginaActual === totalPaginas}
+              style={{ borderRadius: '0 8px 8px 0' }}
             />
           </Pagination>
+          
+          {/* Navegación directa a página */}
+          <form onSubmit={irAPagina} className="d-flex align-items-center gap-2">
+            <span className="small text-muted">Ir a:</span>
+            <Form.Control
+              type="number"
+              min="1"
+              max={totalPaginas}
+              value={paginaInput}
+              onChange={(e) => setPaginaInput(e.target.value)}
+              placeholder="#"
+              style={{
+                width: '60px',
+                textAlign: 'center',
+                borderRadius: '8px',
+                border: '2px solid #dee2e6',
+                padding: '6px 8px',
+                fontSize: '0.9rem'
+              }}
+            />
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-sm"
+              disabled={!paginaInput || parseInt(paginaInput) < 1 || parseInt(paginaInput) > totalPaginas}
+              style={{
+                borderRadius: '8px',
+                padding: '6px 12px'
+              }}
+            >
+              Ir
+            </button>
+          </form>
         </div>
       )}
+        </Col>
+      </Row>
     </Container>
   );
 };

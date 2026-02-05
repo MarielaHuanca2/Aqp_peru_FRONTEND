@@ -13,7 +13,7 @@ function Marcas() {
     { nombre: "Extreme Networks", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Logo_of_Extreme_Networks%2C_Inc._%28old%29.svg/640px-Logo_of_Extreme_Networks%2C_Inc._%28old%29.svg.png" },
     { nombre: "Fortinet", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Fortinet_logo.svg/640px-Fortinet_logo.svg.png" },
     { nombre: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/640px-Microsoft_logo_%282012%29.svg.png" },
-    { nombre: "Samsung", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/320px-Samsung_Logo.svg.png" },
+    { nombre: "Samsung", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Samsung_logo_wordmark.svg/1280px-Samsung_logo_wordmark.svg.png" },
     { nombre: "Qnap", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Qnap_Logo_2004.svg/640px-Qnap_Logo_2004.svg.png" },
     { nombre: "Intel", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Intel_logo_%282006-2020%29.svg/640px-Intel_logo_%282006-2020%29.svg.png" },
     { nombre: "AMD", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/AMD_logo_pre-2013.svg/640px-AMD_logo_pre-2013.svg.png" },
