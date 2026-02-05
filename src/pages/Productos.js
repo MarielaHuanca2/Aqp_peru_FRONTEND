@@ -20,7 +20,17 @@ const ListaProductos = () => {
   // Obtener opciones únicas para los filtros
   const marcasDisponibles = [...new Set(productos.map(p => p.marca))].sort();
   const categoriasDisponibles = [...new Set(productos.map(p => p.categoria?.categoria?.toLowerCase().trim()).filter(Boolean))].sort();
-  const subCategoriasDisponibles = [...new Set(productos.map(p => p.subCategoria?.subCategoria?.toLowerCase().trim()).filter(Boolean))].sort();
+  
+  // Filtrar subcategorías según la categoría seleccionada
+  const subCategoriasDisponibles = filtros.categoria === ""
+    ? [...new Set(productos.map(p => p.subCategoria?.subCategoria?.toLowerCase().trim()).filter(Boolean))].sort()
+    : [...new Set(
+        productos
+          .filter(p => p.categoria?.categoria?.toLowerCase().trim() === filtros.categoria.toLowerCase().trim())
+          .map(p => p.subCategoria?.subCategoria?.toLowerCase().trim())
+          .filter(Boolean)
+      )].sort();
+  
   const condicionesDisponibles = [...new Set(productos.map(p => p.condicionProducto?.condicionProd?.toLowerCase().trim()).filter(Boolean))].sort();
 
   useEffect(() => {
@@ -34,11 +44,22 @@ const ListaProductos = () => {
 
   const productosFiltrados = productos.filter((prod) => {
     const texto = filtros.texto.toLowerCase().trim();
+    
+    // Convertir precio del producto a soles para comparar
+    const precioEnSoles = convertirAMonedaSoles(prod.precio || 0);
+    
+    // Validar filtros de precio
+    const precioMin = filtros.precioMin === "" ? null : Number(filtros.precioMin);
+    const precioMax = filtros.precioMax === "" ? null : Number(filtros.precioMax);
+    
+    const cumplePrecioMin = precioMin === null || precioEnSoles >= precioMin;
+    const cumplePrecioMax = precioMax === null || precioEnSoles <= precioMax;
 
     const resultado = (
       (filtros.texto === "" ||
         prod.descripcion?.toLowerCase().includes(texto) ||
-        prod.modelo?.toLowerCase().includes(texto)) &&
+        prod.modelo?.toLowerCase().includes(texto) ||
+        prod.producto?.toLowerCase().includes(texto)) &&
 
       (filtros.marca === "" ||
         prod.marca?.toLowerCase().trim() === filtros.marca.toLowerCase().trim()) &&
@@ -49,12 +70,14 @@ const ListaProductos = () => {
       (filtros.subCategoria === "" ||
         prod.subCategoria?.subCategoria?.toLowerCase().trim() === filtros.subCategoria.toLowerCase().trim()) &&
 
+      (filtros.condicion === "" ||
+        prod.condicionProducto?.condicionProd?.toLowerCase().trim() === filtros.condicion.toLowerCase().trim()) &&
+
+      cumplePrecioMin &&
+      cumplePrecioMax &&
+
       (!filtros.soloOfertas || prod.esOferta === true)
     );
-
-    if (!resultado) {
-      console.log("Producto filtrado:", prod, "Filtros aplicados:", filtros); // Debugging log
-    }
 
     return resultado;
   });
@@ -156,7 +179,7 @@ const ListaProductos = () => {
               <Form.Select
                 size="sm"
                 value={filtros.categoria}
-                onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
+                onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value, subCategoria: "" })}
               >
                 <option value="">Todas</option>
                 {categoriasDisponibles.map((categoria) => (

@@ -589,7 +589,7 @@ const ProductosAdmin = () => {
             <th>Producto</th>
             <th>Marca</th>
             <th>Modelo</th>
-            <th>Precio</th>
+            <th>Precio USD</th>
             <th>Stock</th>
             <th>Estado</th>
             <th>Oferta</th>
@@ -774,7 +774,7 @@ const ProductosAdmin = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Precio</Form.Label>
+                  <Form.Label>Precio USD</Form.Label>
                   <Form.Control
                     type="number"
                     step="0.01"
