@@ -64,11 +64,22 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilo base del icono */
 .home-card-img {
-  width: 80px; /* Imágenes de íconos más estilizadas */
-  height: 80px;
+  width: 150px;
+  height: 150px;
   margin-bottom: 1.5rem;
   object-fit: contain;
+  /* La transición permite que el movimiento sea fluido y no brusco */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Animación al pasar el mouse (hover) */
+.home-card-img:hover {
+  /* Se agranda un 10% y sube un poco */
+  transform: scale(1.1) translateY(-5px);
+  /* Opcional: añade un brillo sutil */
+  filter: brightness(1.1);
 }
 
 .home-section-title {

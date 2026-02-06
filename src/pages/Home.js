@@ -52,17 +52,17 @@ function Home() {
         {/* Tres columnas */}
         <div className="row text-center mb-5 mt-5">
           <div className="col-md-4 mb-4">
-            <img src="/images/servicio.png" alt="Servicios" className="home-card-img" />
+            <img src="/images/service_front.png" alt="Servicios" className="home-card-img" />
             <h4 className="home-section-title">Servicios Empresariales</h4>
             <p>Instalación, mantenimiento y soporte técnico para tu empresa.</p>
           </div>
           <div className="col-md-4 mb-4">
-            <img src="/images/brand.png" alt="Marcas" className="home-card-img" />
+            <img src="/images/sale_front.png" alt="Marcas" className="home-card-img" />
             <h4 className="home-section-title">Las Mejores Marcas</h4>
             <p>Trabajamos con Lenovo, Dell, HP y más líderes del mercado.</p>
           </div>
           <div className="col-md-4 mb-4">
-            <img src="/images/sales.jpg" alt="Ofertas" className="home-card-img" />
+            <img src="/images/price_front.png" alt="Ofertas" className="home-card-img" />
             <h4 className="home-section-title">Ofertas Exclusivas</h4>
             <p>Aprovecha descuentos y promociones especiales cada semana.</p>
           </div>
