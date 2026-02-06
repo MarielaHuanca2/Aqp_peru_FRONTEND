@@ -15,6 +15,7 @@ const ListaProductos = () => {
   const [ordenarPor, setOrdenarPor] = useState("");
   const [paginaInput, setPaginaInput] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [mostrarBotonScroll, setMostrarBotonScroll] = useState(false);
   const { agregarAlCarrito } = useCarrito();
   const { formatearPrecioSoles, convertirAMonedaSoles } = useTipoCambio();
 
@@ -124,6 +125,25 @@ const ListaProductos = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [paginaActual]);
+
+  // Detectar scroll para mostrar/ocultar botones
+  useEffect(() => {
+    const manejarScroll = () => {
+      setMostrarBotonScroll(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', manejarScroll);
+    return () => window.removeEventListener('scroll', manejarScroll);
+  }, []);
+
+  // Funciones para scroll
+  const irAlInicio = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const irAlFinal = () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  };
 
   // Cálculos de paginación
   const totalPaginas = Math.ceil(productosOrdenados.length / productosPorPagina);
@@ -629,6 +649,16 @@ const ListaProductos = () => {
                     <small className="text-muted">Stock: {prod.stock}</small>
                   </div>
                   <div className="mt-auto d-grid gap-2">
+                    {prod.linkHojaDeDatos && (
+                      <a
+                        href={prod.linkHojaDeDatos}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-secondary btn-sm"
+                      >
+                        📄 Hoja de Datos
+                      </a>
+                    )}
                     <Link to={`/productos/${prod.idProducto}`} className="btn btn-primary btn-sm">
                       Ver Detalles
                     </Link>
@@ -646,16 +676,6 @@ const ListaProductos = () => {
                       >
                         ❌ Agotado
                       </button>
-                    )}
-                    {prod.linkHojaDeDatos && (
-                      <a
-                        href={prod.linkHojaDeDatos}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline-secondary btn-sm"
-                      >
-                        📄 Hoja de Datos
-                      </a>
                     )}
                   </div>
                 </Card.Body>
@@ -764,6 +784,81 @@ const ListaProductos = () => {
       )}
         </Col>
       </Row>
+
+      {/* Botones flotantes de navegación */}
+      {mostrarBotonScroll && (
+        <div style={{
+          position: 'fixed',
+          bottom: '30px',
+          right: '30px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          zIndex: 1000
+        }}>
+          {/* Botón ir al inicio */}
+          <button
+            onClick={irAlInicio}
+            style={{
+              backgroundColor: '#0d6efd',
+              color: 'white',
+              border: 'none',
+              borderRadius: '50%',
+              width: '50px',
+              height: '50px',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#0b5ed7';
+              e.target.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#0d6efd';
+              e.target.style.transform = 'scale(1)';
+            }}
+            title="Ir al inicio"
+          >
+            ▲
+          </button>
+
+          {/* Botón ir al final */}
+          <button
+            onClick={irAlFinal}
+            style={{
+              backgroundColor: '#6c757d',
+              color: 'white',
+              border: 'none',
+              borderRadius: '50%',
+              width: '50px',
+              height: '50px',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#5a6268';
+              e.target.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#6c757d';
+              e.target.style.transform = 'scale(1)';
+            }}
+            title="Ir al final"
+          >
+            ▼
+          </button>
+        </div>
+      )}
     </Container>
   );
 };

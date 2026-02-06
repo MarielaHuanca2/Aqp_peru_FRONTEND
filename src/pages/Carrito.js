@@ -29,6 +29,11 @@ const Carrito = () => {
   const [form, setForm] = useState(() => ({ ...emptyFormTemplate }));
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
+  
+  // Función para formatear números con separadores de miles
+  const formatearNumero = (numero) => {
+    return new Intl.NumberFormat('es-PE').format(numero);
+  };
   // Normalize: keep totals in base currency (USD) and convert only when formatting/sending
   const totalUsd = carrito.reduce((acc, item) => acc + ((item.precioUSD ?? item.precio ?? 0) * item.cantidad), 0);
   // Cálculo de IGV 18% en USD
@@ -238,13 +243,13 @@ const Carrito = () => {
       ) : (
         <>
           <Table striped bordered hover responsive className="mt-3">
-            <thead>
+            <thead className="table-dark">
               <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th></th>
+                <th style={{ width: '40%' }}>Producto</th>
+                <th className="text-end" style={{ width: '15%' }}>Precio</th>
+                <th className="text-center" style={{ width: '20%' }}>Cantidad</th>
+                <th className="text-end" style={{ width: '15%' }}>Subtotal</th>
+                <th className="text-center" style={{ width: '10%' }}>Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -256,24 +261,27 @@ const Carrito = () => {
                 return (
                   <tr key={item.idProducto}>
                     <td>{item.producto}</td>
-                    <td>{formatearPrecioSoles(item.precio || 0)}</td>
-                    <td>
-                      <Form.Control
-                        type="number"
-                        min={1}
-                        max={maxCantidad}
-                        value={item.cantidad}
-                        onChange={(e) => handleCantidadChange(item.idProducto, e.target.value)}
-                        style={{ width: "100px" }}
-                      />
-                      {maxCantidad !== undefined && (
-                        <Form.Text className="text-muted" style={{ fontSize: "0.75rem" }}>
-                          Disponible: {maxCantidad}
-                        </Form.Text>
-                      )}
+                    <td className="text-end">{formatearPrecioSoles(item.precio || 0)}</td>
+                    <td className="text-center">
+                      <div className="d-flex flex-column align-items-center">
+                        <Form.Control
+                          type="number"
+                          min={1}
+                          max={maxCantidad}
+                          value={item.cantidad}
+                          onChange={(e) => handleCantidadChange(item.idProducto, e.target.value)}
+                          style={{ width: "80px" }}
+                          className="text-center"
+                        />
+                        {maxCantidad !== undefined && (
+                          <Form.Text className="text-muted" style={{ fontSize: "0.75rem" }}>
+                            Disponible: {formatearNumero(maxCantidad)}
+                          </Form.Text>
+                        )}
+                      </div>
                     </td>
-                    <td>{formatearPrecioSoles((item.precio || 0) * item.cantidad)}</td>
-                    <td>
+                    <td className="text-end fw-bold">{formatearPrecioSoles((item.precio || 0) * item.cantidad)}</td>
+                    <td className="text-center">
                       <Button variant="danger" size="sm" onClick={() => quitarDelCarrito(item.idProducto)}>
                         Quitar
                       </Button>
@@ -285,10 +293,19 @@ const Carrito = () => {
           </Table>
           <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
             <Button variant="outline-danger" onClick={vaciarCarrito}>Vaciar carrito</Button>
-            <div className="text-end">
-              <div>Sin IGV: <strong> {formatearPrecioSoles(subtotalSinIgv)}</strong></div>
-              <div>IGV (18%): <strong>{formatearPrecioSoles(igv)}</strong></div>
-              <h4 className="mt-1">Total (con IGV): {formatearPrecioSoles(totalConIgv)}</h4>
+            <div className="text-end" style={{ minWidth: '250px' }}>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Sin IGV:</span>
+                <strong className="ms-3">{formatearPrecioSoles(subtotalSinIgv)}</strong>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>IGV (18%):</span>
+                <strong className="ms-3">{formatearPrecioSoles(igv)}</strong>
+              </div>
+              <div className="d-flex justify-content-between pt-2 border-top">
+                <h5 className="mb-0">Total (con IGV):</h5>
+                <h5 className="mb-0 ms-3">{formatearPrecioSoles(totalConIgv)}</h5>
+              </div>
             </div>
           </div>
           

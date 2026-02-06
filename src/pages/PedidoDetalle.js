@@ -24,6 +24,14 @@ const PedidoDetalle = () => {
   // Hook must be called unconditionally at top-level
   const { tipoCambio: tipoCambioGlobal, convertirAMonedaSoles } = useTipoCambio();
 
+  // Función para formatear números con separadores de miles
+  const formatearNumero = (numero) => {
+    return new Intl.NumberFormat('es-PE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(numero);
+  };
+
   useEffect(() => {
     const obtenerPedido = async () => {
       try {
@@ -91,6 +99,24 @@ const PedidoDetalle = () => {
   const obtenerColorEstado = (estado) => {
     const estadoInfo = ESTADOS_PEDIDO.find(e => e.value === estado);
     return estadoInfo?.color || 'secondary';
+  };
+
+  // Función para determinar qué estados están permitidos según el estado actual
+  const obtenerEstadosPermitidos = (estadoActual) => {
+    const transiciones = {
+      'PENDIENTE': ['EN_PROCESO', 'RECHAZADO', 'CANCELADO'],
+      'EN_PROCESO': ['FINALIZADO', 'RECHAZADO', 'CANCELADO'],
+      'RECHAZADO': ['EN_PROCESO', 'CANCELADO'],
+      'FINALIZADO': [], // Estado final, no permite cambios
+      'CANCELADO': []   // Estado final, no permite cambios
+    };
+    
+    return transiciones[estadoActual] || [];
+  };
+
+  // Verificar si el estado es final (no permite más cambios)
+  const esEstadoFinal = (estado) => {
+    return estado === 'FINALIZADO' || estado === 'CANCELADO';
   };
 
   if (loading) {
@@ -257,29 +283,56 @@ const PedidoDetalle = () => {
               {mensajeEstado.texto}
             </Alert>
           )}
-          <div className="d-flex align-items-center gap-3 flex-wrap">
-            <Form.Group className="d-flex align-items-center gap-2">
-              <Form.Label className="mb-0 fw-bold">Nuevo estado:</Form.Label>
-              <Form.Select
-                style={{ width: 'auto' }}
-                value={estado}
-                onChange={(e) => cambiarEstadoPedido(e.target.value)}
-                disabled={actualizandoEstado}
-              >
-                {ESTADOS_PEDIDO.map(est => (
-                  <option key={est.value} value={est.value}>
-                    {est.label}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-            {actualizandoEstado && (
-              <Spinner animation="border" size="sm" />
-            )}
-          </div>
-          <div className="mt-3">
-            <small className="text-muted">Selecciona un nuevo estado para actualizar el pedido.</small>
-          </div>
+          
+          {esEstadoFinal(estado) ? (
+            <Alert variant="info">
+              <strong>ℹ️ Estado Final:</strong> Este pedido está en estado <strong>{ESTADOS_PEDIDO.find(e => e.value === estado)?.label}</strong> y no puede ser modificado.
+            </Alert>
+          ) : (
+            <>
+              <div className="d-flex align-items-center gap-3 flex-wrap">
+                <Form.Group className="d-flex align-items-center gap-2">
+                  <Form.Label className="mb-0 fw-bold">Nuevo estado:</Form.Label>
+                  <Form.Select
+                    style={{ width: 'auto' }}
+                    value={estado}
+                    onChange={(e) => cambiarEstadoPedido(e.target.value)}
+                    disabled={actualizandoEstado}
+                  >
+                    {/* Estado actual siempre visible */}
+                    <option value={estado}>{ESTADOS_PEDIDO.find(e => e.value === estado)?.label}</option>
+                    
+                    {/* Estados permitidos según transición */}
+                    {obtenerEstadosPermitidos(estado).map(estadoPermitido => {
+                      const info = ESTADOS_PEDIDO.find(e => e.value === estadoPermitido);
+                      return (
+                        <option key={estadoPermitido} value={estadoPermitido}>
+                          {info?.label}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                </Form.Group>
+                {actualizandoEstado && (
+                  <Spinner animation="border" size="sm" />
+                )}
+              </div>
+              <div className="mt-3">
+                <small className="text-muted">
+                  <strong>Transiciones permitidas desde {ESTADOS_PEDIDO.find(e => e.value === estado)?.label}:</strong>
+                  {obtenerEstadosPermitidos(estado).length > 0 ? (
+                    <ul className="mb-0 mt-1">
+                      {obtenerEstadosPermitidos(estado).map(est => (
+                        <li key={est}>{ESTADOS_PEDIDO.find(e => e.value === est)?.label}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span className="ms-2">No hay transiciones disponibles.</span>
+                  )}
+                </small>
+              </div>
+            </>
+          )}
         </Card.Body>
       </Card>
 
@@ -322,10 +375,10 @@ const PedidoDetalle = () => {
                       <td>
                         {precioUsd > 0 ? (
                           <>
-                            {detalle.producto?.moneda?.simboloMoneda ?? '$'} {precioUsd.toFixed(2)}
+                            {detalle.producto?.moneda?.simboloMoneda ?? '$'} {formatearNumero(precioUsd)}
                             {tc > 0 && (
                               <div className="text-muted small">
-                                S/ {precioSoles.toFixed(2)} (TC {tc.toFixed(4)})
+                                S/ {formatearNumero(precioSoles)} (TC {tc.toFixed(4)})
                               </div>
                             )}
                           </>
@@ -336,7 +389,7 @@ const PedidoDetalle = () => {
                       <td>{cantidad}</td>
                       <td>
                         {precioUsd > 0 && tc > 0 ? (
-                          <>S/ {subtotal.toFixed(2)}</>
+                          <>S/ {formatearNumero(subtotal)}</>
                         ) : (
                           <span className="text-muted">-</span>
                         )}
@@ -358,15 +411,15 @@ const PedidoDetalle = () => {
                 <tbody>
                   <tr>
                     <td><strong>Subtotal (sin IGV):</strong></td>
-                    <td className="text-end">{monedaSimbolo} {calcularSubtotalUSD().toFixed(2)}</td>
+                    <td className="text-end">{monedaSimbolo} {formatearNumero(calcularSubtotalUSD())}</td>
                   </tr>
                   <tr>
                     <td><strong>IGV (18%):</strong></td>
-                    <td className="text-end">{monedaSimbolo} {calcularIGV_USD().toFixed(2)}</td>
+                    <td className="text-end">{monedaSimbolo} {formatearNumero(calcularIGV_USD())}</td>
                   </tr>
                   <tr className="table-primary">
                     <td><strong>Total (con IGV):</strong></td>
-                    <td className="text-end"><strong>{monedaSimbolo} {calcularTotalConIGV_USD().toFixed(2)}</strong></td>
+                    <td className="text-end"><strong>{monedaSimbolo} {formatearNumero(calcularTotalConIGV_USD())}</strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -377,15 +430,15 @@ const PedidoDetalle = () => {
                 <tbody>
                   <tr>
                     <td><strong>Subtotal (sin IGV):</strong></td>
-                    <td className="text-end">S/ {calcularSubtotalSoles().toFixed(2)}</td>
+                    <td className="text-end">S/ {formatearNumero(calcularSubtotalSoles())}</td>
                   </tr>
                   <tr>
                     <td><strong>IGV (18%):</strong></td>
-                    <td className="text-end">S/ {calcularIGV_Soles().toFixed(2)}</td>
+                    <td className="text-end">S/ {formatearNumero(calcularIGV_Soles())}</td>
                   </tr>
                   <tr className="table-success">
                     <td><strong>Total (con IGV):</strong></td>
-                    <td className="text-end"><strong>S/ {calcularTotalConIGV_Soles().toFixed(2)}</strong></td>
+                    <td className="text-end"><strong>S/ {formatearNumero(calcularTotalConIGV_Soles())}</strong></td>
                   </tr>
                 </tbody>
               </table>
