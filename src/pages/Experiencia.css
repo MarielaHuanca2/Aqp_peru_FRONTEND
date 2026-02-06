@@ -1,121 +1,197 @@
+/* Variables para consistencia */
+:root {
+  --primary-blue: #0070b8;
+  --dark-grey: #333333;
+  --light-grey: #6c757d;
+  --bg-subtle: #f8f9fa;
+  --white: #ffffff;
+  --border-radius: 20px;
+}
+
 .experiencia-page {
-  background-color: #f8f9fa;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  background-color: #f0f2f5;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: var(--dark-grey);
 }
 
 .main-title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #0070b8;
+  font-size: 3.2rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--primary-blue);
+  letter-spacing: -1px;
 }
 
 .page-subtitle {
-  font-size: 1.1rem;
-  color: #6c757d;
-  max-width: 800px;
-  margin: 0 auto;
+  font-size: 1.15rem;
+  color: var(--light-grey);
+  max-width: 850px;
+  line-height: 1.6;
+  text-align: center;
 }
-
-.section-title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #333;
-}
+/* --- SECCIÓN DE LOGOS OPTIMIZADA --- */
 
 .cliente-logos-section {
-  background-color: #ffffff;
-  padding: 2rem 0;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px 0;
 }
 
-.cliente-logo-container {
-  height: 120px;
+.logos-wrapper {
+  display: grid;
+  /* Definimos columnas con buen espacio para que no se amontonen */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+  gap: 30px; /* Espacio generoso entre logos */
+  background: var(--white);
+  padding: 60px 40px; /* Aumentamos el padding interno del recuadro */
+  border-radius: var(--border-radius);
+  /* Sombra más suave y extendida para un look más moderno */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.logo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  padding: 25px;
+  border-radius: 12px;
+  background: transparent;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 160px; /* Altura fija para alineación perfecta */
+}
+
+/* Efecto de recuadro individual al pasar el mouse */
+.logo-box:hover {
+  background: var(--bg-subtle);
+  transform: translateY(-8px);
 }
 
 .cliente-logo {
-  max-height: 80px;
+  max-height: 85px; /* Tamaño controlado para que no sature */
   max-width: 100%;
+  width: auto;
   object-fit: contain;
-  filter: grayscale(100%);
+  opacity: 0.8;
   transition: all 0.3s ease;
+  /* Previene que logos muy brillantes rompan la estética */
+  filter: saturate(0.8);
 }
 
-.cliente-logo:hover {
-  filter: grayscale(0%);
-  transform: scale(1.1);
+.logo-box:hover .cliente-logo {
+  opacity: 1;
+  filter: saturate(1);
+  transform: scale(1.05);
 }
 
-.cliente-nombre {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #6c757d;
+.logo-hover-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin-top: 15px;
   text-align: center;
-}
-
-.casos-de-exito-section {
-  padding-top: 2rem;
-}
-
-.caso-card {
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transform: translateY(10px);
   transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+.logo-box:hover .logo-hover-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+  .logos-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 30px 15px;
+    gap: 15px;
+  }
+  
+  .logo-box {
+    padding: 10px;
+    height: 130px;
+  }
+}
+
+/* Tarjetas de Casos de Éxito */
+.caso-card {
+  border-radius: 20px !important;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .caso-card:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transform: translateY(-5px);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+
+.caso-header-aside {
+  background-color: #fcfcfc;
+  border-right: 1px solid #f0f0f0;
 }
 
 .caso-logo-card {
-  max-width: 100px;
-  max-height: 80px;
-  object-fit: contain;
-  filter: grayscale(100%);
+  max-width: 120px;
+  height: auto;
   margin: 0 auto;
-  display: block;
 }
 
 .caso-cliente-nombre {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark-grey);
+}
+
+.badge-custom {
+  background-color: var(--primary-blue) !important;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .caso-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #0070b8;
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 1.75rem;
 }
 
-.caso-resumen {
-  font-size: 1.1rem;
+.caso-resumen-box {
+  background-color: #f1f8ff;
+  border-left: 5px solid var(--primary-blue);
+  padding: 15px 20px;
+  border-radius: 4px;
   font-style: italic;
-  color: #555;
-  border-left: 3px solid #0070b8;
-  padding-left: 10px;
-  margin-bottom: 1rem;
+  color: #444;
+}
+
+.detail-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.custom-divider {
+  border: 0;
+  height: 2px;
+  background-image: linear-gradient(to right, transparent, var(--primary-blue), transparent);
+  margin: 60px 0;
+  opacity: 0.3;
 }
 
 .caso-ejecutado {
+  color: #777;
   font-size: 0.9rem;
-  color: #888;
+}
+
+/* Ajustes Responsive */
+@media (max-width: 991px) {
+  .caso-header-aside {
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
 }
 
 @media (max-width: 768px) {
-  .main-title {
-    font-size: 2.2rem;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .caso-title {
-    font-size: 1.3rem;
-  }
+  .main-title { font-size: 2.2rem; }
+  .logos-wrapper { padding: 20px; }
+  .logo-box { width: 140px; }
 }
