@@ -30,6 +30,23 @@ export function CarritoProvider({ children }) {
     }
   }, [carrito]);
 
+  // Sincronizar carrito entre pestañas del navegador
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key !== CARRITO_STORAGE_KEY) return;
+
+      try {
+        const nuevoCarrito = e.newValue ? JSON.parse(e.newValue) : [];
+        setCarrito(nuevoCarrito);
+      } catch (error) {
+        console.error("Error al sincronizar carrito entre pestañas:", error);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   const actualizarCantidad = (idProducto, cantidadSolicitada) => {
     if (!Number.isFinite(cantidadSolicitada) || cantidadSolicitada < 1) {
       return;

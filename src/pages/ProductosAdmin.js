@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal } from "react-bootstrap";
+import { Container, Table, Button, Form, Row, Col, Alert, Spinner, Modal, Badge, ProgressBar } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { obtenerProductos, importarCsvOfertas, toggleOfertaProducto } from "../services/productoService";
 import { useTipoCambio } from "../context/TipoCambioContext";
@@ -22,6 +22,8 @@ const ProductosAdmin = () => {
   const [productoParaSubCategorizar, setProductoParaSubCategorizar] = useState(null);
   const [subCategorias, setSubCategorias] = useState([]);
   const [subCategoriaSeleccionada, setSubCategoriaSeleccionada] = useState("");
+  const [showReporteModal, setShowReporteModal] = useState(false);
+  const [reporteImportacion, setReporteImportacion] = useState(null);
   const { formatearPrecioSoles } = useTipoCambio();
   const navigate = useNavigate();
   
@@ -57,6 +59,50 @@ const ProductosAdmin = () => {
     garantia: "",
     umGarantia: "años"
   });
+
+  // Función para parsear el texto plano del reporte de importación
+  const parsearReporteImportacion = (textoPlano) => {
+    const texto = typeof textoPlano === 'string' ? textoPlano : String(textoPlano);
+    
+    // Extraer conteos del resumen: "X productos importados, Y errores"
+    const importadosMatch = texto.match(/(\d+)\s*productos?\s*importados?/i);
+    const erroresMatch = texto.match(/(\d+)\s*errores?/i);
+    const cantImportados = importadosMatch ? parseInt(importadosMatch[1]) : 0;
+    const cantErrores = erroresMatch ? parseInt(erroresMatch[1]) : 0;
+
+    // Parsear cada línea de error
+    const erroresDetalle = [];
+    const lineas = texto.split('\n');
+    
+    lineas.forEach(linea => {
+      if (!linea.includes('Error en l\u00ednea')) return;
+      
+      const lineaNumMatch = linea.match(/Error en l\u00ednea\s*(\d+)/i);
+      const numLinea = lineaNumMatch ? lineaNumMatch[1] : '?';
+      
+      let motivo = linea;
+      let tipo = 'error';
+      
+      if (linea.includes('Ya existe')) {
+        tipo = 'duplicado';
+        const nombreMatch = linea.match(/nombre:\s*(.+)$/i);
+        motivo = nombreMatch ? nombreMatch[1].trim() : linea;
+      } else {
+        // Extraer solo la parte del mensaje después del último ":"
+        const partes = linea.split(':');
+        motivo = partes.length > 1 ? partes[partes.length - 1].trim() : linea;
+      }
+      
+      erroresDetalle.push({ linea: numLinea, motivo, tipo });
+    });
+
+    return {
+      importados: cantImportados,
+      errores: cantErrores > 0 ? cantErrores : erroresDetalle.length,
+      detalleErrores: erroresDetalle,
+      total: cantImportados + (cantErrores > 0 ? cantErrores : erroresDetalle.length)
+    };
+  };
 
   useEffect(() => {
     cargarProductos();
@@ -520,14 +566,33 @@ const ProductosAdmin = () => {
                         const formData = new FormData();
                         formData.append('archivo', csvFile);
                         const resp = await apiClient.post('/productos/importar-csv', formData, {
-                          headers: { 'Content-Type': 'multipart/form-data' }
+                          headers: { 'Content-Type': 'multipart/form-data' },
+                          transformResponse: [(data) => data] // Forzar texto plano, no parsear JSON
                         });
-                        setMensaje({ tipo: 'success', texto: resp.data?.message || 'CSV importado correctamente.' });
+                        
+                        const reporte = parsearReporteImportacion(resp.data);
+                        setReporteImportacion(reporte);
+                        setShowReporteModal(true);
                         setCsvFile(null);
-                        cargarProductos();
+                        if (reporte.importados > 0) {
+                          cargarProductos();
+                        }
                       } catch (err) {
                         console.error('Error importando CSV:', err);
-                        setMensaje({ tipo: 'danger', texto: `Error al importar CSV: ${err.response?.data?.message || err.message}` });
+                        // El backend puede devolver el reporte como error HTTP también
+                        const errData = err.response?.data;
+                        if (errData) {
+                          const texto = typeof errData === 'string' ? errData : JSON.stringify(errData);
+                          if (texto.includes('importad') || texto.includes('Error en línea') || texto.includes('errores')) {
+                            const reporte = parsearReporteImportacion(texto);
+                            setReporteImportacion(reporte);
+                            setShowReporteModal(true);
+                            setCsvFile(null);
+                            if (reporte.importados > 0) cargarProductos();
+                            return;
+                          }
+                        }
+                        setMensaje({ tipo: 'danger', texto: `Error al importar CSV: ${err.response?.data || err.message}` });
                       } finally {
                         setImportandoCsv(false);
                       }
@@ -774,7 +839,7 @@ const ProductosAdmin = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Precio</Form.Label>
+                  <Form.Label>Precio (USD)</Form.Label>
                   <Form.Control
                     type="number"
                     step="0.01"
@@ -966,6 +1031,124 @@ const ProductosAdmin = () => {
           </Button>
           <Button variant="primary" onClick={actualizarSubCategoria}>
             Actualizar Subcategoría
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal de Reporte de Importación */}
+      <Modal show={showReporteModal} onHide={() => setShowReporteModal(false)} size="lg" scrollable>
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title>📊 Reporte de Importación CSV</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {reporteImportacion && (
+            <>
+              {/* Resumen general */}
+              <div className="p-3 mb-3 rounded" style={{ backgroundColor: '#f8f9fa' }}>
+                <Row className="text-center">
+                  <Col md={4}>
+                    <div className="p-3">
+                      <h3 className="mb-1">{reporteImportacion.total}</h3>
+                      <small className="text-muted">Total procesados</small>
+                    </div>
+                  </Col>
+                  <Col md={4}>
+                    <div className="p-3">
+                      <h3 className="mb-1 text-success">{reporteImportacion.importados}</h3>
+                      <small className="text-muted">✅ Importados</small>
+                    </div>
+                  </Col>
+                  <Col md={4}>
+                    <div className="p-3">
+                      <h3 className="mb-1 text-danger">{reporteImportacion.errores}</h3>
+                      <small className="text-muted">❌ Con errores</small>
+                    </div>
+                  </Col>
+                </Row>
+                <ProgressBar className="mt-2" style={{ height: '8px' }}>
+                  <ProgressBar 
+                    variant="success" 
+                    now={reporteImportacion.total > 0 ? (reporteImportacion.importados / reporteImportacion.total) * 100 : 0} 
+                    key={1} 
+                  />
+                  <ProgressBar 
+                    variant="danger" 
+                    now={reporteImportacion.total > 0 ? (reporteImportacion.errores / reporteImportacion.total) * 100 : 0} 
+                    key={2} 
+                  />
+                </ProgressBar>
+                <div className="d-flex justify-content-between mt-1">
+                  <small className="text-success">
+                    {reporteImportacion.total > 0 ? ((reporteImportacion.importados / reporteImportacion.total) * 100).toFixed(1) : 0}% éxito
+                  </small>
+                  <small className="text-danger">
+                    {reporteImportacion.total > 0 ? ((reporteImportacion.errores / reporteImportacion.total) * 100).toFixed(1) : 0}% errores
+                  </small>
+                </div>
+              </div>
+
+              {/* Estado general */}
+              {reporteImportacion.importados > 0 && reporteImportacion.errores === 0 && (
+                <Alert variant="success">
+                  🎉 ¡Todos los productos se importaron correctamente!
+                </Alert>
+              )}
+              {reporteImportacion.importados > 0 && reporteImportacion.errores > 0 && (
+                <Alert variant="warning">
+                  ⚠️ Importación parcial: {reporteImportacion.importados} productos importados, {reporteImportacion.errores} con errores.
+                </Alert>
+              )}
+              {reporteImportacion.importados === 0 && reporteImportacion.errores > 0 && (
+                <Alert variant="danger">
+                  ❌ No se importó ningún producto. Todos los registros presentaron errores.
+                </Alert>
+              )}
+
+              {/* Detalle de errores */}
+              {reporteImportacion.detalleErrores.length > 0 && (
+                <>
+                  <h6 className="mt-3 mb-2">
+                    Detalle de errores 
+                    <Badge bg="danger" className="ms-2">{reporteImportacion.detalleErrores.length}</Badge>
+                  </h6>
+                  <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                    <Table size="sm" bordered hover className="mb-0">
+                      <thead style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+                        <tr>
+                          <th style={{ width: '70px' }}>Línea</th>
+                          <th style={{ width: '100px' }}>Tipo</th>
+                          <th>Producto / Motivo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reporteImportacion.detalleErrores.map((err, idx) => (
+                          <tr key={idx}>
+                            <td className="text-center">
+                              <Badge bg="secondary">{err.linea}</Badge>
+                            </td>
+                            <td>
+                              {err.tipo === 'duplicado' ? (
+                                <Badge bg="warning" text="dark">🔁 Duplicado</Badge>
+                              ) : (
+                                <Badge bg="danger">❌ Error</Badge>
+                              )}
+                            </td>
+                            <td>
+                              <small style={{ wordBreak: 'break-word' }}>{err.motivo}</small>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReporteModal(false)}>
+            Cerrar
           </Button>
         </Modal.Footer>
       </Modal>
