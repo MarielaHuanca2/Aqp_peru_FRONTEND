@@ -8,7 +8,7 @@
 .faq-main-title {
   font-size: 3rem;
   font-weight: 700;
-  color: #0070b8; /* Color principal de tu marca */
+  color: #28a745; /* Color principal de tu marca */
 }
 
 /* Estilos de la sección de preguntas (ej. Envío, Pagos) */
@@ -28,7 +28,7 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #0070b8;
+  border-bottom: 2px solid #28a745;
   padding-bottom: 0.5rem;
 }
 
@@ -66,8 +66,8 @@
 }
 
 .accordion-button:not(.collapsed) {
-  color: #0070b8 !important; /* Color cuando está abierto */
-  border-bottom: 1px solid #0070b8;
+  color: #28a745 !important; /* Color cuando está abierto */
+  border-bottom: 1px solid #28a745;
   border-radius: 8px 8px 0 0 !important;
 }
 

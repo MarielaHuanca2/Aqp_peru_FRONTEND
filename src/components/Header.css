@@ -1,10 +1,10 @@
 /* ========================================
    HEADER - Professional Design
-   Color Palette: #0070b8 (primary blue), #005a94 (dark blue), #ff5722 (accent orange)
+   Color Palette: #28a745 (primary green), #1e7e34 (dark green), #ff5722 (accent orange)
    ======================================== */
 
 .navbar-header {
-  background-color: #0070b8;
+  background-color: #28a745;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   overflow: visible;
   padding: 0;
@@ -49,7 +49,7 @@
 
 .nav-link-custom:hover {
   color: #ffffff !important;
-  background-color: #005a94;
+  background-color: #1e7e34;
   text-decoration: none;
 }
 
@@ -79,7 +79,7 @@
 .mega-dropdown-trigger:hover,
 .mega-dropdown.open .mega-dropdown-trigger,
 .mega-dropdown:hover .mega-dropdown-trigger {
-  background-color: #005a94;
+  background-color: #1e7e34;
   color: #ffffff;
 } 
 
@@ -95,7 +95,7 @@
 /* Toggle button - white and larger hit area */
 .mega-toggle-btn {
   background-color: #ffffff;
-  color: #0070b8;
+  color: #28a745;
   border: 1px solid rgba(0,0,0,0.08);
   padding: 0.45rem 0.6rem;
   border-radius: 6px;
@@ -113,7 +113,7 @@
 }
 
 .mega-toggle-btn:focus {
-  outline: 2px solid rgba(0,112,184,0.2);
+  outline: 2px solid rgba(40,167,69,0.2);
   outline-offset: 2px;
 } 
 
@@ -149,7 +149,7 @@
 .mega-menu-title {
   font-weight: 700;
   font-size: 0.85rem;
-  color: #0070b8;
+  color: #28a745;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.75rem;
@@ -179,7 +179,7 @@
 }
 
 .mega-menu-link:hover {
-  color: #0070b8;
+  color: #28a745;
   padding-left: 4px;
 }
 
@@ -242,7 +242,7 @@
 }
 
 .cart-link:hover {
-  background-color: #005a94;
+  background-color: #1e7e34;
   color: #ffffff;
 }
 
@@ -272,7 +272,7 @@
   width: 28px;
   height: 28px;
   background-color: #ffffff;
-  color: #0070b8;
+  color: #28a745;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -330,14 +330,14 @@
 
 .btn-login {
   background-color: #ffffff;
-  color: #0070b8;
+  color: #28a745;
   border-color: #ffffff;
 }
 
 .btn-login:hover {
   background-color: #f0f0f0;
   border-color: #f0f0f0;
-  color: #005a94;
+  color: #1e7e34;
 }
 
 .btn-logout {
@@ -388,7 +388,7 @@
   .nav-link-custom:hover,
   .mega-dropdown-trigger:hover {
     background-color: #f0f0f0 !important;
-    color: #0070b8 !important;
+    color: #28a745 !important;
   }
 
   .mega-menu {
@@ -397,7 +397,7 @@
     padding: 0.5rem 1rem;
     border-radius: 0;
     border-top: none;
-    border-left: 3px solid #0070b8;
+    border-left: 3px solid #28a745;
     margin-left: 1rem;
     min-width: auto;
   }
@@ -430,7 +430,7 @@
   }
 
   .user-avatar {
-    background-color: #0070b8;
+    background-color: #28a745;
     color: #ffffff;
   }
 
@@ -444,15 +444,15 @@
   }
 
   .btn-admin {
-    background-color: #0070b8;
+    background-color: #28a745;
     color: #ffffff;
-    border-color: #0070b8;
+    border-color: #28a745;
   }
 
   .btn-login {
-    background-color: #0070b8;
+    background-color: #28a745;
     color: #ffffff;
-    border-color: #0070b8;
+    border-color: #28a745;
   }
 
   .btn-logout {
@@ -461,7 +461,7 @@
   }
 
   .cart-link {
-    color: #0070b8;
+    color: #28a745;
   }
 }
 

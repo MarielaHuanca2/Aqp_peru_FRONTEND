@@ -23,7 +23,7 @@
 .home-title {
   font-size: 3.5rem; /* Título principal más grande y llamativo */
   font-weight: 700;
-  color: #0070b8; /* Usamos el azul de tu marca */
+  color: #28a745; /* Usamos el verde de tu marca */
   margin-bottom: 1rem;
 }
 
@@ -35,8 +35,8 @@
 
 /* Botón "Ver productos" */
 .btn-primary.btn-lg {
-  background-color: #0070b8;
-  border-color: #0070b8;
+  background-color: #28a745;
+  border-color: #28a745;
   font-size: 1.2rem;
   padding: 0.8rem 2.5rem; /* Aumenta el relleno para que el botón sea más visible */
   border-radius: 50px; /* Bordes redondeados para un look moderno */
@@ -44,8 +44,8 @@
 }
 
 .btn-primary.btn-lg:hover {
-  background-color: #005a96;
-  border-color: #005a96;
+  background-color: #1e7e34;
+  border-color: #1e7e34;
   transform: translateY(-2px); /* Efecto de "levantar" el botón */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
@@ -85,7 +85,7 @@
 .home-section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #0070b8;
+  color: #28a745;
 }
 
 /* Sección final de beneficios */

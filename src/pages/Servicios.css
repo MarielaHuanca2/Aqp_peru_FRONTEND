@@ -6,7 +6,7 @@
 }
 
 .banner-principal {
-  background-color: #0070b8; /* Azul de tu marca */
+  background-color: #28a745; /* Verde de tu marca */
   color: #ffffff;
   padding: 4rem 0;
   text-align: center;
@@ -28,7 +28,7 @@
 .servicios-main-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #0070b8;
+  color: #28a745;
   margin-bottom: 2rem;
 }
 
@@ -48,7 +48,7 @@
 .service-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #0070b8;
+  color: #28a745;
 }
 
 .service-text {

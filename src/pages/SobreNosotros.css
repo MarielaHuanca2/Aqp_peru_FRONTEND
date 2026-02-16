@@ -28,7 +28,7 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #0070b8;
+  border-bottom: 2px solid #28a745;
   padding-bottom: 0.5rem;
   display: inline-block; 
 }
@@ -76,7 +76,7 @@
 .vision-title {
   font-weight: 700;
   font-size: 1.5rem;
-  color: #0070b8 !important;
+  color: #28a745 !important;
 }
 
 .card-text-justify {
@@ -85,7 +85,7 @@
 }
 
 .valores-section {
-  background-color: #0070b8;
+  background-color: #28a745;
   color: #ffffff;
 }
 
@@ -117,7 +117,7 @@
   line-height: 1.6;
   text-align: justify;
   color: #555;
-  border-left: 4px solid #0070b8;
+  border-left: 4px solid #28a745;
   padding-left: 1rem;
   margin-bottom: 2rem;
 }
@@ -134,7 +134,7 @@
 }
 
 .policy-item-title {
-  color: #0070b8;
+  color: #28a745;
   font-weight: 600;
   font-size: 1.1rem;
 }

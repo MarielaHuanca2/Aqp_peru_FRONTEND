@@ -28,7 +28,7 @@
   font-size: 1.1rem;
   line-height: 1.8;
   margin-bottom: 2rem;
-  border-left: 4px solid #0070b8; /* Borde de color para resaltar */
+  border-left: 4px solid #28a745; /* Borde de color para resaltar */
   padding-left: 1.5rem;
   color: #555;
 }
@@ -44,7 +44,7 @@
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #0070b8;
+  color: #28a745;
   border-bottom: 2px solid #e9ecef; /* Línea separadora */
   padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
@@ -60,7 +60,7 @@
 }
 
 .terms-list strong {
-  color: #0070b8;
+  color: #28a745;
 }
 
 .contact-text {

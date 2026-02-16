@@ -1,6 +1,6 @@
 /* Variables para consistencia */
 :root {
-  --primary-blue: #0070b8;
+  --primary-green: #28a745;
   --dark-grey: #333333;
   --light-grey: #6c757d;
   --bg-subtle: #f8f9fa;
@@ -18,7 +18,7 @@
   font-size: 3.2rem;
   font-weight: 800;
   text-align: center;
-  color: var(--primary-blue);
+  color: var(--primary-green);
   letter-spacing: -1px;
 }
 
@@ -86,7 +86,7 @@
 .logo-hover-name {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--primary-blue);
+  color: var(--primary-green);
   margin-top: 15px;
   text-align: center;
   opacity: 0;
@@ -144,20 +144,20 @@
 }
 
 .badge-custom {
-  background-color: var(--primary-blue) !important;
+  background-color: var(--primary-green) !important;
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
 .caso-title {
-  color: var(--primary-blue);
+  color: var(--primary-green);
   font-weight: 700;
   font-size: 1.75rem;
 }
 
 .caso-resumen-box {
   background-color: #f1f8ff;
-  border-left: 5px solid var(--primary-blue);
+  border-left: 5px solid var(--primary-green);
   padding: 15px 20px;
   border-radius: 4px;
   font-style: italic;
@@ -172,7 +172,7 @@
 .custom-divider {
   border: 0;
   height: 2px;
-  background-image: linear-gradient(to right, transparent, var(--primary-blue), transparent);
+  background-image: linear-gradient(to right, transparent, var(--primary-green), transparent);
   margin: 60px 0;
   opacity: 0.3;
 }
