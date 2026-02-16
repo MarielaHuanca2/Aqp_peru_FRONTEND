@@ -17,7 +17,7 @@ const SobreNosotros = () => {
           <Col md={6} className="order-2 order-md-1">
             <h2 className="section-title">¿Quiénes somos?</h2>
             <p className="about-text">
-              En **ComputerShops**, somos una empresa líder en el sector de computadoras, servidores y soluciones tecnológicas para empresas. Con más de 10 años de experiencia, brindamos productos de alta calidad y un servicio personalizado para cada cliente.
+              En AQP Peru Data, somos una empresa líder en el sector de computadoras, servidores y soluciones tecnológicas para empresas. Con más de 10 años de experiencia, brindamos productos de alta calidad y un servicio personalizado para cada cliente.
             </p>
           </Col>
           <Col md={6} className="order-1 order-md-2 mb-4 mb-md-0">
@@ -96,7 +96,7 @@ const SobreNosotros = () => {
           <Col>
             <h2 className="section-title">Políticas Corporativas</h2>
             <p className="policy-intro">
-              **COMPUTER SHOP’S CORPORATION S.R.L.**, empresa peruana dedicada a brindar servicios tecnológicos e infraestructura tecnológica, bajo lineamientos que garanticen la calidad del servicio, la seguridad y salud ocupacional de los trabajadores, clientes, contratistas y demás partes interesadas se compromete a:
+              AQP Peru Data, empresa peruana dedicada a brindar servicios tecnológicos e infraestructura tecnológica, bajo lineamientos que garanticen la calidad del servicio, la seguridad y salud ocupacional de los trabajadores, clientes, contratistas y demás partes interesadas se compromete a:
             </p>
             <ol className="policy-list">
               <li>

@@ -19,66 +19,89 @@ function Home() {
   }, []);
 
   return (
-    <div className="home-main">
-      {/* Primera imagen a pantalla completa */}
-      <div className="full-width-image fade-in">
-        <img src="/CSC-webinicio-01.jpg" alt="Banner 1" className="banner-image" />
-      </div>
+    <div className="home">
 
-      <div className="container">
-        {/* Texto y botón */}
-        <div className="row align-items-center my-5">
-          <div className="col-md-6">
-            <h1 className="home-title">Bienvenido a ComputerShops</h1>
-            <p className="home-subtitle">
-              Tu tienda líder en tecnología, equipos y soluciones empresariales.
-              Descubre productos, marcas y servicios de calidad.
+      {/* ── HERO ── */}
+      <section className="hero">
+        <img src="/CSC-webinicio-01.jpg" alt="Banner principal" className="hero__bg" />
+        <div className="hero__overlay" />
+        <div className="hero__content fade-in">
+          <h1 className="hero__title">Bienvenido a ComputerShops</h1>
+          <p className="hero__text">
+            Tu tienda líder en tecnología, equipos y soluciones empresariales.
+            Descubre productos, marcas y servicios de calidad.
+          </p>
+          <a href="/productos" className="hero__cta">
+            Ver productos
+            <span className="hero__cta-arrow">→</span>
+          </a>
+        </div>
+      </section>
+
+      {/* ── FEATURES ── */}
+      <section className="features">
+        <div className="features__grid">
+          <article className="feature-card fade-in">
+            <div className="feature-card__icon-wrap">
+              <img src="/images/service_front.png" alt="Servicios" className="feature-card__icon" />
+            </div>
+            <h3 className="feature-card__title">Servicios Empresariales</h3>
+            <p className="feature-card__desc">
+              Instalación, mantenimiento y soporte técnico para tu empresa.
             </p>
-          </div>
-          <div className="col-md-6 text-center">
-            <a href="/productos" className="btn btn-primary btn-lg">
-              Ver productos
-            </a>
-          </div>
-        </div>
-      </div>
+          </article>
 
-      {/* Segunda imagen a pantalla completa */}
-      <div className="full-width-image fade-in">
-        <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner-image" />
-      </div>
-
-      <div className="container">
-        {/* Tres columnas */}
-        <div className="row text-center mb-5 mt-5">
-          <div className="col-md-4 mb-4">
-            <img src="/images/service_front.png" alt="Servicios" className="home-card-img" />
-            <h4 className="home-section-title">Servicios Empresariales</h4>
-            <p>Instalación, mantenimiento y soporte técnico para tu empresa.</p>
-          </div>
-          <div className="col-md-4 mb-4">
-            <img src="/images/sale_front.png" alt="Marcas" className="home-card-img" />
-            <h4 className="home-section-title">Las Mejores Marcas</h4>
-            <p>Trabajamos con Lenovo, Dell, HP y más líderes del mercado.</p>
-          </div>
-          <div className="col-md-4 mb-4">
-            <img src="/images/price_front.png" alt="Ofertas" className="home-card-img" />
-            <h4 className="home-section-title">Ofertas Exclusivas</h4>
-            <p>Aprovecha descuentos y promociones especiales cada semana.</p>
-          </div>
-        </div>
-
-        {/* Sección final */}
-        <div className="row justify-content-center">
-          <div className="col-md-8 text-center">
-            <h2 className="home-benefits-title">¿Por qué elegirnos?</h2>
-            <p className="home-benefits-text">
-              Más de 10 años de experiencia, atención personalizada y garantía
-              en todos nuestros productos. ¡Haz crecer tu negocio con nosotros!
+          <article className="feature-card fade-in">
+            <div className="feature-card__icon-wrap">
+              <img src="/images/sale_front.png" alt="Marcas" className="feature-card__icon" />
+            </div>
+            <h3 className="feature-card__title">Las Mejores Marcas</h3>
+            <p className="feature-card__desc">
+              Trabajamos con Lenovo, Dell, HP y más líderes del mercado.
             </p>
+          </article>
+
+          <article className="feature-card fade-in">
+            <div className="feature-card__icon-wrap">
+              <img src="/images/price_front.png" alt="Ofertas" className="feature-card__icon" />
+            </div>
+            <h3 className="feature-card__title">Ofertas Exclusivas</h3>
+            <p className="feature-card__desc">
+              Aprovecha descuentos y promociones especiales cada semana.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* ── BANNER SECUNDARIO ── */}
+      <section className="banner fade-in">
+        <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner__img" />
+      </section>
+
+      {/* ── WHY US ── */}
+      <section className="why-us fade-in">
+        <span className="why-us__badge">Confianza &amp; Calidad</span>
+        <h2 className="why-us__title">¿Por qué elegirnos?</h2>
+        <p className="why-us__text">
+          Más de 10 años de experiencia, atención personalizada y garantía
+          en todos nuestros productos. ¡Haz crecer tu negocio con nosotros!
+        </p>
+
+        <div className="why-us__stats">
+          <div className="stat">
+            <span className="stat__number">10+</span>
+            <span className="stat__label">Años de experiencia</span>
+          </div>
+          <div className="stat">
+            <span className="stat__number">500+</span>
+            <span className="stat__label">Clientes satisfechos</span>
+          </div>
+          <div className="stat">
+            <span className="stat__number">100%</span>
+            <span className="stat__label">Garantía en productos</span>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
