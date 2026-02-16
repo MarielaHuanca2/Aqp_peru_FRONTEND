@@ -61,7 +61,7 @@ function Login() {
       <div className="login-card">
         {/* Logo */}
         <div className="login-logo">
-          <img src="/logo_nuevo.png" alt="ComputerShops" />
+          <img src="/LOGOAQP.PNG" alt="ComputerShops" />
         </div>
 
         {/* Header */}

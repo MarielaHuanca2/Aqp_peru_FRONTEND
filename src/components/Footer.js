@@ -10,7 +10,7 @@ function Footer() {
         {/* Brand column */}
         <div className="ft__col ft__brand">
           <Link to="/" className="ft__logo">
-            <img src="/logo_nuevo.png" alt="ComputerShops" />
+            <img src="/LOGOAQP.PNG" alt="ComputerShops" />
           </Link>
           <p className="ft__tagline">
             Tu tienda líder en tecnología, equipos y soluciones empresariales en Arequipa.

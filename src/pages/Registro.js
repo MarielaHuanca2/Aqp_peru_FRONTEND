@@ -92,7 +92,7 @@ function Registro() {
         {/* Header */}
         <div className="registro-header">
           <div className="registro-logo">
-            <img src="/logo_nuevo.png" alt="ComputerShops" />
+            <img src="/LOGOAQP.PNG" alt="ComputerShops" />
           </div>
           <h2 className="registro-title">Crear tu cuenta</h2>
           <p className="registro-subtitle">Completa los datos para registrarte como empresa</p>
