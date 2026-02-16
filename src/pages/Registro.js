@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { Container, Form, Button, Alert, Spinner, Row, Col } from "react-bootstrap";
+import { Form, Button, Alert, Spinner } from "react-bootstrap";
+import { FaBuilding, FaEnvelope, FaShieldAlt } from "react-icons/fa";
 import apiClient from "../services/authService";
+import "./Registro.css";
 
 function Registro() {
   const [formData, setFormData] = useState({
@@ -85,15 +87,48 @@ function Registro() {
   };
 
   return (
-    <Container className="mt-5" style={{ maxWidth: "600px" }}>
-      <h2 className="mb-4 text-center">Crear Cuenta</h2>
-      
-      {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
-      
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col md={6}>
+    <div className="registro-page">
+      <div className="registro-card">
+        {/* Header */}
+        <div className="registro-header">
+          <div className="registro-logo">
+            <img src="/logo_nuevo.png" alt="ComputerShops" />
+          </div>
+          <h2 className="registro-title">Crear tu cuenta</h2>
+          <p className="registro-subtitle">Completa los datos para registrarte como empresa</p>
+        </div>
+
+        {/* Step indicator */}
+        <div className="registro-steps">
+          <div className="registro-step registro-step--active">
+            <span className="registro-step__dot">1</span>
+            <span>Empresa</span>
+          </div>
+          <span className="registro-step__line" />
+          <div className="registro-step registro-step--active">
+            <span className="registro-step__dot">2</span>
+            <span>Contacto</span>
+          </div>
+          <span className="registro-step__line" />
+          <div className="registro-step registro-step--active">
+            <span className="registro-step__dot">3</span>
+            <span>Seguridad</span>
+          </div>
+        </div>
+
+        {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
+
+        <Form onSubmit={handleSubmit} className="registro-form">
+
+          {/* ── Section: Empresa ── */}
+          <div className="registro-section">
+            <div className="registro-section__icon registro-section__icon--empresa"><FaBuilding /></div>
+            <p className="registro-section__label">Datos de la empresa</p>
+            <span className="registro-section__line" />
+          </div>
+
+          <div className="registro-row">
             <Form.Group controlId="formRuc" className="mb-3">
               <Form.Label>RUC *</Form.Label>
               <Form.Control
@@ -110,8 +145,52 @@ function Registro() {
                 Debe tener exactamente 11 dígitos
               </Form.Text>
             </Form.Group>
-          </Col>
-          <Col md={6}>
+
+            <Form.Group controlId="formRazonSocial" className="mb-3">
+              <Form.Label>Razón Social *</Form.Label>
+              <Form.Control
+                type="text"
+                name="razonSocial"
+                placeholder="Nombre de la empresa"
+                value={formData.razonSocial}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </div>
+
+          <Form.Group controlId="formDireccion" className="mb-3">
+            <Form.Label>Dirección *</Form.Label>
+            <Form.Control
+              type="text"
+              name="direccion"
+              placeholder="Av. Los Olivos 123, Lima"
+              value={formData.direccion}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+
+          {/* ── Section: Contacto ── */}
+          <div className="registro-section">
+            <div className="registro-section__icon registro-section__icon--contacto"><FaEnvelope /></div>
+            <p className="registro-section__label">Información de contacto</p>
+            <span className="registro-section__line" />
+          </div>
+
+          <div className="registro-row">
+            <Form.Group controlId="formCorreo" className="mb-3">
+              <Form.Label>Correo electrónico *</Form.Label>
+              <Form.Control
+                type="email"
+                name="correo"
+                placeholder="correo@empresa.com"
+                value={formData.correo}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
             <Form.Group controlId="formTelefono" className="mb-3">
               <Form.Label>Teléfono *</Form.Label>
               <Form.Control
@@ -123,47 +202,16 @@ function Registro() {
                 required
               />
             </Form.Group>
-          </Col>
-        </Row>
+          </div>
 
-        <Form.Group controlId="formRazonSocial" className="mb-3">
-          <Form.Label>Razón Social *</Form.Label>
-          <Form.Control
-            type="text"
-            name="razonSocial"
-            placeholder="Nombre de la empresa o razón social"
-            value={formData.razonSocial}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          {/* ── Section: Seguridad ── */}
+          <div className="registro-section">
+            <div className="registro-section__icon registro-section__icon--seguridad"><FaShieldAlt /></div>
+            <p className="registro-section__label">Contraseña</p>
+            <span className="registro-section__line" />
+          </div>
 
-        <Form.Group controlId="formCorreo" className="mb-3">
-          <Form.Label>Correo electrónico *</Form.Label>
-          <Form.Control
-            type="email"
-            name="correo"
-            placeholder="correo@empresa.com"
-            value={formData.correo}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formDireccion" className="mb-3">
-          <Form.Label>Dirección *</Form.Label>
-          <Form.Control
-            type="text"
-            name="direccion"
-            placeholder="Av. Los Olivos 123, Lima"
-            value={formData.direccion}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Row>
-          <Col md={6}>
+          <div className="registro-row">
             <Form.Group controlId="formClave" className="mb-3">
               <Form.Label>Contraseña *</Form.Label>
               <Form.Control
@@ -176,8 +224,7 @@ function Registro() {
                 required
               />
             </Form.Group>
-          </Col>
-          <Col md={6}>
+
             <Form.Group controlId="formConfirmarClave" className="mb-3">
               <Form.Label>Confirmar contraseña *</Form.Label>
               <Form.Control
@@ -190,35 +237,37 @@ function Registro() {
                 required
               />
             </Form.Group>
-          </Col>
-        </Row>
+          </div>
 
-  {/* Campo de tipo de usuario eliminado, todos los usuarios serán normales */}
+          <Button
+            variant="primary"
+            type="submit"
+            className="registro-submit"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Spinner size="sm" animation="border" className="me-2" />
+                Creando cuenta...
+              </>
+            ) : (
+              "Crear cuenta"
+            )}
+          </Button>
+        </Form>
 
-        <Button 
-          variant="primary" 
-          type="submit" 
-          className="w-100 mb-3"
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <Spinner size="sm" animation="border" className="me-2" />
-              Creando cuenta...
-            </>
-          ) : (
-            "Crear cuenta"
-          )}
-        </Button>
-      </Form>
+        <div className="registro-divider">
+          <span>o</span>
+        </div>
 
-      <div className="text-center">
-        <p className="mb-0">¿Ya tienes cuenta?</p>
-        <Link to="/login" className="btn btn-link">
-          Iniciar sesión
-        </Link>
+        <div className="registro-footer">
+          <p>¿Ya tienes cuenta?</p>
+          <Link to="/login" className="registro-footer-link">
+            Iniciar sesión
+          </Link>
+        </div>
       </div>
-    </Container>
+    </div>
   );
 }
 

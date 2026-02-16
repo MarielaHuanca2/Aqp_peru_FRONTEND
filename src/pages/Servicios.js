@@ -9,7 +9,7 @@ function Servicios() {
           <div className="banner-content">
             <h1 className="banner-title">Las Mejores Soluciones en TIC para su Organización</h1>
             <p className="banner-subtitle">
-              ComputerShop's Corporation S.R.L. se funda el año 2001 en la ciudad de Arequipa. Desde entonces, ofrecemos productos y servicios de alta calidad, trabajando con las principales empresas privadas y públicas del País.
+              AQP Perú Data se funda el año 2001 en la ciudad de Arequipa. Desde entonces, ofrecemos productos y servicios de alta calidad, trabajando con las principales empresas privadas y públicas del País.
             </p>
           </div>
         </Container>

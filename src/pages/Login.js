@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { Form, Button, Alert, Spinner } from "react-bootstrap";
 import { authService } from "../services/authService";
+import "./Login.css";
 
 function Login() {
   const [correo, setCorreo] = useState("");
@@ -56,77 +57,88 @@ function Login() {
   };
 
   return (
-    <Container className="mt-5" style={{ maxWidth: "400px" }}>
-      <h2 className="mb-4 text-center">Iniciar Sesión</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
-      
-      <Form onSubmit={handleLogin}>
-        <Form.Group controlId="formCorreo" className="mb-3">
-          <Form.Label>Correo electrónico</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Ingresa tu correo"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-            required
-          />
-        </Form.Group>
+    <div className="login-page">
+      <div className="login-card">
+        {/* Logo */}
+        <div className="login-logo">
+          <img src="/logo_nuevo.png" alt="ComputerShops" />
+        </div>
 
-        <Form.Group controlId="formClave" className="mb-3">
-          <Form.Label>Contraseña</Form.Label>
-          <div className="position-relative">
+        {/* Header */}
+        <div className="login-header">
+          <h2 className="login-title">Bienvenido de vuelta</h2>
+          <p className="login-subtitle">Ingresa tus credenciales para continuar</p>
+        </div>
+
+        {error && <Alert variant="danger">{error}</Alert>}
+
+        <Form onSubmit={handleLogin} className="login-form">
+          <Form.Group controlId="formCorreo" className="mb-3">
+            <Form.Label>Correo electrónico</Form.Label>
             <Form.Control
-              type={mostrarClave ? "text" : "password"}
-              placeholder="Contraseña"
-              value={clave}
-              onChange={(e) => setClave(e.target.value)}
+              type="email"
+              placeholder="nombre@ejemplo.com"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               required
-              style={{ paddingRight: "40px" }}
             />
-            <Button
-              variant="link"
-              onClick={() => setMostrarClave(!mostrarClave)}
-              className="position-absolute"
-              style={{
-                right: "0",
-                top: "0",
-                bottom: "0",
-                border: "none",
-                background: "transparent",
-                color: "#6c757d",
-                padding: "0.375rem 0.75rem"
-              }}
-              type="button"
-            >
-              {mostrarClave ? "👁️" : "👁️‍🗨️"}
-            </Button>
-          </div>
-        </Form.Group>
+          </Form.Group>
 
-        <Button 
-          variant="primary" 
-          type="submit" 
-          className="w-100 mb-3"
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <Spinner size="sm" animation="border" className="me-2" />
-              Iniciando sesión...
-            </>
-          ) : (
-            "Iniciar sesión"
-          )}
-        </Button>
-      </Form>
+          <Form.Group controlId="formClave" className="mb-3">
+            <Form.Label>Contraseña</Form.Label>
+            <div className="login-password-wrap">
+              <Form.Control
+                type={mostrarClave ? "text" : "password"}
+                placeholder="••••••••"
+                value={clave}
+                onChange={(e) => setClave(e.target.value)}
+                required
+                style={{ paddingRight: "48px" }}
+              />
+              <Button
+                variant="link"
+                onClick={() => setMostrarClave(!mostrarClave)}
+                className="login-password-toggle"
+                type="button"
+                tabIndex={-1}
+              >
+                {mostrarClave ? "👁️" : "👁️‍🗨️"}
+              </Button>
+            </div>
+          </Form.Group>
 
-      <div className="text-center">
-        <p className="mb-0">¿No tienes cuenta?</p>
-        <Link to={redirect ? `/registro?redirect=${redirect}` : "/registro"} className="btn btn-link">
-          Crear cuenta nueva
-        </Link>
+          <Button
+            variant="primary"
+            type="submit"
+            className="login-submit"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Spinner size="sm" animation="border" className="me-2" />
+                Iniciando sesión...
+              </>
+            ) : (
+              "Iniciar sesión"
+            )}
+          </Button>
+        </Form>
+
+        <div className="login-divider">
+          <span>o</span>
+        </div>
+
+        <div className="login-footer">
+          <p>¿No tienes cuenta?</p>
+          <Link
+            to={redirect ? `/registro?redirect=${redirect}` : "/registro"}
+            className="login-footer-link"
+          >
+            Crear cuenta nueva
+          </Link>
+        </div>
       </div>
-    </Container>
+    </div>
   );
 }
 
