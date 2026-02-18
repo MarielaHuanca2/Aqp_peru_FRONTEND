@@ -7,7 +7,7 @@
 
 .about-header {
   background-color: #ffffff; 
-  color: #ffffff;
+  color: #333333;
   padding: 4rem 0 2rem;
   text-align: center;
 }
@@ -27,10 +27,11 @@
   font-size: 2rem;
   font-weight: 600;
   color: #333;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border-bottom: 2px solid #28a745;
   padding-bottom: 0.5rem;
-  display: inline-block; 
+  display: block;
+  width: 100%;
 }
 
 .about-image {
@@ -84,6 +85,14 @@
   line-height: 1.7;
 }
 
+/* Align mission/vision card content: title centered, body text left */
+.mission-vision-card .card-body {
+  padding: 1.25rem 1.5rem;
+}
+.mission-vision-card .card-text-justify {
+  text-align: left;
+}
+
 .valores-section {
   background-color: #28a745;
   color: #ffffff;
@@ -106,6 +115,9 @@
 .valores-list li {
   font-size: 1.1rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .valores-list li i {
@@ -115,22 +127,28 @@
 .policy-intro {
   font-size: 1rem;
   line-height: 1.6;
-  text-align: justify;
+  text-align: left;
   color: #555;
   border-left: 4px solid #28a745;
   padding-left: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .policy-list {
-  padding-left: 2rem;
+  padding-left: 1.25rem;
+  list-style-position: outside;
 }
 
 .policy-list li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
   line-height: 1.6;
-  text-align: justify;
+  text-align: left;
   font-size: 1rem;
+}
+
+.policy-list ol {
+  margin-top: 0.25rem;
+  padding-left: 1rem;
 }
 
 .policy-item-title {

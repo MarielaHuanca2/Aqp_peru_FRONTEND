@@ -23,10 +23,10 @@ function Home() {
 
       {/* ── HERO ── */}
       <section className="hero">
-        <img src="/CSC-webinicio-01.jpg" alt="Banner principal" className="hero__bg" />
+        <img src="/BannerAQP-01.jpg" alt="Banner principal" className="hero__bg" />
         <div className="hero__overlay" />
         <div className="hero__content fade-in">
-          <h1 className="hero__title">Bienvenido a ComputerShops</h1>
+          <h1 className="hero__title">Bienvenido a AQP Perú Data</h1>
           <p className="hero__text">
             Tu tienda líder en tecnología, equipos y soluciones empresariales.
             Descubre productos, marcas y servicios de calidad.
@@ -75,7 +75,7 @@ function Home() {
 
       {/* ── BANNER SECUNDARIO ── */}
       <section className="banner fade-in">
-        <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner__img" />
+        <img src="/BannerAQP-02.jpg" alt="Banner 2" className="banner__img" />
       </section>
 
       {/* ── WHY US ── */}

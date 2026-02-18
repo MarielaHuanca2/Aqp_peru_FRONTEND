@@ -3,50 +3,40 @@ import "./Experiencia.css";
 
 const casosDeExito = [
   {
-    cliente: "Sociedad Eléctrica del Sur Oeste S.A. - SEAL",
-    sector: "Energía eléctrica",
+    cliente: "Universidad Nacional de San Agustín – UNSA",
+    sector: "Educación superior pública",
     ubicacion: "Arequipa, Perú",
-    titulo: "Renovación del Data Center de SEAL",
-    resumen: "SEAL necesitaba modernizar su Data Center para garantizar el funcionamiento de sus aplicaciones críticas y conexiones remotas.",
-    solucion: "Aire acondicionado de precisión, sistema contra incendios, UPS, gabinetes, y acceso biométrico.",
-    resultados: "Ambiente óptimo, mayor seguridad y escalabilidad.",
-    ejecutadoPor: "Consorcio ComputerShop’s S.R.L. e Integrity Perú S.A.C.",
-    logo: "/seal.png"
-  },
-  {
-    cliente: "Empresa de Generación Eléctrica de Arequipa S.A. - EGASA",
-    sector: "Generación eléctrica",
-    ubicacion: "C.T. Pisco y C.T. Chilina",
-    titulo: "Servidores Industriales para Sala de Control – EGASA",
-    resumen: "EGASA necesitaba renovar sus servidores para mejorar el sistema SCADA sin interrupciones.",
-    solucion: "Servidores Blade HP, almacenamiento MSA 2040, migración sin pérdida de datos y capacitación técnica.",
-    resultados: "Continuidad operativa, reducción de fallas y ahorro energético.",
-    ejecutadoPor: "ComputerShop’s Corporation.",
-    logo: "/egasa_logo.png"
+    titulo: "Implementación de Nube Privada – Centro de Datos UNSA",
+    resumen: "La UNSA requería modernizar su infraestructura de centro de datos para atender la creciente demanda académica y administrativa, mejorando procesamiento, almacenamiento y disponibilidad de sus servicios.",
+    solucion: "Implementación de nube privada con almacenamiento EMC VNX, switches de fibra canal redundantes, tarjetas HBA y virtualización con VMware vSphere Enterprise y vCenter. Instalación, configuración, puesta en marcha y capacitación especializada.",
+    resultados: "Mayor disponibilidad y fiabilidad de servicios, optimización de recursos, reducción de riesgos y costos, y preparación para crecimiento futuro con mejor recuperación ante desastres.",
+    ejecutadoPor: "AQP-Peru Data",
+    logo: "/unsa_logo.png"
   },
   {
     cliente: "Zona Registral Nº XII – SUNARP",
-    sector: "Servicios registrales",
+    sector: "Servicios registrales públicos",
     ubicacion: "Arequipa, Perú",
-    titulo: "Mantenimiento de Servidores – Zona Registral Nº XII (SUNARP)",
-    resumen: "Los equipos de su centro de datos habían superado su garantía y requerían mantenimiento preventivo y correctivo para garantizar continuidad operativa.",
-    solucion: "Mantenimiento integral a servidores, almacenamiento, respaldo, red, UPS, aire acondicionado, cableado y monitoreo.",
-    resultados: "Reducción de incidencias, aumento de vida útil y operatividad constante.",
-    ejecutadoPor: "ComputerShop’s Corporation.",
+    titulo: "Mantenimiento Preventivo y Correctivo de Equipos Informáticos",
+    resumen: "La institución requería soporte especializado para garantizar la continuidad operativa de sus equipos informáticos e infraestructura tecnológica en múltiples sedes de la región.",
+    solucion: "Servicio integral por dos años de soporte técnico especializado, mantenimiento preventivo y correctivo de PCs, laptops, impresoras, UPS, switches, cableado estructurado y atención de incidencias de hardware y software.",
+    resultados: "Continuidad operativa asegurada, reducción de tiempos de parada, prolongación de vida útil de equipos y mejora en la eficiencia del soporte tecnológico institucional.",
+    ejecutadoPor: "AQP-Peru Data",
     logo: "/sunarp_logo.png"
   },
   {
-    cliente: "Zona Franca de Tacna – ZOFRATACNA",
-    sector: "Comercio exterior / Seguridad institucional",
-    ubicacion: "Tacna, Perú",
-    titulo: "Sistema de Video Vigilancia y Monitoreo – ZOFRATACNA",
-    resumen: "ZOFRATACNA contaba con un sistema CCTV obsoleto, poniendo en riesgo la seguridad. Se requería implementar un sistema IP moderno y eficiente.",
-    solucion: "Instalación de 8 cámaras IP Axis, software ISS SecurOS, servidor Dell, cableado estructurado Cat 6 y fibra OM3. Centro de monitoreo con joystick y pantalla dedicada. Integración con infraestructura virtualizada VMware.",
-    resultados: "Vigilancia en tiempo real, control de accesos, monitoreo bajo demanda, y gestión centralizada.",
-    ejecutadoPor: "Consorcio ComputerShop’s S.R.L. y Soluciones Digitales Unificadas.",
-    logo: "/Zofratacna_logo.jpg"
+    cliente: "SEDAPAR S.A.",
+    sector: "Servicios de saneamiento",
+    ubicacion: "Arequipa, Perú",
+    titulo: "Servicio Especializado de Mantenimiento de Infraestructura TI",
+    resumen: "SEDAPAR necesitaba reforzar el soporte técnico de sus equipos informáticos para garantizar la continuidad de sus operaciones en distintas sedes de la región.",
+    solucion: "Contrato de mantenimiento preventivo y correctivo por dos años, incluyendo soporte a PCs, workstations, servidores Dell/IBM/HP, impresoras, plotters, UPS, switches y atención de incidentes especializados.",
+    resultados: "Operatividad continua de los sistemas informáticos, reducción de fallas críticas, extensión de vida útil de los equipos y mínima interrupción en las actividades empresariales.",
+    ejecutadoPor: "AQP-Peru Data",
+    logo: "/sedapar_logo.png"
   }
 ];
+
 
 function Experiencia() {
   return (

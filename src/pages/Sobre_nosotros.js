@@ -17,7 +17,7 @@ const SobreNosotros = () => {
           <Col md={6} className="order-2 order-md-1">
             <h2 className="section-title">¿Quiénes somos?</h2>
             <p className="about-text">
-              En AQP Peru Data, somos una empresa líder en el sector de computadoras, servidores y soluciones tecnológicas para empresas. Con más de 10 años de experiencia, brindamos productos de alta calidad y un servicio personalizado para cada cliente.
+              En AQP-Peru Data brindamos soluciones integrales en tecnología de la información para organizaciones del sector público y privado. Contamos con experiencia comprobada en venta de equipos, infraestructura para datacenters y servicios de soporte técnico, siempre orientados a la calidad y la satisfacción del cliente.
             </p>
           </Col>
           <Col md={6} className="order-1 order-md-2 mb-4 mb-md-0">
@@ -35,7 +35,7 @@ const SobreNosotros = () => {
       {/* Sección 2: Misión y Visión (con nuevo estilo) */}
       <div className="mission-vision-section py-5">
         <Container>
-          <h2 className="text-center section-title-light mb-5">Mision y Vision</h2>
+          <h2 className="text-center section-title-light mb-5">Misión y Visión</h2>
           <Row>
             <Col md={6}>
               <Card className="mission-vision-card shadow-lg mb-4 h-100">
@@ -47,7 +47,7 @@ const SobreNosotros = () => {
                   />
                   <Card.Title className="mission-title">Nuestra Misión</Card.Title>
                   <Card.Text className="card-text-justify">
-                    Brindar soluciones tecnológicas especializadas y de alta calidad en venta de equipos para Datacenter y Mantenimiento Informático, garantizando eficiencia, seguridad y satisfacción del cliente mediante procesos rápidos y equipos profesionales de la empresa.
+                    Estar comprometidos en ser el socio tecnológico preferido de nuestros clientes, buscando satisfacer sus necesidades, brindando servicios de calidad en las oportunidades y por el medio del talento humano de nuestro personal capacitado.
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -63,7 +63,7 @@ const SobreNosotros = () => {
                   />
                   <Card.Title className="vision-title">Nuestra Visión</Card.Title>
                   <Card.Text className="card-text-justify">
-                    Ser referentes en el Sur del Perú en el suministro y soporte de tecnología para Datacenter, reconocidos por la confiabilidad de nuestros servicios, la mejora continua y el cumplimiento de estándares internacionales de calidad y seguridad.
+                    Ser reconocidos como lideres en el Mercado de Servicios y Comercialización de infraestructura informática, destacándonos por la calidad y ética en nuestro trabajo.
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -90,32 +90,59 @@ const SobreNosotros = () => {
         </Container>
       </div>
 
+      {/* Sección Historia */}
+      <div className="history-section py-5 bg-light">
+        <Container>
+          <h2 className="text-center section-title mb-4">Nuestra Historia</h2>
+          <Row className="justify-content-center">
+            <Col md={10}>
+              <p className="about-text">
+                En febrero del año 2007 surge la empresa AQP-Peru Data con la finalidad de brindar servicio en las diferentes ramas de tecnología de la información, ofreciendo soluciones integrales a empresas del sector público y privado.
+              </p>
+              <p className="about-text">
+                Con nuestro compromiso de mejora continua, en el año 2024 AQP-Peru Data logró obtener las certificaciones <strong>ISO 9001:2015</strong> (Gestión de Calidad) e <strong>ISO 45001:2018</strong> (Gestión de la Seguridad y Salud en el Trabajo), lo que nos permitió mejorar tanto la calidad de nuestros productos y servicios, como la seguridad y salud de nuestros colaboradores.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
       <Container className="py-5">
         {/* Sección de Políticas Corporativas */}
         <Row className="about-section">
           <Col>
             <h2 className="section-title">Políticas Corporativas</h2>
             <p className="policy-intro">
-              AQP Peru Data, empresa peruana dedicada a brindar servicios tecnológicos e infraestructura tecnológica, bajo lineamientos que garanticen la calidad del servicio, la seguridad y salud ocupacional de los trabajadores, clientes, contratistas y demás partes interesadas se compromete a:
+              AQP PERU DATA S.R.L., empresa peruana dedicada a brindar servicios tecnológicos e infraestructura tecnológica, bajo lineamientos que garanticen la calidad del servicio, la seguridad y salud ocupacional de los trabajadores, clientes, contratistas y demás partes interesadas, se compromete a:
             </p>
             <ol className="policy-list">
               <li>
-                <strong className="policy-item-title">Política de Calidad (ISO 9001:2015):</strong> Implementar y mantener un sistema de gestión orientado a la mejora continua, cumplimiento de requisitos del cliente y optimización de procesos.
+                Proporcionar condiciones de trabajo seguras y saludables para la prevención de lesiones y deterioro de la salud relacionados con el trabajo y que sean apropiadas al propósito, tamaño y contexto de la organización y a la naturaleza específica de sus riesgos para la SST y sus oportunidades para la SST.
               </li>
               <li>
-                <strong className="policy-item-title">Política de Atención al Cliente:</strong> Mantener canales efectivos de comunicación, atención oportuna a consultas y reclamos, y asegurar una experiencia positiva.
+                Proteger la seguridad y salud de todos los miembros de la organización mediante la prevención de lesiones, dolencias, enfermedades e incidentes relacionados con el trabajo.
               </li>
               <li>
-                <strong className="policy-item-title">Política de Soporte Técnico y Mantenimiento:</strong> Garantizar la entrega puntual y el correcto funcionamiento de los equipos, estableciendo procesos de control y seguimiento para los servicios en los plazos acordados.
+                Eliminar los peligros y reducir los riesgos para la SST.
               </li>
               <li>
-                <strong className="policy-item-title">Política de Relaciones con Proveedores:</strong> Seleccionar y trabajar con proveedores confiables que cumplan con estándares de calidad y tiempos de entrega.
+                Sensibilizar, capacitar y entrenar a nuestro personal administrativo y operativo en:
+                <ol type="a">
+                  <li>El desempeño de las actividades laborales</li>
+                  <li>Seguridad y salud en el trabajo</li>
+                </ol>
               </li>
               <li>
-                <strong className="policy-item-title">Política de Innovación y Actualización Tecnológica:</strong> Fomentar la capacitación continua del personal y la actualización constante de los portafolios de productos y servicios.
+                Cumplir con los requisitos legales y aplicables y otros requisitos relacionados a nuestras actividades, los programas voluntarios, de la negociación colectiva en seguridad y salud en el trabajo, y de otras prescripciones que suscribimos.
               </li>
               <li>
-                <strong className="policy-item-title">Política de Ética y Responsabilidad Social:</strong> Desarrollar operaciones con integridad, transparencia y compromiso con el entorno social y ambiental, alineándose a los valores corporativos y las mejores prácticas.
+                Fomentar la participación y consulta de los trabajadores haciendo énfasis en los temas de seguridad y salud ocupacional.
+              </li>
+              <li>
+                Mejorar continuamente el desempeño y eficacia del sistema de gestión de calidad y seguridad y salud controlando adecuadamente nuestros procesos.
+              </li>
+              <li>
+                Mejorar la satisfacción del cliente enfocándonos en sus necesidades.
               </li>
             </ol>
           </Col>
