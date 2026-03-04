@@ -57,7 +57,7 @@ function Admin() {
     <br />
     
     <div className="full-width-image-container">
-      <img src="/CSC-webinicio-02.jpg" alt="Banner 2" className="banner-image" />
+      <img src="/BannerAQP-02.jpg" alt="Banner 2" className="banner-image" />
     </div>
     </>
   );
