@@ -550,7 +550,7 @@ const ListaProductos = () => {
                   style={{
                     borderRadius: '8px',
                     border: '2px solid #e9ecef',
-                    padding: '8px 12px',
+                    padding: '8px 2.25rem 8px 12px',
                     fontSize: '0.85rem',
                     cursor: 'pointer',
                     width: 'auto'
