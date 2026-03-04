@@ -53,11 +53,13 @@ function Admin() {
         Cerrar sesión
       </Button>
     </Container>
-    {/* Segunda imagen a pantalla completa (del Home) */}
-    <br />
-    
-    <div className="full-width-image-container">
-      <img src="/BannerAQP-02.jpg" alt="Banner 2" className="banner-image" />
+    {/* Banner inferior */}
+    <div style={{ width: '100%', marginTop: '3rem', overflow: 'hidden', lineHeight: 0 }}>
+      <img
+        src="/BannerAQP-02.jpg"
+        alt="Banner 2"
+        style={{ width: '100%', maxHeight: '320px', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+      />
     </div>
     </>
   );
