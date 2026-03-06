@@ -4,8 +4,8 @@
 
 /* ── VARIABLES ── */
 .navbar-header {
-  --hdr-bg: #0f172a;
-  --hdr-bg-alt: #1e293b;
+  --hdr-bg: #9fa6ac;
+  --hdr-bg-alt: #202d41;
   --hdr-surface: #ffffff;
   --hdr-accent: #28a745;
   --hdr-accent-light: #34d058;
@@ -13,7 +13,7 @@
   --hdr-danger: #ef4444;
   --hdr-orange: #f97316;
   --hdr-text: #f8fafc;
-  --hdr-text-muted: #94a3b8;
+  --hdr-text-muted: #1f1b7d;
   --hdr-border: rgba(255, 255, 255, .08);
   --hdr-radius: 10px;
   --hdr-ease: cubic-bezier(.4, 0, .2, 1);

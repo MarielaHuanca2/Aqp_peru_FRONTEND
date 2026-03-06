@@ -116,9 +116,9 @@ function Header() {
         {/* Logo */}
         <Navbar.Brand as={Link} to="/" className="navbar-brand-custom" onClick={closeMenu}>
           <img
-            src="/LOGOAQP.png"
+            src="/AQP_logo.png"
             alt="Logo"
-            style={{ height: "70px", objectFit: "contain" }}
+            style={{ height: "80px", objectFit: "contain" }}
           />
         </Navbar.Brand>
 
