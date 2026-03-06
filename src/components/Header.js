@@ -101,12 +101,12 @@ function Header() {
     { nombre: "HP", logo: "/marcas/hp_marcas.png" },
     { nombre: "HPE", logo: "/marcas/hpe_marcas.png" },
     { nombre: "Cisco", logo: "/marcas/cisco_marcas.png" },
-    { nombre: "Extreme Networks", logo: "/marcas/extreme_marcas.png" },
-    { nombre: "Fortinet", logo: "/marcas/fortinet_marcas.png" },
-    { nombre: "Microsoft", logo: "/marcas/microsoft_marcas.png" },
+    { nombre: "Extreme Networks", logo: "/marcas/extreme.png" },
+    { nombre: "Fortinet", logo: "/marcas/fortinet.png" },
+    { nombre: "Microsoft", logo: "/marcas/microsoft.png" },
     { nombre: "Samsung", logo: "/marcas/samsung_marcas.png" },
     { nombre: "Qnap", logo: "/marcas/QNAP_marcas.png" },
-    { nombre: "Intel", logo: "/marcas/intel_marcas.png" },
+    { nombre: "Intel", logo: "/marcas/intel.png" },
     { nombre: "AMD", logo: "/marcas/amd_marcas.png" },
   ];
 

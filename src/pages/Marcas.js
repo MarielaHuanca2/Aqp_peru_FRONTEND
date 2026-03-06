@@ -10,18 +10,18 @@ function Marcas() {
     { nombre: "HP", logo: "/marcas/hp_marcas.png" },
     { nombre: "HPE", logo: "/marcas/hpe_marcas.png" },
     { nombre: "Cisco", logo: "/marcas/cisco_marcas.png" },
-    { nombre: "Extreme Networks", logo: "/marcas/extreme_marcas.png" },
-    { nombre: "Fortinet", logo: "/marcas/fortinet_marcas.png" },
-    { nombre: "Microsoft", logo: "/marcas/microsoft_marcas.png" },
+    { nombre: "Extreme Networks", logo: "/marcas/extreme.png" },
+    { nombre: "Fortinet", logo: "/marcas/fortinet.png" },
+    { nombre: "Microsoft", logo: "/marcas/microsoft.png" },
     { nombre: "Samsung", logo: "/marcas/samsung_marcas.png" },
     { nombre: "Qnap", logo: "/marcas/QNAP_marcas.png" },
-    { nombre: "Intel", logo: "/marcas/intel_marcas.png" },
+    { nombre: "Intel", logo: "/marcas/intel.png" },
     { nombre: "AMD", logo: "/marcas/amd_marcas.png" },
-    { nombre: "Kingston", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87_Kingston_WhiteHead_Black.png/640px-%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87_Kingston_WhiteHead_Black.png" },
-    { nombre: "LG", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/LG_logo_%282014%2C_3D%29.svg/640px-LG_logo_%282014%2C_3D%29.svg.png" },
-    { nombre: "APC", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/LogoAPC.svg/640px-LogoAPC.svg.png" },
-    { nombre: "EPSON", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/EPSON-Logo.svg/640px-EPSON-Logo.svg.png" },
-    { nombre: "Dynabook", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Dynabook_Logo.svg/640px-Dynabook_Logo.svg.png" }
+    { nombre: "Kingston", logo: "/marcas/kingston.png" },
+    { nombre: "LG", logo: "marcas/lg_logo.png" },
+    { nombre: "APC", logo: "/marcas/apc.png" },
+    { nombre: "EPSON", logo: "/marcas/epson.png" },
+    { nombre: "Dynabook", logo: "/marcas/Dynabook_Logo.svg.png" }
   ];
 
   return (
