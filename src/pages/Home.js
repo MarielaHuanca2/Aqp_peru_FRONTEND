@@ -36,7 +36,7 @@ function Home() {
             <div className="feature-card__icon-wrap">
               <img src="/images/service_front.png" alt="Servicios" className="feature-card__icon" />
             </div>
-            <h3 className="feature-card__title">Servicios Empresariales</h3>
+            <h3 className="feature-card__title">Servicios Empresariales prueba</h3>
             <p className="feature-card__desc">
               Instalación, mantenimiento y soporte técnico para tu empresa.
             </p>
